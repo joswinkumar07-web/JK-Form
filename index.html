@@ -16,46 +16,26 @@
 :root{--bg:#0B0807;--panel:#15100E;--panel2:#21110D;--line:#382923;--text:#E9E1D7;--muted:#9B9086;--accent:#8A684E;--accent-soft:rgba(138,104,78,.14);--r:14px;--shadow:0 12px 32px rgba(0,0,0,.22)}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--text);font-family:"Helvetica Neue",Arial,Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}.app{width:100%;max-width:520px;margin:0 auto;min-height:100vh;background:radial-gradient(circle at 90% 0%,rgba(138,104,78,.08),transparent 22%),var(--bg);padding:env(safe-area-inset-top) 18px calc(94px + env(safe-area-inset-bottom))}.screen{display:none}.screen.active{display:block}.topbar{display:flex;justify-content:space-between;align-items:center;padding:20px 0 14px;border-bottom:1px solid var(--line)}.brand{font-weight:700;letter-spacing:.08em;font-size:15px;text-transform:uppercase}.brand span{color:var(--accent)}.avatar{width:38px;height:38px;border-radius:0;display:grid;place-items:center;background:transparent;border:1px solid var(--line);font-weight:700;font-size:11px;letter-spacing:.08em}.hello{padding:22px 0 18px}.hello small,.eyebrow{color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:.18em;font-weight:700}.hello h1{font-size:32px;line-height:1.02;letter-spacing:-1.2px;margin:10px 0;font-weight:600}.hello p{color:var(--muted);line-height:1.55;margin:0}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:none;margin-bottom:12px}.hero{padding:22px;background:linear-gradient(180deg,var(--panel2),#130C0A);border-color:#4A332B;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -12% -42% 38%;height:180px;background:radial-gradient(circle,rgba(138,104,78,.18),transparent 66%);pointer-events:none}.hero h2{font-size:29px;line-height:1.02;letter-spacing:-1.1px;margin:10px 0 8px;max-width:290px;font-weight:600}.hero p{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 18px}.row{display:flex;gap:10px;align-items:center}.btn{border:0;border-radius:8px;padding:15px 16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:11px}.btn.primary{background:var(--text);color:var(--bg);flex:1}.btn.secondary{background:transparent;color:var(--text);border:1px solid var(--line)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:18px;border-top:1px solid var(--line)}.stat{background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;padding:14px 10px 4px}.stat:last-child{border-right:0}.stat b{display:block;font-size:18px;font-weight:600}.stat span{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 10px}.sectionTitle h3{font-size:16px;margin:0;font-weight:600;letter-spacing:-.2px}.sectionTitle span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}.item{display:flex;gap:12px;align-items:center;padding:14px 0;border-radius:0;border:0;border-bottom:1px solid var(--line);background:transparent;margin-bottom:0}.icon{width:34px;height:34px;border-radius:0;background:transparent;border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);font-size:9px;font-weight:700;letter-spacing:.08em;flex:0 0 auto}.grow{min-width:0;flex:1}.grow b{display:block;font-size:14px}.grow span{display:block;color:var(--muted);font-size:11px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pill{font-size:9px;padding:6px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}.bottomnav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(11,8,7,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:10px 10px calc(10px + env(safe-area-inset-bottom))}.navbtn{border:0;background:transparent;color:#7E746D;padding:8px 2px 5px;display:grid;gap:5px;place-items:center;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;position:relative}.navbtn.active:before{content:"";position:absolute;top:-11px;width:28px;height:1px;background:var(--accent)}.navbtn i{font-style:normal;font-size:12px;line-height:1}.navbtn.active{color:var(--accent)}.pageHead{padding:18px 2px 12px}.pageHead h1{font-size:30px;letter-spacing:-1px;margin:8px 0;font-weight:600}.pageHead p{color:var(--muted);font-size:13px;line-height:1.55;margin:0}.field{display:grid;gap:7px;margin-bottom:13px}.field label{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.12em;text-transform:uppercase}.field select,.field input{width:100%;background:#0E0A09;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:14px;outline:none}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:9px 11px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}.workoutStage{min-height:430px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(180deg,#1A1210,#0E0A09);position:relative;overflow:hidden}.timer{position:absolute;top:18px;right:18px;background:transparent;border:1px solid var(--line);padding:9px 11px;border-radius:0;font-weight:600;letter-spacing:.08em;font-size:12px}.figure{height:226px;width:118px;margin:58px auto 0;border-radius:58px 58px 30px 30px;background:linear-gradient(180deg,#5F4A40,#241915);opacity:.72;box-shadow:0 0 70px rgba(138,104,78,.12)}.cue{font-size:13px;line-height:1.5;border-left:3px solid var(--accent);padding-left:12px;color:#D8CEC4;margin-top:12px}.exerciseControls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mealMacros{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.macro{text-align:center;border:1px solid var(--line);border-radius:14px;padding:10px 4px}.macro b{display:block;font-size:15px}.macro span{font-size:9px;color:var(--muted)}.progressbar{height:3px;background:#2C211D;border-radius:0;overflow:hidden}.progressbar span{display:block;height:100%;width:55%;background:var(--accent)}
 
-/* movement reference */
-.demoWrap{height:245px;margin:54px -18px 8px;display:grid;place-items:center;position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,#160F0D,#0C0807)}
-.demoMeta{position:absolute;left:14px;top:12px;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.demoBadge{position:absolute;right:14px;bottom:12px;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.motion{width:180px;height:210px;overflow:visible}
-.motion *{vector-effect:non-scaling-stroke}
-.motion .body{stroke:#E9E1D7;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.motion .joint{fill:#E9E1D7}
-.motion .ghost{stroke:#8A684E;stroke-width:1;opacity:.26;fill:none;stroke-dasharray:4 5}
-.motion .ground{stroke:#382923;stroke-width:1}
-.motion .torso,.motion .hip,.motion .armL,.motion .armR,.motion .legL,.motion .legR{transform-box:fill-box;transform-origin:center}
-.motion.squat .hip,.motion.squat .torso,.motion.squat .armL,.motion.squat .armR{animation:squatBody 2.3s ease-in-out infinite}
-.motion.squat .legL,.motion.squat .legR{animation:squatLeg 2.3s ease-in-out infinite}
-.motion.lunge .hip,.motion.lunge .torso{animation:lungeBody 2.5s ease-in-out infinite}
-.motion.lunge .legL{animation:lungeFront 2.5s ease-in-out infinite;transform-origin:50% 10%}
-.motion.lunge .legR{animation:lungeBack 2.5s ease-in-out infinite;transform-origin:50% 10%}
-.motion.push .torso,.motion.push .hip,.motion.push .legL,.motion.push .legR{animation:pushBody 2.1s ease-in-out infinite}
-.motion.push .armL,.motion.push .armR{animation:pushArm 2.1s ease-in-out infinite;transform-origin:50% 10%}
-.motion.row .armR{animation:rowArm 1.9s ease-in-out infinite;transform-origin:50% 10%}
-.motion.row .torso{transform:rotate(23deg)}
-.motion.hinge .torso,.motion.hinge .armL,.motion.hinge .armR{animation:hingeTorso 2.3s ease-in-out infinite;transform-origin:50% 88%}
-.motion.press .armL,.motion.press .armR{animation:pressArm 2s ease-in-out infinite;transform-origin:50% 90%}
-.motion.plank .armL,.motion.plank .armR{animation:plankTap 2.2s ease-in-out infinite;transform-origin:50% 10%}
-@keyframes squatBody{0%,100%{transform:translateY(0)}50%{transform:translateY(42px)}}
-@keyframes squatLeg{0%,100%{transform:rotate(0deg)}50%{transform:rotate(13deg)}}
-@keyframes lungeBody{0%,100%{transform:translateY(0)}50%{transform:translateY(34px)}}
-@keyframes lungeFront{0%,100%{transform:rotate(0)}50%{transform:rotate(26deg)}}
-@keyframes lungeBack{0%,100%{transform:rotate(0)}50%{transform:rotate(-24deg)}}
-@keyframes pushBody{0%,100%{transform:translateY(-8px)}50%{transform:translateY(22px)}}
-@keyframes pushArm{0%,100%{transform:rotate(0)}50%{transform:rotate(28deg)}}
-@keyframes rowArm{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-48deg) translateY(-5px)}}
-@keyframes hingeTorso{0%,100%{transform:rotate(0)}50%{transform:rotate(42deg)}}
-@keyframes pressArm{0%,100%{transform:translateY(0)}50%{transform:translateY(-48px)}}
-@keyframes plankTap{0%,100%{transform:rotate(0)}50%{transform:rotate(-26deg) translate(-8px,-8px)}}
-.exerciseVisualRow{display:flex;gap:10px;align-items:center}
-.miniDemo{width:52px;height:42px;border:1px solid var(--line);display:grid;place-items:center;background:#100B09;flex:0 0 auto;overflow:hidden;position:relative}
-.miniDemo:before{content:"";width:8px;height:8px;border:1.5px solid var(--text);border-radius:50%;position:absolute;top:7px}
-.miniDemo:after{content:"";width:22px;height:18px;border-left:1.5px solid var(--text);border-bottom:1.5px solid var(--text);position:absolute;top:16px;left:20px;transform:skewX(-18deg);animation:miniMove 2s ease-in-out infinite}
-@keyframes miniMove{0%,100%{transform:translateY(0) skewX(-18deg)}50%{transform:translateY(7px) skewX(18deg)}}
-
+/* exercise video reference */
+.exerciseMedia{height:265px;margin:54px -18px 12px;position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0A0706}
+.exerciseMedia video{width:100%;height:100%;object-fit:cover;display:block;background:#0A0706}
+.exerciseMedia:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,8,7,.08),rgba(11,8,7,.08) 55%,rgba(11,8,7,.56));pointer-events:none}
+.mediaFallback{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,rgba(138,104,78,.13),transparent 26%),linear-gradient(180deg,#17100D,#0B0807);z-index:1}
+.mediaFallback.hidden{display:none}
+.mediaFallbackInner{text-align:center;max-width:220px;padding:20px}
+.mediaMark{width:54px;height:54px;margin:0 auto 16px;border:1px solid #5A4035;border-radius:50%;display:grid;place-items:center;font-size:16px;color:var(--text)}
+.mediaFallback b{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
+.mediaFallback span{display:block;font-size:10px;line-height:1.55;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.mediaTop{position:absolute;z-index:3;left:14px;right:14px;top:12px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.mediaTop span{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#D7CEC5;background:rgba(11,8,7,.52);padding:6px 7px;border:1px solid rgba(233,225,215,.14)}
+.mediaControls{position:absolute;z-index:4;left:14px;right:14px;bottom:13px;display:flex;align-items:center;justify-content:space-between}
+.mediaPlay{width:42px;height:42px;border-radius:50%;border:1px solid rgba(233,225,215,.34);background:rgba(11,8,7,.62);color:var(--text);display:grid;place-items:center;font-size:12px}
+.mediaHint{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#D7CEC5}
+.exerciseSummary{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;margin-top:2px}
+.exerciseSummary .sets{font-size:10px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.exerciseListRow{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.exerciseThumb{width:48px;height:42px;background:linear-gradient(135deg,#21110D,#0C0807);border:1px solid var(--line);display:grid;place-items:center;font-size:8px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.exerciseThumb span{width:16px;height:16px;border:1px solid #6A4B3D;border-radius:50%;display:grid;place-items:center;font-size:7px;color:var(--text)}
 /* onboarding */
 .onboarding{position:fixed;inset:0;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;z-index:100;display:none}.onboarding.show{display:block}.obShell{width:100%;max-width:520px;height:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column}.obTop{display:flex;align-items:center;justify-content:space-between;gap:14px}.obLogo{font-weight:700;letter-spacing:.08em;font-size:15px}.obLogo span{color:inherit}.obCount{font-size:11px;color:var(--muted);font-weight:800}.obTrack{height:2px;background:#2A201C;border-radius:0;margin:18px 0 0;overflow:hidden}.obTrack span{height:100%;display:block;background:var(--accent);width:14.28%;transition:.25s}.obBody{flex:1;display:flex;align-items:center}.obStep{display:none;width:100%;animation:up .24s ease}.obStep.active{display:block}.obStep .eyebrow{margin-bottom:10px}.obStep h1{font-size:36px;line-height:.98;letter-spacing:-1.6px;margin:0 0 12px;max-width:340px;font-weight:600}.obStep>p{color:var(--muted);line-height:1.6;font-size:14px;margin:0 0 24px}.choiceGrid{display:grid;gap:0;border-top:1px solid var(--line)}.choice{border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:17px 2px;border-radius:0;text-align:left}.choice.selected{border-color:var(--line);background:linear-gradient(90deg,rgba(138,104,78,.12),transparent 70%);padding-left:12px}.choice b{display:block;font-weight:600}.choice span{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}.obActions{display:flex;gap:10px}.obActions .btn{min-height:50px}.back{width:54px}.summary{display:grid;gap:9px}.summaryRow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}.summaryRow span{color:var(--muted);font-size:12px}.summaryRow b{text-align:right;font-size:12px}@keyframes up{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 @media(min-width:700px){body{padding:24px 0}.app{border:1px solid var(--line);border-radius:28px;min-height:900px;overflow:hidden;position:relative}.bottomnav{bottom:24px;border:1px solid var(--line);border-radius:0 0 28px 28px}.onboarding{background:#080504}.obShell{border:1px solid var(--line);border-radius:28px;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;max-height:900px;margin:24px auto;overflow:hidden}}
@@ -74,22 +54,19 @@
   <section id="train" class="screen">
     <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Guided workout</h1><p>Clear guidance. One exercise at a time.</p></div>
     <div class="card workoutStage"><div class="timer" id="timer">00:30</div>
-<div class="demoWrap">
-  <div class="demoMeta">MOVEMENT REFERENCE · LOOP</div>
-  <svg id="motionDemo" class="motion squat" viewBox="0 0 180 210" aria-label="Animated exercise reference">
-    <line class="ground" x1="24" y1="191" x2="156" y2="191"/>
-    <circle class="joint" cx="90" cy="35" r="11"/>
-    <g class="torso body"><line x1="90" y1="50" x2="90" y2="104"/></g>
-    <g class="hip body"><line x1="78" y1="105" x2="102" y2="105"/></g>
-    <g class="armL body"><line x1="90" y1="62" x2="61" y2="94"/><line x1="61" y1="94" x2="52" y2="126"/></g>
-    <g class="armR body"><line x1="90" y1="62" x2="119" y2="94"/><line x1="119" y1="94" x2="128" y2="126"/></g>
-    <g class="legL body"><line x1="81" y1="107" x2="66" y2="149"/><line x1="66" y1="149" x2="57" y2="190"/></g>
-    <g class="legR body"><line x1="99" y1="107" x2="114" y2="149"/><line x1="114" y1="149" x2="123" y2="190"/></g>
-    <path class="ghost" d="M46 158 Q90 132 134 158"/>
-  </svg>
-  <div class="demoBadge" id="demoBadge">SQUAT PATTERN</div>
+<div class="exerciseMedia">
+  <video id="exerciseVideo" muted loop playsinline preload="metadata"></video>
+  <div class="mediaFallback" id="mediaFallback">
+    <div class="mediaFallbackInner">
+      <div class="mediaMark">▶</div>
+      <b id="fallbackTitle">Exercise demonstration</b>
+      <span>Real movement reference · video slot</span>
+    </div>
+  </div>
+  <div class="mediaTop"><span>FORM / TRAIN</span><span id="mediaStep">01 / 05</span></div>
+  <div class="mediaControls"><button class="mediaPlay" id="mediaPlay" onclick="toggleExerciseVideo()">▶</button><span class="mediaHint">Movement reference</span></div>
 </div>
-<div><div class="eyebrow" id="exerciseLabel">EXERCISE 1</div><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="cue" id="cue">Brace first. Control the lowering phase. Keep the movement clean.</div></div></div>
+<div><div class="eyebrow" id="exerciseLabel">EXERCISE 1</div><div class="exerciseSummary"><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="sets" id="exerciseSets">3 × 15</div></div><div class="cue" id="cue">Brace first. Control the lowering phase. Keep the movement clean.</div></div></div>
     <div class="exerciseControls"><button class="btn secondary" onclick="toggleTimer()" id="timerBtn">Start timer</button><button class="btn primary" onclick="nextExercise()">Complete set</button></div>
     <div class="sectionTitle"><h3>Session</h3><span id="sessionMeta">Beginner · 30 min</span></div><div id="exerciseList"></div>
   </section>
@@ -129,9 +106,26 @@ function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.string
 function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll(`#${id} .choice`).forEach(c=>c.classList.toggle('selected',c.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obDiet.value=p.diet||'Balanced';obMeals.value=p.meals||'4';obRestrictions.clear();document.querySelectorAll('#obRestrictions .chip').forEach(c=>{const on=(p.restrictions||[]).includes(c.dataset.value);c.classList.toggle('on',on);if(on)obRestrictions.add(c.dataset.value)});obStep=1;updateOb();onboarding.classList.add('show')}
 function applyProfile(p){const first=(p.name||'Athlete').split(' ')[0];greeting.textContent=`Good afternoon, ${first}.`;avatar.textContent=first.slice(0,2).toUpperCase();goalEyebrow.textContent=p.goal||'YOUR PLAN';todayTitle.textContent=`Full Body · ${(p.time||'30 minutes').replace(' minutes',' min')}`;todayCopy.textContent=`${p.level} session using ${String(p.equip||'no equipment').toLowerCase()}.`;weekCount.textContent=`3/${parseInt(p.days)||4}`;sessionMeta.textContent=`${p.level} · ${p.time}`;profileName.value=p.name||'';profileGoal.value=p.goal||'';profileLevel.value=p.level||'';profileEquip.value=p.equip||'';profileDays.value=`${p.days} · ${p.time}`;diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain';restrictions.clear();document.querySelectorAll('#restrictionChips .chip').forEach(c=>{const on=(p.restrictions||[]).includes(c.dataset.value);c.classList.toggle('on',on);if(on)restrictions.add(c.dataset.value)});renderWorkout();renderWeek(p);generateMeals()}
 function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
-function demoType(name){const n=name.toLowerCase();if(n.includes('squat')||n.includes('leg press'))return['squat','SQUAT PATTERN'];if(n.includes('lunge'))return['lunge','LUNGE PATTERN'];if(n.includes('push')||n.includes('chest press')||n.includes('floor press'))return['push','PUSH PATTERN'];if(n.includes('row')||n.includes('pulldown'))return['row','PULL PATTERN'];if(n.includes('rdl')||n.includes('deadlift'))return['hinge','HINGE PATTERN'];if(n.includes('pike')||n.includes('press'))return['press','PRESS PATTERN'];if(n.includes('plank')||n.includes('dead bug')||n.includes('crunch')||n.includes('pallof'))return['plank','CORE CONTROL'];return['squat','MOVEMENT PATTERN']}
-function setDemo(name){const [type,label]=demoType(name);motionDemo.className.baseVal='motion '+type;demoBadge.textContent=label}
-function renderWorkout(){const data=currentWorkout();homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>`<div class="item"><div class="miniDemo"></div><div class="grow"><b>${x[0]}</b><span>${x[1]} · movement reference</span></div><div class="pill">View</div></div>`).join('');exerciseList.innerHTML=data.map((x,i)=>`<div class="item" style="${i===exIndex?'border-color:#8A684E':''}"><div class="icon">${i===exIndex?'NOW':String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${x[1]}</span></div></div>`).join('');exerciseName.textContent=data[exIndex][0];exerciseLabel.textContent=`EXERCISE ${exIndex+1} OF ${data.length}`;setDemo(data[exIndex][0])}
+const exerciseMediaMap={
+'Tempo Squat':'/media/exercises/tempo-squat.mp4','Push-up':'/media/exercises/push-up.mp4','Reverse Lunge':'/media/exercises/reverse-lunge.mp4','Pike Push-up':'/media/exercises/pike-push-up.mp4','Plank Shoulder Tap':'/media/exercises/plank-shoulder-tap.mp4',
+'DB Squat':'/media/exercises/db-squat.mp4','DB Floor Press':'/media/exercises/db-floor-press.mp4','One-arm Row':'/media/exercises/one-arm-row.mp4','DB RDL':'/media/exercises/db-rdl.mp4','Dead Bug':'/media/exercises/dead-bug.mp4',
+'Band Squat':'/media/exercises/band-squat.mp4','Band Row':'/media/exercises/band-row.mp4','Band Chest Press':'/media/exercises/band-chest-press.mp4','Band RDL':'/media/exercises/band-rdl.mp4','Pallof Press':'/media/exercises/pallof-press.mp4',
+'Leg Press':'/media/exercises/leg-press.mp4','Chest Press':'/media/exercises/chest-press.mp4','Lat Pulldown':'/media/exercises/lat-pulldown.mp4','Romanian Deadlift':'/media/exercises/romanian-deadlift.mp4','Cable Crunch':'/media/exercises/cable-crunch.mp4'
+};
+function loadExerciseMedia(name){
+  const src=exerciseMediaMap[name]||'';
+  exerciseVideo.pause(); exerciseVideo.removeAttribute('src'); exerciseVideo.load();
+  mediaFallback.classList.remove('hidden'); mediaPlay.textContent='▶'; fallbackTitle.textContent=name;
+  if(!src)return;
+  exerciseVideo.src=src;
+  exerciseVideo.onloadeddata=()=>{mediaFallback.classList.add('hidden')};
+  exerciseVideo.onerror=()=>{mediaFallback.classList.remove('hidden')};
+}
+function toggleExerciseVideo(){
+  if(!exerciseVideo.src || !mediaFallback.classList.contains('hidden')) return;
+  if(exerciseVideo.paused){exerciseVideo.play();mediaPlay.textContent='Ⅱ'}else{exerciseVideo.pause();mediaPlay.textContent='▶'}
+}
+function renderWorkout(){const data=currentWorkout();homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>`<div class="exerciseListRow"><div class="exerciseThumb"><span>▶</span></div><div class="grow"><b>${x[0]}</b><span>${x[1]} · video reference</span></div><div class="pill">View</div></div>`).join('');exerciseList.innerHTML=data.map((x,i)=>`<div class="exerciseListRow" style="${i===exIndex?'border-color:#8A684E':''}"><div class="icon">${i===exIndex?'NOW':String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${x[1]}</span></div><div class="pill">${i===exIndex?'Active':'Next'}</div></div>`).join('');exerciseName.textContent=data[exIndex][0];exerciseSets.textContent=data[exIndex][1];exerciseLabel.textContent=`EXERCISE ${exIndex+1} OF ${data.length}`;mediaStep.textContent=`${String(exIndex+1).padStart(2,'0')} / ${String(data.length).padStart(2,'0')}`;loadExerciseMedia(data[exIndex][0])}
 function renderWeek(p){const n=parseInt(p.days)||4;weeklyPlan.innerHTML=Array.from({length:n},(_,i)=>`<div class="card"><div class="eyebrow">DAY ${i+1}</div><h3 style="margin:8px 0 4px">${['Full Body Strength','Upper Body','Lower Body','Conditioning','Full Body Strength','Mobility'][i%6]}</h3><p style="color:var(--muted);font-size:12px;margin:0">${p.time} · ${p.equip}</p></div>`).join('')}
 function startSession(){exIndex=0;secs=30;renderWorkout();timer.textContent='00:30';timerBtn.textContent='Start timer'}
 function toggleTimer(){if(tick){clearInterval(tick);tick=null;timerBtn.textContent='Resume';return}timerBtn.textContent='Pause';tick=setInterval(()=>{secs--;timer.textContent=`00:${String(Math.max(0,secs)).padStart(2,'0')}`;if(secs<=0){clearInterval(tick);tick=null;nextExercise()}},1000)}
