@@ -44,6 +44,33 @@
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
 .authCard{margin-top:14px}.authState{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.authState:last-child{border-bottom:0}.authState b{font-size:13px;font-weight:600}.authState span{font-size:10px;color:var(--muted);display:block;margin-top:3px}.authSheet{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;background:rgba(0,0,0,.58);backdrop-filter:blur(6px)}.authSheet.show{display:flex}.authPanel{width:min(520px,100%);margin:0 auto;background:#0E0A09;border-top:1px solid var(--line);border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -24px 70px rgba(0,0,0,.42)}.authHandle{width:36px;height:3px;background:#49382F;border-radius:999px;margin:0 auto 18px}.authPanel h2{font-size:26px;letter-spacing:-.8px;margin:8px 0 8px}.authPanel p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 18px}.authActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.authClose{position:absolute;right:18px;top:18px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--text)}.authPanelWrap{position:relative}.accountBadge{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);padding:5px 7px;border-radius:999px}
+
+.entryGate,.planReadyGate{position:fixed;inset:0;z-index:115;display:none;background:radial-gradient(circle at 82% 8%,rgba(138,104,78,.14),transparent 28%),#0B0807}
+.entryGate.show,.planReadyGate.show{display:block}
+.entryShell{width:100%;max-width:520px;height:100%;margin:0 auto;padding:calc(22px + env(safe-area-inset-top)) 20px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.entryTop{display:flex;align-items:center;justify-content:space-between}
+.entryLogo{font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.entryMeta{font-size:9px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.entryBody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 0 32px}
+.entryKicker{color:var(--accent);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
+.entryBody h1{font-size:44px;line-height:.94;letter-spacing:-2.1px;font-weight:600;margin:0 0 18px;max-width:410px}
+.entryBody p{font-size:14px;line-height:1.65;color:var(--muted);max-width:380px;margin:0}
+.entryRule{width:54px;height:1px;background:var(--accent);margin:24px 0}
+.entryPoints{display:grid;gap:11px;margin-top:2px}
+.entryPoint{font-size:11px;color:#C9BFB6;display:flex;gap:10px;align-items:center}
+.entryPoint i{font-style:normal;color:var(--accent);font-size:9px}
+.entryActions{display:grid;gap:10px}
+.entryActions .btn{width:100%}
+.entryFine{font-size:9px;color:#766B64;text-align:center;line-height:1.5;margin-top:4px}
+.authModeTabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin:6px 0 18px}
+.authModeTab{border:0;background:transparent;color:var(--muted);min-height:42px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.authModeTab.active{background:var(--text);color:var(--bg)}
+.authSubmit{width:100%;margin-top:4px}
+.planReadyCard{margin-top:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0}
+.planReadyRow{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);font-size:11px}
+.planReadyRow:last-child{border-bottom:0}.planReadyRow span{color:var(--muted)}.planReadyRow b{font-weight:600;text-align:right}
+@media(min-width:700px){.entryGate,.planReadyGate{background:#080504}.entryShell{border:1px solid var(--line);border-radius:28px;background:radial-gradient(circle at 82% 8%,rgba(138,104,78,.14),transparent 28%),#0B0807;max-height:900px;margin:24px auto;overflow:hidden}}
+
 /* onboarding */
 .onboarding{position:fixed;inset:0;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;z-index:100;display:none}.onboarding.show{display:block}.obShell{width:100%;max-width:520px;height:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column}.obTop{display:flex;align-items:center;justify-content:space-between;gap:14px}.obLogo{font-weight:700;letter-spacing:.08em;font-size:15px}.obLogo span{color:inherit}.obCount{font-size:11px;color:var(--muted);font-weight:800}.obTrack{height:2px;background:#2A201C;border-radius:0;margin:18px 0 0;overflow:hidden}.obTrack span{height:100%;display:block;background:var(--accent);width:14.28%;transition:.25s}.obBody{flex:1;display:flex;align-items:center}.obStep{display:none;width:100%;animation:up .24s ease}.obStep.active{display:block}.obStep .eyebrow{margin-bottom:10px}.obStep h1{font-size:36px;line-height:.98;letter-spacing:-1.6px;margin:0 0 12px;max-width:340px;font-weight:600}.obStep>p{color:var(--muted);line-height:1.6;font-size:14px;margin:0 0 24px}.choiceGrid{display:grid;gap:0;border-top:1px solid var(--line)}.choice{border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:18px 2px;min-height:64px;border-radius:0;text-align:left;transition:background .16s ease,padding .16s ease}.choice.selected{border-color:var(--line);background:linear-gradient(90deg,rgba(138,104,78,.14),transparent 72%);padding-left:12px}.choice.selected b:after{content:"  ✓";color:var(--accent);font-size:11px}.choice b{display:block;font-weight:600}.choice span{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}.obActions{display:flex;gap:10px}.obActions .btn{min-height:50px}.back{width:54px}.summary{display:grid;gap:9px}.summaryRow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}.summaryRow span{color:var(--muted);font-size:12px}.summaryRow b{text-align:right;font-size:12px}@keyframes up{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 @media(min-width:700px){body{padding:24px 0}.app{border:1px solid var(--line);border-radius:28px;min-height:900px;overflow:hidden;position:relative}.bottomnav{bottom:24px;border:1px solid var(--line);border-radius:0 0 28px 28px}.onboarding{background:#080504}.obShell{border:1px solid var(--line);border-radius:28px;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;max-height:900px;margin:24px auto;overflow:hidden}}
@@ -92,7 +119,63 @@
 </div>
 
 
-<div class="authSheet" id="authSheet" onclick="if(event.target===this)closeAuth()"><div class="authPanel"><div class="authPanelWrap"><button class="authClose" onclick="closeAuth()">×</button><div class="authHandle"></div><div class="eyebrow">JK FORM ACCOUNT</div><h2>Save your plan.</h2><p>Your training setup and progress can follow you across devices.</p><div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="8+ characters"></div><div class="authActions"><button class="btn secondary" onclick="signInUser()">Sign in</button><button class="btn primary" onclick="signUpUser()">Create account</button></div><div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div></div></div></div>
+
+<div class="entryGate" id="entryGate">
+  <div class="entryShell">
+    <div class="entryTop"><div class="entryLogo">JK FORM</div><div class="entryMeta" id="entryMeta">FORM / START</div></div>
+    <div class="entryBody">
+      <div class="entryKicker" id="entryKicker">TRAIN WITH INTENT</div>
+      <h1 id="entryTitle">Build better form.</h1>
+      <p id="entryCopy">A training system shaped around your goal, experience and routine — without the noise.</p>
+      <div class="entryRule"></div>
+      <div class="entryPoints" id="entryPoints">
+        <div class="entryPoint"><i>01</i><span>Personalized training structure</span></div>
+        <div class="entryPoint"><i>02</i><span>Clear exercise guidance</span></div>
+        <div class="entryPoint"><i>03</i><span>Progress that stays with you</span></div>
+      </div>
+    </div>
+    <div class="entryActions">
+      <button class="btn primary" id="entryPrimary" onclick="startEntryFlow()">Build my plan</button>
+      <button class="btn secondary" id="entrySecondary" onclick="openAuth('signin')">I already have an account</button>
+      <div class="entryFine" id="entryFine">You can explore as a guest before creating an account.</div>
+    </div>
+  </div>
+</div>
+
+<div class="planReadyGate" id="planReadyGate">
+  <div class="entryShell">
+    <div class="entryTop"><div class="entryLogo">JK FORM</div><div class="entryMeta">FORM / READY</div></div>
+    <div class="entryBody">
+      <div class="entryKicker">YOUR STARTING POINT</div>
+      <h1>Your plan is ready.</h1>
+      <p>Start training now, or create an account so your setup and progress follow you across devices.</p>
+      <div class="planReadyCard" id="planReadySummary"></div>
+    </div>
+    <div class="entryActions">
+      <button class="btn primary" onclick="saveReadyPlan()">Save my plan</button>
+      <button class="btn secondary" onclick="continueAsGuest()">Continue as guest</button>
+      <div class="entryFine">No subscription or payment is required for this test build.</div>
+    </div>
+  </div>
+</div>
+
+<div class="authSheet" id="authSheet" onclick="if(event.target===this)closeAuth()">
+  <div class="authPanel"><div class="authPanelWrap">
+    <button class="authClose" onclick="closeAuth()">×</button>
+    <div class="authHandle"></div>
+    <div class="eyebrow" id="authEyebrow">JK FORM ACCOUNT</div>
+    <h2 id="authTitle">Welcome back.</h2>
+    <p id="authCopy">Sign in to restore your plan and training progress.</p>
+    <div class="authModeTabs">
+      <button class="authModeTab active" id="authSignInTab" onclick="setAuthMode('signin')">Sign in</button>
+      <button class="authModeTab" id="authSignUpTab" onclick="setAuthMode('signup')">Create account</button>
+    </div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+    <div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="8+ characters"></div>
+    <button class="btn primary authSubmit" id="authSubmitBtn" onclick="submitAuth()">Sign in</button>
+    <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
+  </div></div>
+</div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 7</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to personalize workouts and meals from day one.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
 <div class="obStep" data-step="2"><div class="eyebrow">YOUR GOAL</div><h1>What are you training for?</h1><p>Choose the outcome that matters most right now.</p><div class="choiceGrid" id="goalChoices"><button class="choice" data-value="Build muscle"><b>Build muscle</b><span>Strength, muscle and progressive overload.</span></button><button class="choice" data-value="Fat loss"><b>Fat loss</b><span>Higher activity with strength retention.</span></button><button class="choice" data-value="General fitness"><b>General fitness</b><span>Strength, energy and consistency.</span></button><button class="choice" data-value="Mobility"><b>Mobility</b><span>Move better and improve control.</span></button></div></div>
@@ -107,7 +190,7 @@
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1';let obStep=1,exIndex=0,secs=30,tick=null,cloudWorkoutId=null;const restrictions=new Set(),obRestrictions=new Set();
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1';let obStep=1,exIndex=0,secs=30,tick=null,cloudWorkoutId=null,authMode='signin';const restrictions=new Set(),obRestrictions=new Set();
 const workoutMap={"No equipment":[['Tempo Squat','3 × 15'],['Push-up','3 × 10'],['Reverse Lunge','3 × 10/side'],['Pike Push-up','3 × 8'],['Plank Shoulder Tap','3 × 20']],"Dumbbells":[['DB Squat','3 × 12'],['DB Floor Press','3 × 10'],['One-arm Row','3 × 12'],['DB RDL','3 × 12'],['Dead Bug','3 × 10/side']],"Resistance bands":[['Band Squat','3 × 15'],['Band Row','3 × 12'],['Band Chest Press','3 × 12'],['Band RDL','3 × 15'],['Pallof Press','3 × 10/side']],"Gym access":[['Leg Press','3 × 12'],['Chest Press','3 × 10'],['Lat Pulldown','3 × 12'],['Romanian Deadlift','3 × 10'],['Cable Crunch','3 × 12']]};
 const meals={Balanced:[['Breakfast','Oats + Greek yogurt + banana'],['Lunch','Rice + grilled chicken + vegetables'],['Snack','Fruit + yogurt'],['Dinner','Chapati + dal + paneer + salad']],Vegetarian:[['Breakfast','Vegetable poha + curd'],['Lunch','Rice + dal + paneer + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + paneer bhurji + salad']],Vegan:[['Breakfast','Oats + soy milk + banana'],['Lunch','Rice + dal + tofu + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + chickpea curry + salad']],"High protein":[['Breakfast','Eggs + oats + fruit'],['Lunch','Chicken rice bowl + vegetables'],['Snack','Greek yogurt + fruit'],['Dinner','Paneer/chicken wrap + salad']]};
 function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'})}
@@ -122,15 +205,22 @@ async function syncProfileToCloud(){const user=await getUser();const raw=localSt
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
 function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=`${obStep} of 7`;obProgress.style.width=`${obStep/7*100}%`;obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===7?'Build my plan':'Continue';if(obStep===7){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',`${p.days} · ${p.time}`],['Meals',`${p.diet} · ${p.meals}/day`],['Avoiding',p.restrictions.length?p.restrictions.join(', '):'No selected restrictions']].map(x=>`<div class="summaryRow"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}}
 function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===7){finishOb();return}obStep=Math.max(1,Math.min(7,obStep+dir));updateOb()}
-async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud();showFeedback('Plan saved')}else{showFeedback('Plan ready');setTimeout(openAuth,500)}}
+async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud();showFeedback('Plan saved');return}renderPlanReady(p);planReadyGate.classList.add('show')}
 function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll(`#${id} .choice`).forEach(c=>c.classList.toggle('selected',c.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obDiet.value=p.diet||'Balanced';obMeals.value=p.meals||'4';obRestrictions.clear();document.querySelectorAll('#obRestrictions .chip').forEach(c=>{const on=(p.restrictions||[]).includes(c.dataset.value);c.classList.toggle('on',on);if(on)obRestrictions.add(c.dataset.value)});obStep=1;updateOb();onboarding.classList.add('show')}
 function applyProfile(p){const first=(p.name||'Athlete').split(' ')[0];greeting.textContent=`Good afternoon, ${first}.`;avatar.textContent=first.slice(0,2).toUpperCase();goalEyebrow.textContent=p.goal||'YOUR PLAN';todayTitle.textContent=`Full Body · ${(p.time||'30 minutes').replace(' minutes',' min')}`;todayCopy.textContent=`${p.level} session using ${String(p.equip||'no equipment').toLowerCase()}.`;weekCount.textContent=`3/${parseInt(p.days)||4}`;sessionMeta.textContent=`${p.level} · ${p.time}`;profileName.value=p.name||'';profileGoal.value=p.goal||'';profileLevel.value=p.level||'';profileEquip.value=p.equip||'';profileDays.value=`${p.days} · ${p.time}`;diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain';restrictions.clear();document.querySelectorAll('#restrictionChips .chip').forEach(c=>{const on=(p.restrictions||[]).includes(c.dataset.value);c.classList.toggle('on',on);if(on)restrictions.add(c.dataset.value)});renderWorkout();renderWeek(p);generateMeals()}
-function openAuth(){authSheet.classList.add('show');authMessage.textContent=''}
+function setAuthMode(mode){authMode=mode;const signup=mode==='signup';authSignInTab.classList.toggle('active',!signup);authSignUpTab.classList.toggle('active',signup);authTitle.textContent=signup?'Keep your progress.':'Welcome back.';authCopy.textContent=signup?'Create an account to save your plan and progress across devices.':'Sign in to restore your saved plan and training progress.';authSubmitBtn.textContent=signup?'Create account':'Sign in';authPassword.autocomplete=signup?'new-password':'current-password';authMessage.textContent=''}
+function openAuth(mode='signin'){setAuthMode(mode);entryGate.classList.remove('show');planReadyGate.classList.remove('show');authSheet.classList.add('show');setTimeout(()=>authEmail.focus(),120)}
 function closeAuth(){authSheet.classList.remove('show')}
-async function refreshAccountUI(){const user=await getUser();if(user){accountTitle.textContent='Signed in';accountCopy.textContent=user.email||'Your plan is saved to your account.';accountBadge.textContent='Cloud';accountBtn.textContent='Manage account';signOutBtn.style.display='inline-flex'}else{accountTitle.textContent='Save your plan';accountCopy.textContent='Create an account to keep your plan and progress across devices.';accountBadge.textContent='Local';accountBtn.textContent='Create account / Sign in';signOutBtn.style.display='none'}}
-async function signUpUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||password.length<8){authMessage.textContent='Use a valid email and a password with at least 8 characters.';return}authMessage.textContent='Creating account…';const raw=localStorage.getItem(KEY);const name=raw?JSON.parse(raw).name||'':'';const {data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:window.location.origin}});if(error){authMessage.textContent=error.message;return}if(data.session){await syncProfileToCloud();closeAuth();showFeedback('Account created')}else{authMessage.textContent='Check your email to confirm the account. Your plan is still saved on this device.'}await refreshAccountUI()}
-async function signInUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||!password){authMessage.textContent='Enter your email and password.';return}authMessage.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});if(error){authMessage.textContent=error.message;return}const restored=await restoreCloudProfile();if(!restored)await syncProfileToCloud();closeAuth();await refreshAccountUI();showFeedback('Signed in')}
-async function signOutUser(){await sb.auth.signOut();await refreshAccountUI();showFeedback('Signed out')}
+function submitAuth(){authMode==='signup'?signUpUser():signInUser()}
+function showEntry(kind='new'){entryGate.dataset.kind=kind;if(kind==='returning'){entryMeta.textContent='FORM / RETURN';entryKicker.textContent='WELCOME BACK';entryTitle.textContent='Pick up where you left off.';entryCopy.textContent='Your local plan is still here. Sign in to restore cloud progress, or continue on this device.';entryPrimary.textContent='Sign in';entrySecondary.textContent='Continue on this device';entryPrimary.onclick=()=>openAuth('signin');entrySecondary.onclick=()=>{entryGate.classList.remove('show');go('home')};entryFine.textContent='Your local plan remains available on this device.'}else{entryMeta.textContent='FORM / START';entryKicker.textContent='TRAIN WITH INTENT';entryTitle.textContent='Build better form.';entryCopy.textContent='A training system shaped around your goal, experience and routine — without the noise.';entryPrimary.textContent='Build my plan';entrySecondary.textContent='I already have an account';entryPrimary.onclick=startEntryFlow;entrySecondary.onclick=()=>openAuth('signin');entryFine.textContent='You can explore as a guest before creating an account.'}entryGate.classList.add('show')}
+function startEntryFlow(){entryGate.classList.remove('show');obStep=1;updateOb();onboarding.classList.add('show')}
+function renderPlanReady(p){planReadySummary.innerHTML=[['Goal',p.goal],['Training',p.days+' · '+p.time],['Setup',p.equip]].map(x=>`<div class="planReadyRow"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+function saveReadyPlan(){planReadyGate.classList.remove('show');openAuth('signup')}
+function continueAsGuest(){planReadyGate.classList.remove('show');go('home');showFeedback('Plan ready')}
+async function refreshAccountUI(){const user=await getUser();if(user){accountTitle.textContent='Signed in';accountCopy.textContent=user.email||'Your plan is saved to your account.';accountBadge.textContent='Cloud';accountBtn.textContent='Account';accountBtn.onclick=()=>openAuth('signin');signOutBtn.style.display='inline-flex'}else{accountTitle.textContent='Save your plan';accountCopy.textContent='Create an account to keep your plan and progress across devices.';accountBadge.textContent='Local';accountBtn.textContent='Create account';accountBtn.onclick=()=>openAuth('signup');signOutBtn.style.display='none'}}
+async function signUpUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||password.length<8){authMessage.textContent='Use a valid email and a password with at least 8 characters.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Creating…';const raw=localStorage.getItem(KEY);const name=raw?JSON.parse(raw).name||'':'';const {data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:window.location.origin}});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Create account';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');if(data.session){await syncProfileToCloud();authSheet.classList.remove('show');await refreshAccountUI();showFeedback('Account created')}else{authMessage.textContent='Check your email to confirm your account. You can close this and keep using your plan while you wait.'}}
+async function signInUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||!password){authMessage.textContent='Enter your email and password.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Sign in';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');const restored=await restoreCloudProfile();if(!restored)await syncProfileToCloud();authSheet.classList.remove('show');entryGate.classList.remove('show');await refreshAccountUI();go('home');showFeedback('Welcome back')}
+async function signOutUser(){localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();await refreshAccountUI();showEntry('returning')}
 function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
 const exerciseMediaMap={
 'Tempo Squat':'/media/exercises/tempo-squat.mp4','Push-up':'/media/exercises/push-up.mp4','Reverse Lunge':'/media/exercises/reverse-lunge.mp4','Pike Push-up':'/media/exercises/pike-push-up.mp4','Plank Shoulder Tap':'/media/exercises/plank-shoulder-tap.mp4',
@@ -161,6 +251,6 @@ async function nextExercise(){if(tick){clearInterval(tick);tick=null}const data=
 function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
 function generateMeals(){const d=diet.value,count=+mealsPerDay.value;let rows=[...(meals[d]||meals.Balanced)];if(count===3)rows=[rows[0],rows[1],rows[3]];if(count===5)rows=[rows[0],rows[1],['Snack 1','Fruit + protein source'],rows[2],rows[3]];mealPlan.innerHTML=rows.map((x,i)=>`<div class="item"><div class="icon">${String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');mealSnapshot.innerHTML=rows.slice(0,3).map(x=>`<div class="item" style="margin-bottom:8px"><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');dietTag.textContent=d;const g=nutritionGoal.value;if(g==='Fat loss'){cal.textContent='1,850';protein.textContent='145g';carbs.textContent='175g';fats.textContent='62g'}else if(g==='Muscle gain'){cal.textContent='2,450';protein.textContent='165g';carbs.textContent='285g';fats.textContent='78g'}else{cal.textContent='2,150';protein.textContent='145g';carbs.textContent='230g';fats.textContent='72g'}}
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {})); }
-(async function init(){sb.auth.onAuthStateChange(async()=>{await refreshAccountUI()});const user=await getUser();if(user){await restoreCloudProfile()}const raw=localStorage.getItem(KEY);if(!raw){document.querySelector('#goalChoices [data-value="General fitness"]').classList.add('selected');document.querySelector('#levelChoices [data-value="Beginner"]').classList.add('selected');document.querySelector('#equipChoices [data-value="No equipment"]').classList.add('selected');updateOb();onboarding.classList.add('show')}else{try{applyProfile(JSON.parse(raw))}catch(e){localStorage.removeItem(KEY);onboarding.classList.add('show')}}await refreshAccountUI()})();
+(async function init(){sb.auth.onAuthStateChange(async(event)=>{await refreshAccountUI();if(event==='SIGNED_IN'){entryGate.classList.remove('show');planReadyGate.classList.remove('show')}});document.querySelector('#goalChoices [data-value="General fitness"]').classList.add('selected');document.querySelector('#levelChoices [data-value="Beginner"]').classList.add('selected');document.querySelector('#equipChoices [data-value="No equipment"]').classList.add('selected');updateOb();const user=await getUser();if(user){localStorage.setItem(HAD_ACCOUNT_KEY,'1');await restoreCloudProfile();const raw=localStorage.getItem(KEY);if(raw)applyProfile(JSON.parse(raw));go('home')}else{const raw=localStorage.getItem(KEY);if(raw){try{applyProfile(JSON.parse(raw));if(localStorage.getItem(HAD_ACCOUNT_KEY)==='1')showEntry('returning');else go('home')}catch(e){localStorage.removeItem(KEY);showEntry('new')}}else{showEntry('new')}}await refreshAccountUI()})();
 </script>
 </body></html>
