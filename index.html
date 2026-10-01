@@ -11,6 +11,9 @@
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/icon-192.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>JK Form — Mobile Coach</title>
 <style>
 :root{--bg:#0B0807;--panel:#15100E;--panel2:#21110D;--line:#382923;--text:#E9E1D7;--muted:#9B9086;--accent:#8A684E;--accent-soft:rgba(138,104,78,.14);--r:14px;--shadow:0 12px 32px rgba(0,0,0,.22)}
@@ -71,14 +74,115 @@
 /* onboarding */
 .onboarding{position:fixed;inset:0;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;z-index:100;display:none}.onboarding.show{display:block}.obShell{width:100%;max-width:520px;height:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column}.obTop{display:flex;align-items:center;justify-content:space-between;gap:14px}.obLogo{font-weight:700;letter-spacing:.08em;font-size:15px}.obLogo span{color:inherit}.obCount{font-size:11px;color:var(--muted);font-weight:800}.obTrack{height:2px;background:#2A201C;border-radius:0;margin:18px 0 0;overflow:hidden}.obTrack span{height:100%;display:block;background:var(--accent);width:14.28%;transition:.25s}.obBody{flex:1;display:flex;align-items:center}.obStep{display:none;width:100%;animation:up .24s ease}.obStep.active{display:block}.obStep .eyebrow{margin-bottom:10px}.obStep h1{font-size:36px;line-height:.98;letter-spacing:-1.6px;margin:0 0 12px;max-width:340px;font-weight:600}.obStep>p{color:var(--muted);line-height:1.6;font-size:14px;margin:0 0 24px}.choiceGrid{display:grid;gap:0;border-top:1px solid var(--line)}.choice{border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:18px 2px;min-height:64px;border-radius:0;text-align:left;transition:background .16s ease,padding .16s ease}.choice.selected{border-color:var(--line);background:linear-gradient(90deg,rgba(138,104,78,.14),transparent 72%);padding-left:12px}.choice.selected b:after{content:"  ✓";color:var(--accent);font-size:11px}.choice b{display:block;font-weight:600}.choice span{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}.obActions{display:flex;gap:10px}.obActions .btn{min-height:50px}.back{width:54px}.summary{display:grid;gap:9px}.summaryRow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}.summaryRow span{color:var(--muted);font-size:12px}.summaryRow b{text-align:right;font-size:12px}@keyframes up{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 @media(min-width:700px){body{padding:24px 0}.app{border:1px solid var(--line);border-radius:28px;min-height:900px;overflow:hidden;position:relative}.bottomnav{bottom:24px;border:1px solid var(--line);border-radius:0 0 28px 28px}.onboarding{background:#080504}.obShell{border:1px solid var(--line);border-radius:28px;background:radial-gradient(circle at 85% 6%,rgba(138,104,78,.12),transparent 25%),#0B0807;max-height:900px;margin:24px auto;overflow:hidden}}
+
+/* JK FORM UI SYSTEM V2 — CINEMATIC FORM */
+body{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;letter-spacing:-.01em}
+.app{max-width:560px;padding-left:20px;padding-right:20px;background:
+linear-gradient(180deg,rgba(138,104,78,.045),transparent 210px),var(--bg)}
+.topbar{padding:22px 0 17px;border-bottom:1px solid rgba(233,225,215,.12)}
+.brand{font-size:14px;letter-spacing:.16em;font-weight:600}
+.avatar{border:0;width:auto;height:auto;font-size:9px;letter-spacing:.16em;color:var(--muted);padding:6px 0;background:none}
+.hello{padding:34px 0 26px}
+.hello small,.eyebrow{font-size:9px;letter-spacing:.2em;font-weight:600}
+.hello h1{font-size:42px;line-height:.94;letter-spacing:-2px;margin:14px 0 14px;font-weight:600;max-width:430px}
+.hello p{font-size:14px;line-height:1.5}
+.card{border-radius:0;background:transparent;border:0;border-top:1px solid rgba(233,225,215,.12);padding:18px 0;margin:0;box-shadow:none}
+.hero{margin-left:-20px;margin-right:-20px;padding:28px 20px 24px;background:
+linear-gradient(145deg,#21110D 0%,#120B09 56%,#0B0807 100%);border-top:1px solid #493329;border-bottom:1px solid #34241F;border-left:0;border-right:0}
+.hero:after{inset:auto -4% -34% 50%;height:220px;background:radial-gradient(circle,rgba(138,104,78,.13),transparent 67%)}
+.hero .eyebrow{display:flex;justify-content:space-between;align-items:center}
+.hero h2{font-size:42px;letter-spacing:-1.8px;line-height:.95;max-width:420px;margin:18px 0 12px}
+.hero p{max-width:340px;margin-bottom:26px}
+.hero .row{gap:0;border-top:1px solid rgba(233,225,215,.12);border-bottom:1px solid rgba(233,225,215,.12)}
+.hero .row .btn{border-radius:0;min-height:58px}
+.hero .row .btn.primary{background:var(--text);color:var(--bg)}
+.hero .row .btn.secondary{border:0;border-left:1px solid rgba(233,225,215,.12);min-width:112px}
+.stats{margin-top:22px;border-top:0}
+.stat{padding:5px 14px 0 0;border-right:1px solid rgba(233,225,215,.12)}
+.stat b{font-size:22px;letter-spacing:-.6px}
+.stat span{font-size:8px;letter-spacing:.16em}
+.sectionTitle{margin:32px 0 12px;padding-bottom:10px;border-bottom:1px solid rgba(233,225,215,.10)}
+.sectionTitle h3{font-size:20px;letter-spacing:-.6px;font-weight:600}
+.sectionTitle span{font-size:8px;letter-spacing:.18em}
+.exerciseListRow{grid-template-columns:42px 1fr auto;gap:14px;padding:16px 0}
+.exerciseThumb,.icon{border:0;background:none;width:42px;height:42px;display:flex;align-items:center;justify-content:flex-start;color:var(--accent);font-size:8px;letter-spacing:.12em}
+.exerciseThumb span{border:1px solid #5A4035;width:28px;height:28px}
+.grow b{font-size:15px;font-weight:500}
+.grow span{font-size:10px;margin-top:5px}
+.pill{border:0;padding:0;color:var(--muted);font-size:8px;letter-spacing:.16em}
+.bottomnav{max-width:560px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(11,8,7,.96);border-top:1px solid rgba(233,225,215,.10)}
+.navbtn{min-height:48px;font-size:7px;letter-spacing:.15em;color:#756B65}
+.navbtn i{font-size:9px}
+.navbtn.active:before{top:-11px;width:18px;height:1px}
+.pageHead{padding:30px 0 22px;border-bottom:1px solid rgba(233,225,215,.10);margin-bottom:8px}
+.pageHead h1{font-size:40px;line-height:.96;letter-spacing:-1.8px;margin:12px 0}
+.pageHead p{font-size:13px;max-width:380px}
+.field{margin-bottom:16px}
+.field label{font-size:8px;letter-spacing:.18em}
+.field select,.field input{border-radius:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 0;min-height:50px}
+.field select:focus,.field input:focus{box-shadow:none;border-color:var(--accent)}
+.btn{border-radius:0;font-size:9px;letter-spacing:.14em;min-height:50px}
+.btn.secondary{border:1px solid rgba(233,225,215,.16)}
+.choiceGrid{border-top:1px solid rgba(233,225,215,.13)}
+.choice{padding:20px 2px;min-height:72px}
+.choice.selected{background:none;padding-left:2px;border-bottom-color:var(--accent)}
+.choice.selected b:after{float:right}
+.choice b{font-size:17px;font-weight:500}
+.choice span{font-size:11px;max-width:340px}
+.obShell{padding-left:20px;padding-right:20px}
+.obTop{padding-bottom:4px}
+.obLogo{font-size:13px;letter-spacing:.15em;font-weight:600}
+.obCount{font-size:9px;letter-spacing:.14em}
+.obTrack{height:1px;margin-top:16px}
+.obBody{align-items:flex-start;padding-top:11vh}
+.obStep h1{font-size:44px;letter-spacing:-2.2px;max-width:420px;margin-bottom:14px}
+.obStep>p{font-size:13px;max-width:390px;margin-bottom:28px}
+.obActions{padding-top:18px;border-top:1px solid rgba(233,225,215,.1)}
+.authPanel{border-radius:0;background:#0D0908;border-top:1px solid rgba(233,225,215,.14);padding:24px 20px calc(24px + env(safe-area-inset-bottom))}
+.authHandle{display:none}
+.authPanel h2{font-size:34px;letter-spacing:-1.4px;margin-top:22px}
+.authModeTabs{border:0;border-bottom:1px solid var(--line)}
+.authModeTab{min-height:44px;border-bottom:1px solid transparent;margin-bottom:-1px}
+.authModeTab.active{background:none;color:var(--text);border-bottom-color:var(--accent)}
+.workoutStage{margin-left:-20px;margin-right:-20px;padding:0 20px 22px;border-top:0;background:#0A0706}
+.exerciseMedia{height:360px;margin:0 -20px 22px;border-top:0;border-bottom:1px solid rgba(233,225,215,.12)}
+.exerciseMedia:after{background:linear-gradient(180deg,rgba(11,8,7,.04),rgba(11,8,7,.16) 55%,rgba(11,8,7,.78))}
+.mediaFallback{background:
+linear-gradient(135deg,rgba(138,104,78,.10),transparent 42%),
+linear-gradient(180deg,#16100D,#090605)}
+.mediaFallbackInner{max-width:260px}
+.mediaMark{width:64px;height:64px;border-color:#6F4C3D}
+.mediaFallback b{font-size:15px}
+.mediaFallback span{font-size:8px;letter-spacing:.16em}
+.exerciseSummary h2{font-size:34px!important;letter-spacing:-1.4px!important}
+.cue{border-left:1px solid var(--accent);font-size:12px;color:#CFC5BC}
+.exerciseControls{grid-template-columns:1fr 1.25fr;gap:0;border-top:1px solid rgba(233,225,215,.12);border-bottom:1px solid rgba(233,225,215,.12)}
+.exerciseControls .btn{border:0;border-radius:0}
+.exerciseControls .btn+ .btn{border-left:1px solid rgba(233,225,215,.12)}
+.authCard{margin-top:0;border-top:1px solid rgba(233,225,215,.12)}
+.authState{padding:16px 0}
+.accountBadge{border:0;padding:0;font-size:8px;letter-spacing:.16em}
+#profile .card:last-child .field{display:grid;grid-template-columns:120px 1fr;align-items:center;border-bottom:1px solid rgba(233,225,215,.09);margin:0}
+#profile .card:last-child .field label{padding:16px 0}
+#profile .card:last-child .field input{border:0;text-align:right;padding:16px 0;min-height:auto;color:var(--text)}
+#profile .card:last-child>.btn{margin-top:20px}
+.mealMacros{border-color:rgba(233,225,215,.12)}
+.macro{border-right-color:rgba(233,225,215,.12);padding:16px 5px}
+@media(min-width:700px){
+  body{padding:28px 0}
+  .app{border-radius:0;border-color:rgba(233,225,215,.12);min-height:900px}
+  .bottomnav{bottom:28px;border-radius:0}
+  .onboarding{background:#080504}
+  .obShell{border-radius:0;border-color:rgba(233,225,215,.12)}
+}
 </style>
 </head>
 <body>
 <div class="app">
   <section id="home" class="screen active">
     <div class="topbar"><div class="brand">JK FORM</div><div class="avatar" id="avatar">JK</div></div>
-    <div class="hello"><small id="goalEyebrow">YOUR PLAN</small><h1 id="greeting">Good afternoon, athlete.</h1><p>Better form. Bigger perspective.</p></div>
-    <div class="card hero"><div><div class="eyebrow">FORM / TRAIN · TODAY</div><h2 id="todayTitle">Full Body · 30 min</h2><p id="todayCopy">Practical training. Built around your level and equipment.</p></div><div class="row"><button class="btn primary" onclick="go('train');startSession()">Start workout</button><button class="btn secondary" onclick="go('plan')">Plan</button></div><div class="stats"><div class="stat"><b id="weekCount">3/4</b><span>Workouts</span></div><div class="stat"><b>126</b><span>Active min</span></div><div class="stat"><b>7</b><span>Day streak</span></div></div></div>
+    <div class="hello"><small id="goalEyebrow">TODAY / TRAIN</small><h1 id="greeting">Ready when you are.</h1><p>Your next session, without the noise.</p></div>
+    <div class="card hero"><div><div class="eyebrow"><span>FORM / TRAIN</span><span>SESSION 01</span></div><h2 id="todayTitle">Full Body · 30 min</h2><p id="todayCopy">Built around your level and equipment.</p></div><div class="row"><button class="btn primary" onclick="go('train');startSession()">Start workout</button><button class="btn secondary" onclick="go('plan')">Plan</button></div><div class="stats"><div class="stat"><b id="weekCount">3/4</b><span>Workouts</span></div><div class="stat"><b>126</b><span>Active min</span></div><div class="stat"><b>7</b><span>Day streak</span></div></div></div>
     <div class="sectionTitle"><h3>Up next</h3><span>This week</span></div><div id="homeWorkout"></div>
     <div class="sectionTitle"><h3>Meals today</h3><span id="dietTag">Balanced</span></div><div class="card" id="mealSnapshot"></div>
   </section>
@@ -91,8 +195,8 @@
   <div class="mediaFallback" id="mediaFallback">
     <div class="mediaFallbackInner">
       <div class="mediaMark">▶</div>
-      <b id="fallbackTitle">Exercise demonstration</b>
-      <span>Real movement reference · video slot</span>
+      <b id="fallbackTitle">Movement guide</b>
+      <span>Exercise demo coming into focus</span>
     </div>
   </div>
   <div class="mediaTop"><span>FORM / TRAIN</span><span id="mediaStep">01 / 05</span></div>
@@ -109,7 +213,7 @@
 
   <section id="progress" class="screen"><div class="pageHead"><div class="eyebrow">FORM / BUILD</div><h1>Build consistency</h1><p>Track the work. Build the form.</p></div><div class="card"><div class="sectionTitle" style="margin-top:0"><h3>Weekly completion</h3><span>3 of 4</span></div><div class="progressbar"><span style="width:75%"></span></div></div><div class="card"><div class="stats"><div class="stat"><b>7</b><span>Streak</span></div><div class="stat"><b>12</b><span>Sessions</span></div><div class="stat"><b>6h</b><span>Training</span></div></div></div></section>
 
-  <section id="profile" class="screen"><div class="pageHead"><div class="eyebrow">JK FORM</div><h1>Your setup</h1><p>Update the inputs JK Form uses to personalize your plan.</p></div><div class="card authCard"><div class="eyebrow">ACCOUNT</div><div class="authState"><div><b id="accountTitle">Save your plan</b><span id="accountCopy">Create an account to keep your plan and progress across devices.</span></div><span class="accountBadge" id="accountBadge">Local</span></div><button class="btn secondary" id="accountBtn" style="width:100%;margin-top:14px" onclick="openAuth()">Create account / Sign in</button><button class="btn secondary" id="signOutBtn" style="width:100%;margin-top:8px;display:none" onclick="signOutUser()">Sign out</button></div><div class="card"><div class="field"><label>Name</label><input id="profileName" readonly></div><div class="field"><label>Primary goal</label><input id="profileGoal" readonly></div><div class="field"><label>Training level</label><input id="profileLevel" readonly></div><div class="field"><label>Equipment</label><input id="profileEquip" readonly></div><div class="field"><label>Routine</label><input id="profileDays" readonly></div><button class="btn primary" style="width:100%" onclick="restartOnboarding()">Redo onboarding</button></div></section>
+  <section id="profile" class="screen"><div class="pageHead"><div class="eyebrow">JK FORM</div><h1>Your setup</h1><p>Update the inputs JK Form uses to personalize your plan.</p></div><div class="card authCard"><div class="eyebrow">ACCOUNT</div><div class="authState"><div><b id="accountTitle">Save your plan</b><span id="accountCopy">Create an account to keep your plan and progress across devices.</span></div><span class="accountBadge" id="accountBadge">Local</span></div><button class="btn secondary" id="accountBtn" style="width:100%;margin-top:14px" onclick="openAuth()">Create account / Sign in</button><button class="btn secondary" id="signOutBtn" style="width:100%;margin-top:8px;display:none" onclick="signOutUser()">Sign out</button></div><div class="card"><div class="field"><label>Name</label><input id="profileName" readonly></div><div class="field"><label>Primary goal</label><input id="profileGoal" readonly></div><div class="field"><label>Training level</label><input id="profileLevel" readonly></div><div class="field"><label>Equipment</label><input id="profileEquip" readonly></div><div class="field"><label>Routine</label><input id="profileDays" readonly></div><button class="btn primary" style="width:100%" onclick="restartOnboarding()">Edit training setup</button></div></section>
 
   <div class="feedbackToast" id="feedbackToast">Saved</div>
   <nav class="bottomnav"><button class="navbtn active" data-screen="home" onclick="go('home')"><i>01</i>Home</button><button class="navbtn" data-screen="train" onclick="go('train')"><i>02</i>Train</button><button class="navbtn" data-screen="meals" onclick="go('meals')"><i>03</i>Meals</button><button class="navbtn" data-screen="progress" onclick="go('progress')"><i>04</i>Build</button><button class="navbtn" data-screen="profile" onclick="go('profile')"><i>05</i>Profile</button></nav>
