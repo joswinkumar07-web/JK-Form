@@ -175,6 +175,30 @@ linear-gradient(180deg,#16100D,#090605)}
   .onboarding{background:#080504}
   .obShell{border-radius:0;border-color:rgba(233,225,215,.12)}
 }
+
+.exerciseReference{position:relative;margin:0 -20px 24px;border-bottom:1px solid rgba(233,225,215,.12);background:#100B09;padding:52px 20px 14px}
+.referenceTop{position:absolute;left:20px;right:20px;top:16px;display:flex;align-items:center;justify-content:space-between;font-size:8px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted)}
+.poseGrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(233,225,215,.10)}
+.poseGrid.single{grid-template-columns:1fr}
+.poseFrame{background:#E9E1D7;position:relative;min-height:240px;overflow:hidden}
+.poseFrame img{width:100%;height:240px;object-fit:cover;display:block;filter:saturate(.72) contrast(1.03)}
+.poseTag{position:absolute;left:10px;bottom:10px;background:rgba(11,8,7,.82);color:#E9E1D7;padding:6px 8px;font-size:7px;letter-spacing:.16em;text-transform:uppercase}
+.referencePlaceholder{min-height:240px;display:grid;place-items:center;background:linear-gradient(135deg,#21110D,#0B0807);color:var(--muted);font-size:9px;letter-spacing:.15em;text-transform:uppercase;text-align:center;padding:30px}
+.referenceSource{display:flex;justify-content:space-between;gap:12px;padding-top:12px;color:#6F655F;font-size:7px;letter-spacing:.13em;text-transform:uppercase}
+.exerciseInfo{padding-bottom:4px}
+.exerciseMetaLine{display:flex;justify-content:space-between;gap:16px;padding:14px 0 18px;margin-top:12px;border-top:1px solid rgba(233,225,215,.1);border-bottom:1px solid rgba(233,225,215,.1);font-size:8px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.guideBlock{padding:22px 0 6px}
+.guideLabel{font-size:8px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.guideSteps{display:grid}
+.guideStep{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid rgba(233,225,215,.08);font-size:12px;line-height:1.5;color:#D7CEC5}
+.guideStep span:first-child{font-size:8px;letter-spacing:.14em;color:var(--accent);padding-top:3px}
+.guideSplit{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:22px 0 4px;border-top:1px solid rgba(233,225,215,.1);border-bottom:1px solid rgba(233,225,215,.1)}
+.guideSplit>div{padding:16px 14px 16px 0}
+.guideSplit>div+div{padding-left:14px;border-left:1px solid rgba(233,225,215,.1)}
+.guideText{font-size:11px;line-height:1.5;color:#CFC5BC}
+.exerciseThumb.hasImg{overflow:hidden;align-items:stretch;width:42px;height:42px}
+.exerciseThumb.hasImg img{width:42px;height:42px;object-fit:cover;filter:saturate(.65) contrast(1.04)}
+@media(max-width:390px){.poseFrame,.poseFrame img,.referencePlaceholder{min-height:205px;height:205px}.guideSplit{grid-template-columns:1fr}.guideSplit>div+div{border-left:0;border-top:1px solid rgba(233,225,215,.1);padding-left:0}}
 </style>
 </head>
 <body>
@@ -190,19 +214,21 @@ linear-gradient(180deg,#16100D,#090605)}
   <section id="train" class="screen">
     <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Guided workout</h1><p>Clear guidance. One exercise at a time.</p></div>
     <div class="card workoutStage"><div class="timer" id="timer">00:30</div>
-<div class="exerciseMedia">
-  <video id="exerciseVideo" muted loop playsinline preload="metadata"></video>
-  <div class="mediaFallback" id="mediaFallback">
-    <div class="mediaFallbackInner">
-      <div class="mediaMark">▶</div>
-      <b id="fallbackTitle">Movement guide</b>
-      <span>Exercise demo coming into focus</span>
-    </div>
-  </div>
-  <div class="mediaTop"><span>FORM / TRAIN</span><span id="mediaStep">01 / 05</span></div>
-  <div class="mediaControls"><button class="mediaPlay" id="mediaPlay" onclick="toggleExerciseVideo()">▶</button><span class="mediaHint">Movement reference</span></div>
+<div class="exerciseReference" id="exerciseReference">
+  <div class="referenceTop"><span>FORM / TRAIN</span><span id="mediaStep">01 / 05</span></div>
+  <div class="poseGrid" id="poseGrid"></div>
+  <div class="referenceSource"><span id="referenceType">MOVEMENT REFERENCE</span><span>Exercise visuals by RepDB</span></div>
 </div>
-<div><div class="eyebrow" id="exerciseLabel">EXERCISE 1</div><div class="exerciseSummary"><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="sets" id="exerciseSets">3 × 15</div></div><div class="cue" id="cue">Brace first. Control the lowering phase. Keep the movement clean.</div></div></div>
+<div class="exerciseInfo">
+  <div class="eyebrow" id="exerciseLabel">EXERCISE 1</div>
+  <div class="exerciseSummary"><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="sets" id="exerciseSets">3 × 15</div></div>
+  <div class="exerciseMetaLine"><span id="exerciseTarget">QUADS · GLUTES</span><span id="exerciseEquipment">BODYWEIGHT</span></div>
+  <div class="guideBlock"><div class="guideLabel">HOW TO</div><div class="guideSteps" id="guideSteps"></div></div>
+  <div class="guideSplit">
+    <div><div class="guideLabel">FORM CUE</div><div class="guideText" id="cue">Brace first. Control the lowering phase.</div></div>
+    <div><div class="guideLabel">AVOID</div><div class="guideText" id="avoidCue">Rushing the lowering phase.</div></div>
+  </div>
+</div></div>
     <div class="exerciseControls"><button class="btn secondary" onclick="toggleTimer()" id="timerBtn">Start timer</button><button class="btn primary" onclick="nextExercise()">Complete set</button></div>
     <div class="sectionTitle"><h3>Session</h3><span id="sessionMeta">Beginner · 30 min</span></div><div id="exerciseList"></div>
   </section>
@@ -213,7 +239,7 @@ linear-gradient(180deg,#16100D,#090605)}
 
   <section id="progress" class="screen"><div class="pageHead"><div class="eyebrow">FORM / BUILD</div><h1>Build consistency</h1><p>Track the work. Build the form.</p></div><div class="card"><div class="sectionTitle" style="margin-top:0"><h3>Weekly completion</h3><span>3 of 4</span></div><div class="progressbar"><span style="width:75%"></span></div></div><div class="card"><div class="stats"><div class="stat"><b>7</b><span>Streak</span></div><div class="stat"><b>12</b><span>Sessions</span></div><div class="stat"><b>6h</b><span>Training</span></div></div></div></section>
 
-  <section id="profile" class="screen"><div class="pageHead"><div class="eyebrow">JK FORM</div><h1>Your setup</h1><p>Update the inputs JK Form uses to personalize your plan.</p></div><div class="card authCard"><div class="eyebrow">ACCOUNT</div><div class="authState"><div><b id="accountTitle">Save your plan</b><span id="accountCopy">Create an account to keep your plan and progress across devices.</span></div><span class="accountBadge" id="accountBadge">Local</span></div><button class="btn secondary" id="accountBtn" style="width:100%;margin-top:14px" onclick="openAuth()">Create account / Sign in</button><button class="btn secondary" id="signOutBtn" style="width:100%;margin-top:8px;display:none" onclick="signOutUser()">Sign out</button></div><div class="card"><div class="field"><label>Name</label><input id="profileName" readonly></div><div class="field"><label>Primary goal</label><input id="profileGoal" readonly></div><div class="field"><label>Training level</label><input id="profileLevel" readonly></div><div class="field"><label>Equipment</label><input id="profileEquip" readonly></div><div class="field"><label>Routine</label><input id="profileDays" readonly></div><button class="btn primary" style="width:100%" onclick="restartOnboarding()">Edit training setup</button></div></section>
+  <section id="profile" class="screen"><div class="pageHead"><div class="eyebrow">JK FORM</div><h1>Your setup</h1><p>Update the inputs JK Form uses to personalize your plan.</p></div><div class="card authCard"><div class="eyebrow">ACCOUNT</div><div class="authState"><div><b id="accountTitle">Save your plan</b><span id="accountCopy">Create an account to keep your plan and progress across devices.</span></div><span class="accountBadge" id="accountBadge">Local</span></div><button class="btn secondary" id="accountBtn" style="width:100%;margin-top:14px" onclick="openAuth()">Create account / Sign in</button><button class="btn secondary" id="signOutBtn" style="width:100%;margin-top:8px;display:none" onclick="signOutUser()">Sign out</button></div><div class="card"><div class="field"><label>Name</label><input id="profileName" readonly></div><div class="field"><label>Primary goal</label><input id="profileGoal" readonly></div><div class="field"><label>Training level</label><input id="profileLevel" readonly></div><div class="field"><label>Equipment</label><input id="profileEquip" readonly></div><div class="field"><label>Routine</label><input id="profileDays" readonly></div><button class="btn primary" style="width:100%" onclick="restartOnboarding()">Edit training setup</button></div><div style="padding:16px 0 0;font-size:8px;line-height:1.5;color:#6F655F;letter-spacing:.08em;text-transform:uppercase">Exercise reference visuals: <a href="https://repdb.co" target="_blank" rel="noopener" style="color:#9B9086">RepDB</a></div></section>
 
   <div class="feedbackToast" id="feedbackToast">Saved</div>
   <nav class="bottomnav"><button class="navbtn active" data-screen="home" onclick="go('home')"><i>01</i>Home</button><button class="navbtn" data-screen="train" onclick="go('train')"><i>02</i>Train</button><button class="navbtn" data-screen="meals" onclick="go('meals')"><i>03</i>Meals</button><button class="navbtn" data-screen="progress" onclick="go('progress')"><i>04</i>Build</button><button class="navbtn" data-screen="profile" onclick="go('profile')"><i>05</i>Profile</button></nav>
@@ -285,26 +311,105 @@ async function upgradeGuestUser(){const email=authEmail.value.trim();if(!email){
 async function signInUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||!password){authMessage.textContent='Enter your email and password.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Sign in';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');const restored=await restoreCloudProfile();if(!restored)await syncProfileToCloud();authSheet.classList.remove('show');entryGate.classList.remove('show');await refreshAccountUI();go('home');showFeedback('Welcome back')}
 async function signOutUser(){localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();await refreshAccountUI();showEntry('returning')}
 function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
-const exerciseMediaMap={
-'Tempo Squat':'/media/exercises/tempo-squat.mp4','Push-up':'/media/exercises/push-up.mp4','Reverse Lunge':'/media/exercises/reverse-lunge.mp4','Pike Push-up':'/media/exercises/pike-push-up.mp4','Plank Shoulder Tap':'/media/exercises/plank-shoulder-tap.mp4',
-'DB Squat':'/media/exercises/db-squat.mp4','DB Floor Press':'/media/exercises/db-floor-press.mp4','One-arm Row':'/media/exercises/one-arm-row.mp4','DB RDL':'/media/exercises/db-rdl.mp4','Dead Bug':'/media/exercises/dead-bug.mp4',
-'Band Squat':'/media/exercises/band-squat.mp4','Band Row':'/media/exercises/band-row.mp4','Band Chest Press':'/media/exercises/band-chest-press.mp4','Band RDL':'/media/exercises/band-rdl.mp4','Pallof Press':'/media/exercises/pallof-press.mp4',
-'Leg Press':'/media/exercises/leg-press.mp4','Chest Press':'/media/exercises/chest-press.mp4','Lat Pulldown':'/media/exercises/lat-pulldown.mp4','Romanian Deadlift':'/media/exercises/romanian-deadlift.mp4','Cable Crunch':'/media/exercises/cable-crunch.mp4'
+const REPDB_BASE='https://huggingface.co/datasets/RepDB/exercise-dataset/resolve/main/images/flat/';
+const exerciseGuides={
+'Tempo Squat':{
+  target:'QUADS · GLUTES',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'bodyweight-squat-start.webp',REPDB_BASE+'bodyweight-squat-peak.webp'],
+  labels:['START','DEPTH'],
+  steps:['Stand with feet about shoulder-width apart and brace your core.','Sit the hips back and lower for about three seconds until your thighs reach roughly parallel.','Drive through your mid-foot and stand tall without losing your brace.'],
+  cue:'Knees track over your toes. Keep the lowering phase controlled.',
+  avoid:'Rushing the descent or letting the knees collapse inward.'
+},
+'Push-up':{
+  target:'CHEST · TRICEPS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'push-up-start.webp',REPDB_BASE+'push-up-peak.webp'],
+  labels:['START','BOTTOM'],
+  steps:['Set a strong high plank with hands just outside shoulder width.','Lower your chest toward the floor while keeping your body in one straight line.','Press the floor away and return to full arm extension.'],
+  cue:'Brace your abs and glutes. Let the elbows travel slightly back.',
+  avoid:'Sagging through the hips or flaring the elbows straight out.'
+},
+'Reverse Lunge':{
+  target:'GLUTES · QUADS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'bodyweight-reverse-lunge-start.webp',REPDB_BASE+'bodyweight-reverse-lunge-peak.webp'],
+  labels:['START','BOTTOM'],
+  steps:['Stand tall with your feet about hip-width apart.','Step one foot back and lower the rear knee toward the floor under control.','Push through the front foot to return to standing, then change sides.'],
+  cue:'Keep the front foot planted and your torso tall.',
+  avoid:'Stepping too narrow or allowing the front knee to cave inward.'
+},
+'Pike Push-up':{
+  target:'SHOULDERS · TRICEPS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'pike-push-ups-start.webp',REPDB_BASE+'pike-push-ups-peak.webp'],
+  labels:['START','LOWER'],
+  steps:['Start with hips high in an inverted-V position and hands shoulder-width apart.','Bend your elbows and lower the crown of your head toward the floor between your hands.','Press firmly through your hands until the elbows are straight again.'],
+  cue:'Keep your hips high so the shoulders stay loaded.',
+  avoid:'Dropping the hips and turning the movement into a regular push-up.'
+},
+'Plank Shoulder Tap':{
+  target:'CORE · SHOULDERS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'plank-main.webp'],
+  labels:['BASE POSITION'],
+  steps:['Set a high plank with your feet slightly wider than hip-width.','Shift your weight gently and tap the opposite shoulder with one hand.','Place the hand down and alternate sides while keeping your trunk quiet.'],
+  cue:'Press the floor away and keep the hips square to the ground.',
+  avoid:'Rocking the hips side to side or rushing the taps.'
+},
+'DB Floor Press':{
+  target:'CHEST · TRICEPS',equipment:'DUMBBELLS',
+  images:[REPDB_BASE+'dumbbell-floor-press-start.webp',REPDB_BASE+'dumbbell-floor-press-peak.webp'],
+  labels:['START','PRESS'],
+  steps:['Lie on the floor with a dumbbell in each hand and elbows comfortably below shoulder height.','Press both dumbbells up until the arms are extended.','Lower under control until the upper arms contact the floor, then repeat.'],
+  cue:'Keep wrists stacked over elbows and ribs controlled.',
+  avoid:'Bouncing the elbows off the floor.'
+},
+'One-arm Row':{
+  target:'BACK · BICEPS',equipment:'DUMBBELL',
+  images:[REPDB_BASE+'single-arm-db-row-start.webp',REPDB_BASE+'single-arm-db-row-peak.webp'],
+  labels:['START','ROW'],
+  steps:['Support one hand and knee on a stable bench or surface.','Let the dumbbell hang, then pull it toward your hip.','Squeeze the shoulder blade and lower the weight under control.'],
+  cue:'Keep your torso stable and drive the elbow back.',
+  avoid:'Twisting the body to lift the weight.'
+},
+'Dead Bug':{
+  target:'CORE',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'dead-bug-start.webp',REPDB_BASE+'dead-bug-peak.webp'],
+  labels:['START','EXTEND'],
+  steps:['Lie on your back with arms up and hips and knees bent to 90 degrees.','Extend one arm and the opposite leg toward the floor.','Return to the start and alternate sides.'],
+  cue:'Keep the lower back gently pressed into the floor.',
+  avoid:'Arching the lower back as the limbs extend.'
+}
 };
-function loadExerciseMedia(name){
-  const src=exerciseMediaMap[name]||'';
-  exerciseVideo.pause(); exerciseVideo.removeAttribute('src'); exerciseVideo.load();
-  mediaFallback.classList.remove('hidden'); mediaPlay.textContent='▶'; fallbackTitle.textContent=name;
-  if(!src)return;
-  exerciseVideo.src=src;
-  exerciseVideo.onloadeddata=()=>{mediaFallback.classList.add('hidden')};
-  exerciseVideo.onerror=()=>{mediaFallback.classList.remove('hidden')};
+function genericGuide(name){
+  return{target:'TECHNIQUE',equipment:'YOUR SETUP',images:[],labels:[],steps:['Set your starting position and brace before the rep.','Move through the working range under control.','Finish the rep without losing alignment, then reset.'],cue:'Control the rep and keep tension on the target muscles.',avoid:'Using momentum when your position starts to break down.'}
 }
-function toggleExerciseVideo(){
-  if(!exerciseVideo.src || !mediaFallback.classList.contains('hidden')) return;
-  if(exerciseVideo.paused){exerciseVideo.play();mediaPlay.textContent='Ⅱ'}else{exerciseVideo.pause();mediaPlay.textContent='▶'}
+function renderExerciseGuide(name){
+  const g=exerciseGuides[name]||genericGuide(name);
+  exerciseTarget.textContent=g.target;
+  exerciseEquipment.textContent=g.equipment;
+  cue.textContent=g.cue;
+  avoidCue.textContent=g.avoid;
+  guideSteps.innerHTML=g.steps.map((s,i)=>'<div class="guideStep"><span>'+String(i+1).padStart(2,'0')+'</span><div>'+s+'</div></div>').join('');
+  if(g.images.length){
+    poseGrid.classList.toggle('single',g.images.length===1);
+    poseGrid.innerHTML=g.images.map((src,i)=>'<div class="poseFrame"><img src="'+src+'" alt="'+name+' '+(g.labels[i]||'reference')+'" loading="eager" referrerpolicy="no-referrer"><div class="poseTag">'+(g.labels[i]||('STEP '+(i+1)))+'</div></div>').join('');
+  }else{
+    poseGrid.classList.add('single');
+    poseGrid.innerHTML='<div class="referencePlaceholder">Reference illustration<br>coming next</div>';
+  }
 }
-function renderWorkout(){const data=currentWorkout();homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>`<div class="exerciseListRow clickableRow" onclick="openExercise(${i})"><div class="exerciseThumb"><span>▶</span></div><div class="grow"><b>${x[0]}</b><span>${x[1]} · video reference</span></div><div class="pill">View</div></div>`).join('');exerciseList.innerHTML=data.map((x,i)=>`<div class="exerciseListRow" style="${i===exIndex?'border-color:#8A684E':''}"><div class="icon">${i===exIndex?'NOW':String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${x[1]}</span></div><div class="pill">${i===exIndex?'Active':'Next'}</div></div>`).join('');exerciseName.textContent=data[exIndex][0];exerciseSets.textContent=data[exIndex][1];exerciseLabel.textContent=`EXERCISE ${exIndex+1} OF ${data.length}`;mediaStep.textContent=`${String(exIndex+1).padStart(2,'0')} / ${String(data.length).padStart(2,'0')}`;loadExerciseMedia(data[exIndex][0])}
+function renderWorkout(){
+  const data=currentWorkout();
+  homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>{
+    const g=exerciseGuides[x[0]]||genericGuide(x[0]);
+    const thumb=g.images?.[0]||'';
+    return '<div class="exerciseListRow clickableRow" onclick="openExercise('+i+')"><div class="exerciseThumb '+(thumb?'hasImg':'')+'">'+(thumb?'<img src="'+thumb+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span>REF</span>')+'</div><div class="grow"><b>'+x[0]+'</b><span>'+x[1]+' · movement guide</span></div><div class="pill">View</div></div>';
+  }).join('');
+  exerciseList.innerHTML=data.map((x,i)=>'<div class="exerciseListRow" style="'+(i===exIndex?'border-color:#8A684E':'')+'"><div class="icon">'+(i===exIndex?'NOW':String(i+1).padStart(2,'0'))+'</div><div class="grow"><b>'+x[0]+'</b><span>'+x[1]+'</span></div><div class="pill">'+(i===exIndex?'Active':'Next')+'</div></div>').join('');
+  exerciseName.textContent=data[exIndex][0];
+  exerciseSets.textContent=data[exIndex][1];
+  exerciseLabel.textContent='EXERCISE '+(exIndex+1)+' OF '+data.length;
+  mediaStep.textContent=String(exIndex+1).padStart(2,'0')+' / '+String(data.length).padStart(2,'0');
+  renderExerciseGuide(data[exIndex][0]);
+}
 function openExercise(i){exIndex=i;go('train');renderWorkout();showFeedback('Exercise opened')}
 function showFeedback(msg){feedbackToast.textContent=msg;feedbackToast.classList.add('show');clearTimeout(showFeedback.t);showFeedback.t=setTimeout(()=>feedbackToast.classList.remove('show'),1400)}
 function renderWeek(p){const n=parseInt(p.days)||4;weeklyPlan.innerHTML=Array.from({length:n},(_,i)=>`<div class="card"><div class="eyebrow">DAY ${i+1}</div><h3 style="margin:8px 0 4px">${['Full Body Strength','Upper Body','Lower Body','Conditioning','Full Body Strength','Mobility'][i%6]}</h3><p style="color:var(--muted);font-size:12px;margin:0">${p.time} · ${p.equip}</p></div>`).join('')}
