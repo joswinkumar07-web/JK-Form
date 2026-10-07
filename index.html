@@ -370,7 +370,7 @@ const exercisePools={
     lowerHinge:['Glute Bridge','Single-leg Glute Bridge'],
     upperPush:['Push-up','Pike Push-up','Close-grip Push-up'],
     upperPull:['Superman','Bird Dog'],
-    accessory:['Standing Calf Raise','Superman'],
+    accessory:['Standing Calf Raise','Superman'],upperAccessory:['Close-grip Push-up','Pike Push-up','Superman'],lowerAccessory:['Standing Calf Raise','Glute Bridge','Single-leg Glute Bridge'],
     core:['Dead Bug','Plank Shoulder Tap','Side Plank'],
     conditioning:['Mountain Climber','Squat to Reach'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -380,7 +380,7 @@ const exercisePools={
     lowerHinge:['DB RDL','DB Glute Bridge'],
     upperPush:['DB Floor Press','DB Shoulder Press','DB Close-grip Press'],
     upperPull:['One-arm Row','DB Pullover','DB Rear Delt Row'],
-    accessory:['DB Lateral Raise','DB Curl','DB Triceps Extension','Standing Calf Raise'],
+    accessory:['DB Lateral Raise','DB Curl','DB Triceps Extension','Standing Calf Raise'],upperAccessory:['DB Lateral Raise','DB Curl','DB Triceps Extension'],lowerAccessory:['Standing Calf Raise','DB Glute Bridge','DB Reverse Lunge'],
     core:['Dead Bug','Plank Shoulder Tap','Suitcase Hold'],
     conditioning:['DB Thruster','Mountain Climber'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -390,7 +390,7 @@ const exercisePools={
     lowerHinge:['Band RDL','Band Good Morning'],
     upperPush:['Band Chest Press','Band Shoulder Press','Band Push-up'],
     upperPull:['Band Row','Band Pulldown','Band Pull Apart'],
-    accessory:['Band Lateral Raise','Band Curl','Band Triceps Pressdown','Band Lateral Walk'],
+    accessory:['Band Lateral Raise','Band Curl','Band Triceps Pressdown','Band Lateral Walk'],upperAccessory:['Band Lateral Raise','Band Curl','Band Triceps Pressdown'],lowerAccessory:['Band Lateral Walk','Standing Calf Raise','Band Reverse Lunge'],
     core:['Pallof Press','Dead Bug','Plank Shoulder Tap'],
     conditioning:['Band Squat to Press','Mountain Climber'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -400,7 +400,7 @@ const exercisePools={
     lowerHinge:['Romanian Deadlift','Leg Curl','Hip Thrust'],
     upperPush:['Chest Press','Shoulder Press','Incline Chest Press'],
     upperPull:['Lat Pulldown','Seated Cable Row','Chest-supported Row'],
-    accessory:['Cable Lateral Raise','DB Curl','Triceps Pressdown','Standing Calf Raise'],
+    accessory:['Cable Lateral Raise','DB Curl','Triceps Pressdown','Standing Calf Raise'],upperAccessory:['Cable Lateral Raise','DB Curl','Triceps Pressdown'],lowerAccessory:['Standing Calf Raise','Leg Curl','Leg Extension'],
     core:['Cable Crunch','Dead Bug','Pallof Press'],
     conditioning:['Incline Walk','Mountain Climber'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -458,8 +458,8 @@ function isAvoidedExercise(name,p){
   return false;
 }
 function relatedPoolKeys(key){
-  if(['lowerKnee','lowerHinge'].includes(key))return[key,'lowerKnee','lowerHinge','accessory'];
-  if(['upperPush','upperPull'].includes(key))return[key,'upperPush','upperPull','accessory'];
+  if(['lowerKnee','lowerHinge','lowerAccessory'].includes(key))return[key,'lowerKnee','lowerHinge','lowerAccessory','accessory'];
+  if(['upperPush','upperPull','upperAccessory'].includes(key))return[key,'upperPush','upperPull','upperAccessory','accessory'];
   if(key==='core')return['core','accessory'];
   if(key==='conditioning')return['conditioning','core'];
   if(key==='mobility')return['mobility','core'];
@@ -477,11 +477,19 @@ function replaceAvoidedItems(items,p,pool){
     return null;
   }).filter(Boolean);
 }
-function priorityKey(area){
-  return{Chest:'upperPush',Back:'upperPull',Shoulders:'upperPush',Arms:'accessory',Legs:'lowerKnee',Glutes:'lowerHinge',Core:'core'}[area]||null;
-}
-function priorityIndex(area){
-  return{Chest:0,Back:0,Shoulders:1,Arms:1,Legs:0,Glutes:0,Core:0}[area]||0;
+function priorityCandidates(area,pool,p){
+  const values=(key)=>pool[key]||[];
+  if(area==='Chest')return values('upperPush');
+  if(area==='Back')return values('upperPull');
+  if(area==='Shoulders')return [values('upperPush')[1],values('upperAccessory')[0],values('upperPush')[0]].filter(Boolean);
+  if(area==='Arms'){
+    if(p.equip==='No equipment')return ['Close-grip Push-up'];
+    return values('upperAccessory').filter(n=>/(curl|triceps|close-grip)/i.test(n)).concat(values('upperAccessory'));
+  }
+  if(area==='Legs')return values('lowerKnee').concat(values('lowerAccessory'));
+  if(area==='Glutes')return values('lowerHinge').concat(values('lowerAccessory'));
+  if(area==='Core')return values('core');
+  return[];
 }
 function sessionSupportsPriority(title,area){
   if(!area||area==='Balanced')return false;
@@ -491,18 +499,22 @@ function sessionSupportsPriority(title,area){
   return false;
 }
 function applyPriority(items,p,pool,title){
-  const area=p.priorityArea||'Balanced',key=priorityKey(area);
-  if(!key||!sessionSupportsPriority(title,area))return items;
-  const list=pool[key]||[];
-  let name=list[priorityIndex(area)%Math.max(1,list.length)]||'';
-  if(area==='Arms'&&p.equip==='No equipment')name='Close-grip Push-up';
-  if(area==='Shoulders'&&p.equip==='No equipment')name='Pike Push-up';
-  if(!name||isAvoidedExercise(name,p)||items.some(x=>x.name===name)){
-    name=list.find(n=>!isAvoidedExercise(n,p)&&!items.some(x=>x.name===n))||'';
-  }
+  const area=p.priorityArea||'Balanced';
+  if(!sessionSupportsPriority(title,area))return items;
+  const candidates=priorityCandidates(area,pool,p);
+  const name=candidates.find(n=>n&&!isAvoidedExercise(n,p)&&!items.some(x=>x.name===n));
   if(!name)return items;
-  const role=area==='Core'?'core':'accessory',priority=sessionExercise(name,role,key);
-  const out=[...items],replaceAt=out.map(x=>x.role).lastIndexOf('accessory')>=0?out.map(x=>x.role).lastIndexOf('accessory'):out.length-1;
+  let key='accessory',role='accessory';
+  if(area==='Core'){key='core';role='core'}
+  else if(['Chest','Shoulders'].includes(area)){key='upperPush'}
+  else if(area==='Back'){key='upperPull'}
+  else if(area==='Arms'){key='upperAccessory'}
+  else if(area==='Legs'){key='lowerKnee'}
+  else if(area==='Glutes'){key='lowerHinge'}
+  const priority=sessionExercise(name,role,key);
+  const out=[...items];
+  let replaceAt=-1;
+  for(let i=out.length-1;i>=0;i--){if(['accessory','core','conditioning','mobility'].includes(out[i].role)){replaceAt=i;break}}
   if(out.length<exerciseLimit(p))out.push(priority);else if(replaceAt>=0)out[replaceAt]=priority;
   return out;
 }
@@ -514,16 +526,16 @@ function rawSession(type,variant,p){
     fullA:{title:'Full Body A',focus:'Squat · push · pull',items:[S('lowerKnee',0,'main'),S('upperPush',0,'main'),S('upperPull',0,'main'),S('lowerHinge',0,'accessory'),S('core',0,'core'),S('accessory',0,'accessory'),S('conditioning',0,'conditioning')]},
     fullB:{title:'Full Body B',focus:'Hinge · pull · unilateral',items:[S('lowerHinge',0,'main'),S('upperPull',1,'main'),S('lowerKnee',1,'main'),S('upperPush',1,'accessory'),S('core',1,'core'),S('accessory',1,'accessory'),S('conditioning',1,'conditioning')]},
     fullC:{title:'Full Body C',focus:'Balanced strength · control',items:[S('lowerKnee',2,'main'),S('upperPush',0,'main'),S('upperPull',0,'main'),S('lowerHinge',1,'accessory'),S('core',2,'core'),S('accessory',2,'accessory'),S('conditioning',0,'conditioning')]},
-    upperA:{title:'Upper A',focus:'Push · pull · shoulders',items:[S('upperPush',0,'main'),S('upperPull',0,'main'),S('upperPush',1,'accessory'),S('upperPull',1,'accessory'),S('accessory',0,'accessory'),S('accessory',1,'accessory'),S('core',0,'core')]},
-    upperB:{title:'Upper B',focus:'Back · chest · arms',items:[S('upperPull',1,'main'),S('upperPush',0,'main'),S('upperPull',0,'accessory'),S('upperPush',1,'accessory'),S('accessory',1,'accessory'),S('accessory',2,'accessory'),S('core',1,'core')]},
-    lowerA:{title:'Lower A',focus:'Squat · hinge · core',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',3,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
-    lowerB:{title:'Lower B',focus:'Hinge · unilateral · core',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',0,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',0,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
-    pushA:{title:'Push A',focus:'Chest · shoulders · triceps',items:[S('upperPush',0,'main'),S('upperPush',1,'main'),S('upperPush',2,'accessory'),S('accessory',0,'accessory'),S('accessory',2,'accessory'),S('core',0,'core')]},
-    pushB:{title:'Push B',focus:'Shoulders · chest · triceps',items:[S('upperPush',1,'main'),S('upperPush',0,'main'),S('accessory',0,'accessory'),S('upperPush',2,'accessory'),S('accessory',2,'accessory'),S('core',1,'core')]},
-    pullA:{title:'Pull A',focus:'Back · rear delts · biceps',items:[S('upperPull',0,'main'),S('upperPull',1,'main'),S('upperPull',2,'accessory'),S('accessory',1,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
-    pullB:{title:'Pull B',focus:'Back · biceps · trunk',items:[S('upperPull',1,'main'),S('upperPull',0,'main'),S('upperPull',2,'accessory'),S('accessory',1,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
-    legsA:{title:'Legs A',focus:'Quads · glutes · hamstrings',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',3,'accessory'),S('core',0,'core')]},
-    legsB:{title:'Legs B',focus:'Posterior chain · unilateral',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',2,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',0,'accessory'),S('core',1,'core')]},
+    upperA:{title:'Upper A',focus:'Push · pull · shoulders',items:[S('upperPush',0,'main'),S('upperPull',0,'main'),S('upperPush',1,'accessory'),S('upperPull',1,'accessory'),S('upperAccessory',0,'accessory'),S('upperAccessory',1,'accessory'),S('core',0,'core')]},
+    upperB:{title:'Upper B',focus:'Back · chest · arms',items:[S('upperPull',1,'main'),S('upperPush',0,'main'),S('upperPull',0,'accessory'),S('upperPush',1,'accessory'),S('upperAccessory',1,'accessory'),S('upperAccessory',2,'accessory'),S('core',1,'core')]},
+    lowerA:{title:'Lower A',focus:'Squat · hinge · core',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('lowerAccessory',0,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
+    lowerB:{title:'Lower B',focus:'Hinge · unilateral · core',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',0,'accessory'),S('lowerHinge',1,'accessory'),S('lowerAccessory',1,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
+    pushA:{title:'Push A',focus:'Chest · shoulders · triceps',items:[S('upperPush',0,'main'),S('upperPush',1,'main'),S('upperPush',2,'accessory'),S('upperAccessory',0,'accessory'),S('upperAccessory',2,'accessory'),S('core',0,'core')]},
+    pushB:{title:'Push B',focus:'Shoulders · chest · triceps',items:[S('upperPush',1,'main'),S('upperPush',0,'main'),S('upperAccessory',0,'accessory'),S('upperPush',2,'accessory'),S('upperAccessory',2,'accessory'),S('core',1,'core')]},
+    pullA:{title:'Pull A',focus:'Back · rear delts · biceps',items:[S('upperPull',0,'main'),S('upperPull',1,'main'),S('upperPull',2,'accessory'),S('upperAccessory',1,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
+    pullB:{title:'Pull B',focus:'Back · biceps · trunk',items:[S('upperPull',1,'main'),S('upperPull',0,'main'),S('upperPull',2,'accessory'),S('upperAccessory',1,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
+    legsA:{title:'Legs A',focus:'Quads · glutes · hamstrings',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('lowerAccessory',0,'accessory'),S('core',0,'core')]},
+    legsB:{title:'Legs B',focus:'Posterior chain · unilateral',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',2,'accessory'),S('lowerHinge',1,'accessory'),S('lowerAccessory',1,'accessory'),S('core',1,'core')]},
     conditioning:{title:'Conditioning + Core',focus:'Work capacity · trunk',items:[S('conditioning',0,'conditioning'),S('lowerKnee',1,'accessory'),S('upperPush',0,'accessory'),S('conditioning',1,'conditioning'),S('core',0,'core'),S('core',1,'core')]},
     mobility:{title:'Mobility + Control',focus:'Range · control · core',items:[S('mobility',0,'mobility'),S('mobility',1,'mobility'),S('core',0,'core'),S('lowerHinge',0,'accessory'),S('core',1,'core')]}
   };
