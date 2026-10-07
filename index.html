@@ -299,16 +299,90 @@ linear-gradient(180deg,#16100D,#090605)}
 .mealTags span{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .mealSwapBtn{border:0;background:none;color:var(--text);font-size:8px;letter-spacing:.14em;text-transform:uppercase;min-height:38px;padding:0}
 @media(max-width:420px){.mealPrefs{grid-template-columns:1fr}}
+
+.homeHello{padding-bottom:24px}
+.homeHello h1{font-size:38px;max-width:430px}
+.homeHello p{font-size:11px;max-width:390px}
+.homePrimary{position:relative;padding:24px 0 22px;border-top:1px solid rgba(233,225,215,.14);border-bottom:1px solid rgba(233,225,215,.14)}
+.homePrimaryTop{display:flex;justify-content:space-between;gap:16px;margin-bottom:18px}
+.homePrimaryTop span{font-size:8px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+.homePrimary h2{font-size:42px;line-height:.94;letter-spacing:-1.8px;margin:0;max-width:430px;font-weight:600}
+.homePrimary>p{font-size:11px;line-height:1.5;color:var(--muted);margin:11px 0 0}
+.homeWhy{margin-top:22px;padding:15px 0 0;border-top:1px solid rgba(233,225,215,.08)}
+.homeWhy span,.homeProgression span{display:block;font-size:7px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.homeWhy b,.homeProgression b{display:block;font-size:12px;font-weight:500}
+.homeWhy p,.homeProgression p{font-size:10px;line-height:1.55;color:var(--muted);margin:5px 0 0;max-width:440px}
+.homeActions{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;margin-top:20px}
+.homeTextAction,.homeSectionLink button{border:0;background:none;color:var(--muted);font-size:8px;letter-spacing:.13em;text-transform:uppercase;padding:10px 0;min-height:42px}
+.homeTextAction:hover,.homeSectionLink button:hover{color:var(--text)}
+.homeProgression{display:grid;grid-template-columns:.72fr 1.28fr;gap:18px;padding:18px 0;border-bottom:1px solid rgba(233,225,215,.1)}
+.homeProgression>p{margin:0}
+.homeSectionLink{margin-top:28px}
+.homeSectionLink button{min-height:auto;padding:5px 0}
+.homeWeek{padding:16px 0 5px;border-top:1px solid rgba(233,225,215,.1);border-bottom:1px solid rgba(233,225,215,.1)}
+.homeWeekHead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.homeWeekHead b{font-size:12px;font-weight:500}
+.homeWeekHead span{font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.homeWeekBar{margin-bottom:5px}
+.homeStats{margin-top:12px}
+.homeStats .stat{padding-top:11px;padding-bottom:8px}
+.homeWorkoutPreview .exerciseListRow{padding:13px 0}
+.homeMeals{padding:15px 0 2px;border-top:1px solid rgba(233,225,215,.1)}
+.homeMealsMeta{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:5px}
+.homeMealsMeta span{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.homeMealsMeta b{font-size:9px;color:var(--muted);font-weight:400;text-align:right}
+.homeMeals .item{padding:12px 0}
+.homeMeals .item b{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.homeMeals .item span{font-size:12px;color:var(--text);margin-top:5px}
+@media(max-width:420px){
+  .homePrimary h2{font-size:36px}
+  .homeProgression{grid-template-columns:1fr}
+  .homeActions{grid-template-columns:1fr}
+  .homeTextAction{text-align:left}
+}
 </style>
 </head>
 <body>
 <div class="app">
   <section id="home" class="screen active">
     <div class="topbar"><div class="brand">JK FORM</div><div class="avatar" id="avatar">JK</div></div>
-    <div class="hello"><small id="goalEyebrow">TODAY / TRAIN</small><h1 id="greeting">Ready when you are.</h1><p>Your next session, without the noise.</p></div>
-    <div class="card hero"><div><div class="eyebrow"><span>FORM / TRAIN</span><span>SESSION 01</span></div><h2 id="todayTitle">Full Body · 30 min</h2><p id="todayCopy">Built around your level and equipment.</p></div><div class="row"><button class="btn primary" onclick="go('train');startSession()">Start workout</button><button class="btn secondary" onclick="go('plan')">Plan</button></div><div class="stats"><div class="stat"><b id="weekCount">0/4</b><span>This week</span></div><div class="stat"><b id="homeActiveMin">0</b><span>Active min</span></div><div class="stat"><b id="homeStreak">0</b><span>Day streak</span></div></div></div>
-    <div class="sectionTitle"><h3>Up next</h3><span>This week</span></div><div id="homeWorkout"></div>
-    <div class="sectionTitle"><h3>Meals today</h3><span id="dietTag">Balanced</span></div><div class="card" id="mealSnapshot"></div>
+    <div class="hello homeHello"><small id="goalEyebrow">TODAY / TRAIN</small><h1 id="greeting">Ready when you are.</h1><p id="homeLead">One clear session. Built around your plan.</p></div>
+
+    <div class="homePrimary">
+      <div class="homePrimaryTop"><span id="homeSessionLabel">NEXT · DAY 1</span><span id="homeDuration">30 MIN</span></div>
+      <h2 id="todayTitle">Full Body A</h2>
+      <p id="todayCopy">Balanced strength · Beginner · no equipment</p>
+      <div class="homeWhy">
+        <span>WHY THIS SESSION</span>
+        <b id="homeWhyTitle">Your next planned workout</b>
+        <p id="homeWhyCopy">Built from your weekly split, goal and available equipment.</p>
+      </div>
+      <div class="homeActions">
+        <button class="btn primary" id="homeStartBtn" onclick="go('train');startSession()">Start workout</button>
+        <button class="homeTextAction" onclick="go('train');openFitToday()">Fit today →</button>
+      </div>
+    </div>
+
+    <div class="homeProgression" id="homeProgression" style="display:none">
+      <div><span>NEXT TARGET</span><b id="homeProgressionTitle">Progress from last time</b></div>
+      <p id="homeProgressionCopy"></p>
+    </div>
+
+    <div class="sectionTitle homeSectionLink"><h3>This week</h3><button onclick="go('progress')">View progress →</button></div>
+    <div class="homeWeek">
+      <div class="homeWeekHead"><b id="homeWeekText">0 of 4 sessions</b><span id="homeWeekStatus">Week in progress</span></div>
+      <div class="progressbar homeWeekBar"><span id="homeWeekBar" style="width:0%"></span></div>
+      <div class="stats homeStats"><div class="stat"><b id="weekCount">0/4</b><span>Sessions</span></div><div class="stat"><b id="homeActiveMin">0</b><span>Active min</span></div><div class="stat"><b id="homeStreak">0</b><span>Day streak</span></div></div>
+    </div>
+
+    <div class="sectionTitle homeSectionLink"><h3>Session preview</h3><button onclick="go('plan')">Full plan →</button></div>
+    <div id="homeWorkout" class="homeWorkoutPreview"></div>
+
+    <div class="sectionTitle homeSectionLink"><h3>Meals today</h3><button onclick="go('meals')">Open meals →</button></div>
+    <div class="homeMeals">
+      <div class="homeMealsMeta"><span id="dietTag">Balanced</span><b id="homeMealFocus">Built around your preferences</b></div>
+      <div id="mealSnapshot"></div>
+    </div>
   </section>
 
   <section id="train" class="screen">
@@ -777,7 +851,33 @@ function dbToLocalProfile(p){return{name:p.name||'Athlete',goal:p.goal||'General
 async function getUser(){const {data}=await sb.auth.getUser();return data.user||null}
 async function syncProfileToCloud(){const user=await getUser();const raw=localStorage.getItem(KEY);if(!user||!raw)return false;const p=JSON.parse(raw);const {error}=await sb.from('profiles').upsert(localToDbProfile(p,user),{onConflict:'id'});if(error){console.error(error);return false}return true}
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
-function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll('#'+id+' .choice').forEach(ch=>ch.classList.toggle('selected',ch.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function renderActiveSessionContext(p){
+function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll('#'+id+' .choice').forEach(ch=>ch.classList.toggle('selected',ch.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function currentProgressionCue(session){
+  const notes=(session?.exercises||[]).map(x=>x[3]).filter(Boolean);
+  return notes[0]||'';
+}
+function renderHomeIntelligence(p){
+  if(!p)return;
+  const program=currentProgram(),session=currentSession(),effective=sessionProfile(p);
+  const day=Math.max(1,activeSessionIndex+1),total=program.sessions.length;
+  homeSessionLabel.textContent='NEXT · DAY '+day+' OF '+total;
+  homeDuration.textContent=(parseInt(effective.time)||30)+' MIN';
+  homeStartBtn.textContent='Start '+session.title;
+  homeLead.textContent='Your next session, nutrition and progress in one place.';
+  homeWhyTitle.textContent=program.name+' · '+session.focus;
+  const reasons=[];
+  if(p.priorityArea&&p.priorityArea!=='Balanced')reasons.push(p.priorityArea+' priority');
+  reasons.push(String(effective.equip||'No equipment').toLowerCase());
+  reasons.push(p.trainingStyle&&p.trainingStyle!=='Balanced'?p.trainingStyle.toLowerCase():p.level.toLowerCase());
+  homeWhyCopy.textContent='Built from '+reasons.join(' · ')+'.';
+  const cue=currentProgressionCue(session);
+  homeProgression.style.display=cue?'grid':'none';
+  if(cue){
+    const feedback=adaptiveFeedback[baseSession().key];
+    homeProgressionTitle.textContent=feedback==='too_easy'?'Progress from last time':feedback==='too_hard'?'Make the next session more manageable':'Repeat with quality';
+    homeProgressionCopy.textContent=cue;
+  }
+}
+function renderActiveSessionContext(p){
   const effective=sessionProfile(p),session=currentSession();
   todayTitle.textContent=session.title+' · '+String(effective.time||'30 minutes').replace(' minutes',' min');
   todayCopy.textContent=session.focus+' · '+effective.level+' · '+String(effective.equip).toLowerCase()+(effective.priorityArea&&effective.priorityArea!=='Balanced'?' · '+effective.priorityArea+' priority':'');
@@ -785,6 +885,7 @@ function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.
   trainTitle.textContent=session.title;
   trainSubtitle.textContent=session.focus+' · '+effective.goal+(todayAdjustment.lighter?' · lighter day':'');
   updateTodayFitLabel();
+  renderHomeIntelligence(p);
 }
 function applyProfile(p){
   const first=(p.name||'Athlete').split(' ')[0],hr=new Date().getHours(),hello=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
@@ -1353,12 +1454,15 @@ function calcStreak(sessions){
 async function refreshProgress(){
   const raw=localStorage.getItem(KEY);const p=raw?JSON.parse(raw):{};const target=parseInt(p.days)||4;
   const user=await getUser();
-  if(!user){weekCount.textContent='0/'+target;homeActiveMin.textContent='0';homeStreak.textContent='0';progressWeekLabel.textContent='0 of '+target;progressWeekBar.style.width='0%';progressStreak.textContent='0';progressSessions.textContent='0';progressTraining.textContent='0m';progressRecent.innerHTML='<div class="emptyState">Sign in or start as a guest to track progress.</div>';return}
+  if(!user){weekCount.textContent='0/'+target;homeActiveMin.textContent='0';homeStreak.textContent='0';homeWeekText.textContent='0 of '+target+' sessions';homeWeekStatus.textContent='Start with today';homeWeekBar.style.width='0%';progressWeekLabel.textContent='0 of '+target;progressWeekBar.style.width='0%';progressStreak.textContent='0';progressSessions.textContent='0';progressTraining.textContent='0m';progressRecent.innerHTML='<div class="emptyState">Sign in or start as a guest to track progress.</div>';return}
   const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at,plan_index,session_key,difficulty_feedback').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
   if(error){console.error(error);return}
   const sessions=data||[];adaptiveFeedback={};for(const s of sessions){if(s.session_key&&s.difficulty_feedback&&adaptiveFeedback[s.session_key]===undefined)adaptiveFeedback[s.session_key]=s.difficulty_feedback}const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
   const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){const lastPlanned=weekly.find(s=>Number.isInteger(s.plan_index));activeSessionIndex=lastPlanned?((lastPlanned.plan_index+1)%program.sessions.length):(weekly.length%program.sessions.length);renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
   weekCount.textContent=weekly.length+'/'+target;homeActiveMin.textContent=String(weeklyMin);homeStreak.textContent=String(streak);
+  homeWeekText.textContent=weekly.length+' of '+target+' sessions';
+  homeWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';
+  homeWeekStatus.textContent=weekly.length>=target?'Week complete':weekly.length===0?'Start with today':(target-weekly.length)+' session'+((target-weekly.length)===1?'':'s')+' left';
   progressWeekLabel.textContent=weekly.length+' of '+target;progressWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';progressStreak.textContent=String(streak);progressSessions.textContent=String(sessions.length);progressTraining.textContent=totalMin>=60?(Math.floor(totalMin/60)+'h '+(totalMin%60?totalMin%60+'m':'')):totalMin+'m';
   progressRecent.innerHTML=sessions.length?sessions.slice(0,6).map(s=>'<div class="historyRow"><div><b>'+(s.workout_name||'Workout')+'</b><span>'+(s.duration_minutes||0)+' min · completed</span></div><time>'+new Date(s.completed_at||s.created_at).toLocaleDateString(undefined,{day:'numeric',month:'short'})+'</time></div>').join(''):'<div class="emptyState">Complete a workout and it will appear here.</div>';
 }
@@ -1388,7 +1492,7 @@ async function saveWorkoutFeedback(value){
   const {error}=await sb.from('workout_sessions').update({difficulty_feedback:value}).eq('id',completedWorkoutId);
   if(error){console.error(error);feedbackImpact.textContent='Could not save feedback right now.';return}
   if(completedSessionKey)adaptiveFeedback[completedSessionKey]=value;
-  const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);activeProgram=buildProgram(p);renderWeek(p)}
+  const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);activeProgram=buildProgram(p);renderWeek(p);renderActiveSessionContext(p);renderWorkout()}
   showFeedback('Feedback saved');
 }
 function closeWorkoutComplete(){completeSheet.classList.remove('show');completedWorkoutId=null;completedSessionKey=null;completedSessionMinutes=null}
@@ -1571,8 +1675,9 @@ function renderMealPlan(){
     const tags=[m.minutes+' min',m.budget,...m.tags.slice(0,2)];
     return'<div class="mealCard"><div class="mealCardTop"><div><div class="mealSlot">'+slots[i]+'</div><h3>'+m.name+'</h3><p>'+m.desc+'</p></div><button class="mealSwapBtn" onclick="openMealSwap('+i+')">Swap</button></div><div class="mealTags">'+tags.map(t=>'<span>'+t+'</span>').join('')+'</div></div>';
   }).join('');
-  mealSnapshot.innerHTML=chosen.slice(0,3).filter(Boolean).map(m=>'<div class="item" style="margin-bottom:8px"><div class="grow"><b>'+m.slot+'</b><span>'+m.name+'</span></div></div>').join('');
+  mealSnapshot.innerHTML=chosen.slice(0,3).filter(Boolean).map(m=>'<div class="item"><div class="grow"><b>'+m.slot+'</b><span>'+m.name+'</span></div></div>').join('');
   dietTag.textContent=p.diet;
+  homeMealFocus.textContent=p.cuisine+' · '+p.maxMinutes+' min max'+(normalizeProteinPreference(p)!=='Flexible'?' · '+normalizeProteinPreference(p):'');
   mealPlanMeta.textContent=p.cuisine+' · '+p.maxMinutes+' min max';
   const focus=nutritionFocus(p);nutritionFocusTitle.textContent=focus.title;nutritionFocusCopy.textContent=focus.copy;nutritionFocusMeta.innerHTML=focus.tags.map(x=>'<span>'+x+'</span>').join('');
 }
