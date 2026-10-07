@@ -691,6 +691,16 @@ function renderWorkout(){
     exerciseControls.classList.remove('single');
     timerBtn.textContent=tick?'Pause rest':(secs<=0?'Restart rest':'Resume rest');
     completeSetBtn.textContent='Start set '+setIndex;
+  }else if(workoutPhase==='between'){
+    setProgress.textContent='NEXT · SET 1 OF '+totalSets;
+    workoutStateKicker.textContent='EXERCISE COMPLETE';
+    workoutStateText.textContent='Up next · '+current[0];
+    workoutStateDetail.textContent='Rest, then begin set 1';
+    timer.style.display='block';
+    timerBtn.style.display='inline-flex';
+    exerciseControls.classList.remove('single');
+    timerBtn.textContent=tick?'Pause rest':(secs<=0?'Restart rest':'Resume rest');
+    completeSetBtn.textContent='Start '+current[0];
   }else{
     setProgress.textContent='SET '+setIndex+' OF '+totalSets;
     workoutStateKicker.textContent='WORK SET';
@@ -771,7 +781,7 @@ function beginRest(){
   timerBtn.textContent='Pause rest';
 }
 function toggleTimer(){
-  if(workoutPhase!=='rest')return;
+  if(!['rest','between'].includes(workoutPhase))return;
   if(tick){stopRestTimer();timerBtn.textContent='Resume rest';return}
   if(secs<=0){secs=30;timer.textContent='00:30'}
   tick=setInterval(()=>{
@@ -783,6 +793,14 @@ function toggleTimer(){
 function startNextSet(){
   stopRestTimer();workoutPhase='work';secs=30;timer.textContent='00:30';renderWorkout();showFeedback('Set '+setIndex+' ready')
 }
+function beginBetweenExerciseRest(){
+  stopRestTimer();workoutPhase='between';secs=30;timer.textContent='00:30';renderWorkout();
+  tick=setInterval(()=>{
+    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Ready · '+currentWorkout()[exIndex][0];showFeedback('Next exercise ready')}
+  },1000);
+  timerBtn.textContent='Pause rest';
+}
 function showExerciseAdvance(completed,next){
   advanceText.textContent=completed+' done · '+next+' next';
   exerciseAdvance.classList.add('show');
@@ -790,7 +808,7 @@ function showExerciseAdvance(completed,next){
   showExerciseAdvance.t=setTimeout(()=>exerciseAdvance.classList.remove('show'),2200);
 }
 function handleWorkoutPrimary(){
-  if(workoutPhase==='rest'){startNextSet();return}
+  if(['rest','between'].includes(workoutPhase)){startNextSet();return}
   completeCurrentSet();
 }
 async function startSession(){
@@ -824,8 +842,8 @@ async function completeCurrentSet(){
 
   if(!finalExercise){
     const completedName=current[0];
-    exIndex++;setIndex=1;workoutPhase='work';secs=30;
-    renderWorkout();
+    exIndex++;setIndex=1;secs=30;
+    beginBetweenExerciseRest();
     showExerciseAdvance(completedName,data[exIndex][0]);
     exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});
     return;
