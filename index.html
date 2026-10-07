@@ -734,7 +734,7 @@ if ('serviceWorker' in navigator) { window.addEventListener('load', () => naviga
         showEntry('new');
       }
     }else{
-      showEntry('new');
+      showEntry(localStorage.getItem(HAD_ACCOUNT_KEY)==='1'?'returning':'new');
     }
   }
 
