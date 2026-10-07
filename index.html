@@ -255,6 +255,14 @@ linear-gradient(180deg,#16100D,#090605)}
 .trainingPrefs .chips{display:flex;flex-wrap:wrap;gap:8px}
 .trainingPrefs .chip{min-height:42px}
 .prefHint{font-size:10px;line-height:1.55;color:var(--muted);margin:5px 0 0}
+
+.sessionFeedback{padding:18px 0 20px;margin:0 0 18px;border-bottom:1px solid rgba(233,225,215,.1)}
+.sessionFeedback>span{display:block;font-size:8px;letter-spacing:.18em;color:var(--muted);margin-bottom:10px}
+.feedbackChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.feedbackChoices button{min-height:44px;border:1px solid rgba(233,225,215,.14);background:transparent;color:var(--text);font-size:9px;letter-spacing:.08em}
+.feedbackChoices button.active{border-color:var(--accent);color:var(--accent)}
+.sessionFeedback small{display:block;font-size:9px;line-height:1.45;color:var(--muted);margin-top:10px}
+.adaptiveHint{margin:10px 0 0;padding-left:11px;border-left:1px solid var(--accent);font-size:9px;line-height:1.5;color:#CFC5BC}
 </style>
 </head>
 <body>
@@ -280,7 +288,7 @@ linear-gradient(180deg,#16100D,#090605)}
 <div class="exerciseInfo">
   <div class="eyebrow" id="exerciseLabel">EXERCISE 1</div>
   <div class="exerciseSummary"><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="sets" id="exerciseSets">3 × 15</div></div><div class="setProgress" id="setProgress">SET 1 OF 3</div>
-  <div class="exerciseMetaLine"><span id="exerciseTarget">QUADS · GLUTES</span><span id="exerciseEquipment">BODYWEIGHT</span></div>
+  <div class="exerciseMetaLine"><span id="exerciseTarget">QUADS · GLUTES</span><span id="exerciseEquipment">BODYWEIGHT</span></div><div class="adaptiveHint" id="adaptiveHint" style="display:none"></div>
   <div class="guideBlock"><div class="guideLabel">HOW TO</div><div class="guideSteps" id="guideSteps"></div></div>
   <div class="guideSplit">
     <div><div class="guideLabel">FORM CUE</div><div class="guideText" id="cue">Brace first. Control the lowering phase.</div></div>
@@ -349,7 +357,7 @@ linear-gradient(180deg,#16100D,#090605)}
     <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
   </div></div>
 </div>
-<div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
+<div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
 <div class="obStep" data-step="2"><div class="eyebrow">YOUR GOAL</div><h1>What are you training for?</h1><p>Choose the outcome that matters most right now.</p><div class="choiceGrid" id="goalChoices"><button class="choice" data-value="Build muscle"><b>Build muscle</b><span>Strength, muscle and progressive overload.</span></button><button class="choice" data-value="Fat loss"><b>Fat loss</b><span>Higher activity with strength retention.</span></button><button class="choice" data-value="General fitness"><b>General fitness</b><span>Strength, energy and consistency.</span></button><button class="choice" data-value="Mobility"><b>Mobility</b><span>Move better and improve control.</span></button></div></div>
@@ -363,7 +371,7 @@ linear-gradient(180deg,#16100D,#090605)}
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={};const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();
 const exercisePools={
   'No equipment':{
     lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
@@ -436,7 +444,34 @@ function repRangeFor(p,role){
   if(p.goal==='Mobility')return role==='main'?'8–10 controlled':'10–12 controlled';
   return role==='main'?'8–12':'10–15';
 }
-function prescribeExercise(item,p){return[item.name,setCountFor(p,item.role)+' × '+repRangeFor(p,item.role),item.role]}
+function parseRepRange(spec){
+  const m=String(spec).match(/(\d+)\s*[–-]\s*(\d+)/);
+  return m?{low:+m[1],high:+m[2]}:null;
+}
+function adaptiveNoteFor(sessionKey,p,role,spec){
+  const feedback=adaptiveFeedback[sessionKey];
+  if(!feedback)return '';
+  if(feedback==='too_easy'){
+    if(p.equip==='No equipment'){
+      const range=parseRepRange(spec);
+      return range?'Next target · '+(range.low+2)+'–'+(range.high+2)+' reps':'Next target · add 1–2 controlled reps';
+    }
+    return role==='main'?'Next target · increase resistance slightly if form stays clean':'Next target · add 1–2 reps or a small load increase';
+  }
+  if(feedback==='too_hard'){
+    return p.equip==='No equipment'?'Next target · use the lower end of the range with clean form':'Next target · use the lower end of the range or slightly less resistance';
+  }
+  if(feedback==='good')return 'Last time felt right · repeat the target and progress only if form stays clean';
+  return '';
+}
+function adaptSpecFor(sessionKey,p,role,spec){
+  const feedback=adaptiveFeedback[sessionKey];
+  if(feedback!=='too_easy'||p.equip!=='No equipment')return spec;
+  const range=parseRepRange(spec);
+  if(!range||/sec|side/i.test(spec))return spec;
+  return String(spec).replace(/\d+\s*[–-]\s*\d+/, (range.low+2)+'–'+(range.high+2));
+}
+function prescribeExercise(item,p,sessionKey){const base=setCountFor(p,item.role)+' × '+repRangeFor(p,item.role);const spec=adaptSpecFor(sessionKey,p,item.role,base);return[item.name,spec,item.role,adaptiveNoteFor(sessionKey,p,item.role,base)]}
 function progressionRule(p){
   if(p.goal==='Build muscle')return p.equip==='No equipment'
     ?'Reach the top of the rep range with clean form, then add reps, tempo or a harder variation.'
@@ -556,8 +591,9 @@ function rawSession(type,variant,p){
     const finisher=(pool.conditioning||[]).find(n=>!items.some(x=>x.name===n)&&!isAvoidedExercise(n,p));
     if(finisher)items.push(sessionExercise(finisher,'conditioning','conditioning'));
   }
-  return{key:type+(v?'-'+v:''),title:base.title+(v&&['fullA','fullB','upperA','upperB','lowerA','lowerB'].includes(type)?'':''),
-    focus:base.focus,exercises:items.map(x=>prescribeExercise(x,p))};
+  const sessionKey=type+(v?'-'+v:'');
+  return{key:sessionKey,title:base.title+(v&&['fullA','fullB','upperA','upperB','lowerA','lowerB'].includes(type)?'':''),
+    focus:base.focus,exercises:items.map(x=>prescribeExercise(x,p,sessionKey))};
 }
 function buildProgram(p){
   const days=Math.max(2,Math.min(6,parseInt(p.days)||4));
@@ -1057,6 +1093,9 @@ function renderWorkout(){
   exerciseLabel.textContent='EXERCISE '+(exIndex+1)+' OF '+data.length;
   mediaStep.textContent=String(exIndex+1).padStart(2,'0')+' / '+String(data.length).padStart(2,'0');
   renderExerciseGuide(current[0]);
+  const adaptiveNote=current[3]||'';
+  adaptiveHint.style.display=adaptiveNote?'block':'none';
+  adaptiveHint.textContent=adaptiveNote;
 
   const next=data[exIndex+1];
   if(next){nextExercisePreview.style.display='flex';nextExerciseName.textContent=next[0];nextExerciseSpec.textContent=next[1]}
@@ -1133,9 +1172,9 @@ async function refreshProgress(){
   const raw=localStorage.getItem(KEY);const p=raw?JSON.parse(raw):{};const target=parseInt(p.days)||4;
   const user=await getUser();
   if(!user){weekCount.textContent='0/'+target;homeActiveMin.textContent='0';homeStreak.textContent='0';progressWeekLabel.textContent='0 of '+target;progressWeekBar.style.width='0%';progressStreak.textContent='0';progressSessions.textContent='0';progressTraining.textContent='0m';progressRecent.innerHTML='<div class="emptyState">Sign in or start as a guest to track progress.</div>';return}
-  const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at,plan_index,session_key').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
+  const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at,plan_index,session_key,difficulty_feedback').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
   if(error){console.error(error);return}
-  const sessions=data||[];const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
+  const sessions=data||[];adaptiveFeedback={};for(const s of sessions){if(s.session_key&&s.difficulty_feedback&&adaptiveFeedback[s.session_key]===undefined)adaptiveFeedback[s.session_key]=s.difficulty_feedback}const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
   const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){const lastPlanned=weekly.find(s=>Number.isInteger(s.plan_index));activeSessionIndex=lastPlanned?((lastPlanned.plan_index+1)%program.sessions.length):(weekly.length%program.sessions.length);renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
   weekCount.textContent=weekly.length+'/'+target;homeActiveMin.textContent=String(weeklyMin);homeStreak.textContent=String(streak);
   progressWeekLabel.textContent=weekly.length+' of '+target;progressWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';progressStreak.textContent=String(streak);progressSessions.textContent=String(sessions.length);progressTraining.textContent=totalMin>=60?(Math.floor(totalMin/60)+'h '+(totalMin%60?totalMin%60+'m':'')):totalMin+'m';
@@ -1145,6 +1184,8 @@ function showWorkoutComplete(user,data){
   completeExercises.textContent=String(data.length);
   const p=JSON.parse(localStorage.getItem(KEY)||'{}');
   completeMinutes.textContent=String(parseInt(p.time)||30);
+  document.querySelectorAll('.feedbackChoices button').forEach(b=>b.classList.remove('active'));
+  feedbackImpact.textContent='Optional · helps adjust the next time this workout appears.';
   if(user?.is_anonymous){
     completeCopy.textContent='Workout saved. Create an account to keep this progress across devices.';
     completePrimaryBtn.textContent='Save my progress';
@@ -1158,7 +1199,17 @@ function showWorkoutComplete(user,data){
   }
   completeSheet.classList.add('show');
 }
-function closeWorkoutComplete(){completeSheet.classList.remove('show')}
+async function saveWorkoutFeedback(value){
+  if(!['too_easy','good','too_hard'].includes(value)||!completedWorkoutId)return;
+  document.querySelectorAll('.feedbackChoices button').forEach(b=>b.classList.toggle('active',b.dataset.feedback===value));
+  feedbackImpact.textContent=value==='too_easy'?'Next time this workout returns, JK Form will nudge the target upward.':value==='too_hard'?'Next time this workout returns, JK Form will make the target more manageable.':'JK Form will keep this prescription steady and progress it gradually.';
+  const {error}=await sb.from('workout_sessions').update({difficulty_feedback:value}).eq('id',completedWorkoutId);
+  if(error){console.error(error);feedbackImpact.textContent='Could not save feedback right now.';return}
+  if(completedSessionKey)adaptiveFeedback[completedSessionKey]=value;
+  const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);activeProgram=buildProgram(p);renderWeek(p)}
+  showFeedback('Feedback saved');
+}
+function closeWorkoutComplete(){completeSheet.classList.remove('show');completedWorkoutId=null;completedSessionKey=null}
 function dismissWorkoutComplete(){closeWorkoutComplete();go('home')}
 function handleCompletePrimary(){
   const mode=completeSheet.dataset.mode;closeWorkoutComplete();
@@ -1258,6 +1309,8 @@ async function completeCurrentSet(){
     }).eq('id',cloudWorkoutId);
   }
 
+  completedWorkoutId=cloudWorkoutId;
+  completedSessionKey=currentSession().key;
   showFeedback('Workout complete');
   cloudWorkoutId=null;setIndex=1;exIndex=0;workoutPhase='work';
   await refreshProgress();
