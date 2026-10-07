@@ -350,9 +350,94 @@ function setAuthMode(mode){
   else if(mode==='reset'){authTitle.textContent='Choose a new password.';authCopy.textContent='Create a new password for your JK Form account.';authSubmitBtn.textContent='Update password';authPassword.autocomplete='new-password'}
   authMessage.textContent='';
 }
-function openAuth(mode='signin'){setAuthMode(mode);entryGate.classList.remove('show');authSheet.classList.add('show');setTimeout(()=>{if(['finish','reset'].includes(mode))authPassword.focus();else authEmail.focus()},120)}
+function openAuth(mode='signin'){
+  setAuthMode(mode);
+  entryGate.classList.remove('show');
+  authPassword.value='';
+  authConfirmPassword.value='';
+  authSheet.classList.add('show');
+  setTimeout(()=>{if(['finish','reset'].includes(mode))authPassword.focus();else authEmail.focus()},120);
+}
 function closeAuth(){authSheet.classList.remove('show')}
-function submitAuth(){if(authMode==='signup')return signUpUser();if(authMode==='upgrade')return upgradeGuestUser();if(authMode==='finish')return finishGuestAccount();if(authMode==='forgot')return requestPasswordReset();if(authMode==='reset')return finishPasswordReset();return signInUser()}
+function submitAuth(){
+  if(authMode==='signup')return signUpUser();
+  if(authMode==='upgrade')return upgradeGuestUser();
+  if(authMode==='finish')return finishGuestAccount();
+  if(authMode==='forgot')return requestPasswordReset();
+  if(authMode==='reset')return finishPasswordReset();
+  return signInUser();
+}
+function prepareOnboarding(){
+  obStep=1;
+  document.querySelector('#goalChoices [data-value="General fitness"]')?.classList.add('selected');
+  document.querySelector('#levelChoices [data-value="Beginner"]')?.classList.add('selected');
+  document.querySelector('#equipChoices [data-value="No equipment"]')?.classList.add('selected');
+  updateOb();
+}
+function showEntry(kind='new'){
+  entryGate.dataset.kind=kind;
+  if(kind==='returning'){
+    entryMeta.textContent='FORM / RETURN';
+    entryKicker.textContent='JK FORM';
+    entryTitle.textContent='Welcome back.';
+    entryCopy.textContent='Sign in to restore your plan and training progress.';
+    entryPrimary.textContent='Sign in';
+    entrySecondary.innerHTML='New here? <b>Start fresh</b>';
+    entryPrimary.onclick=()=>openAuth('signin');
+    entrySecondary.onclick=()=>{localStorage.removeItem(KEY);localStorage.removeItem(HAD_ACCOUNT_KEY);startEntryFlow()};
+  }else{
+    entryMeta.textContent='FORM / START';
+    entryKicker.textContent='JK FORM';
+    entryTitle.textContent='Train with intent.';
+    entryCopy.textContent='Build a training plan around your goal, experience and routine.';
+    entryPrimary.textContent='Get started';
+    entrySecondary.innerHTML='Already using JK Form? <b>Sign in</b>';
+    entryPrimary.onclick=startEntryFlow;
+    entrySecondary.onclick=()=>openAuth('signin');
+  }
+  entryGate.classList.add('show');
+}
+async function ensureGuestUser(){
+  const user=await getUser();
+  if(user)return user;
+  const {data,error}=await sb.auth.signInAnonymously({options:{data:{source:'jk-form-guest'}}});
+  if(error){showFeedback('Could not start guest session');console.error(error);return null}
+  return data.user||null;
+}
+async function startEntryFlow(){
+  entryPrimary.disabled=true;
+  entryPrimary.textContent='Starting…';
+  const guest=await ensureGuestUser();
+  entryPrimary.disabled=false;
+  entryPrimary.textContent='Get started';
+  if(!guest)return;
+  entryGate.classList.remove('show');
+  prepareOnboarding();
+  onboarding.classList.add('show');
+}
+async function routeAuthenticatedUser(){
+  const user=await getUser();
+  if(!user)return false;
+  if(!user.is_anonymous)localStorage.setItem(HAD_ACCOUNT_KEY,'1');
+
+  const restored=await restoreCloudProfile();
+  let raw=localStorage.getItem(KEY);
+
+  if(!restored&&raw){
+    await syncProfileToCloud();
+    const {data}=await sb.from('profiles').select('onboarding_completed').eq('id',user.id).maybeSingle();
+    if(data?.onboarding_completed){applyProfile(JSON.parse(raw));go('home');return true}
+  }
+
+  raw=localStorage.getItem(KEY);
+  if(raw){
+    try{applyProfile(JSON.parse(raw));go('home');return true}catch(e){localStorage.removeItem(KEY)}
+  }
+
+  prepareOnboarding();
+  onboarding.classList.add('show');
+  return false;
+}
 async function refreshAccountUI(){const user=await getUser();if(user&&user.is_anonymous){accountTitle.textContent='Guest profile';accountCopy.textContent='Your workouts are being tracked on this device. Create an account to keep them across devices.';accountBadge.textContent='Guest';accountBtn.style.display='inline-flex';accountBtn.textContent='Save progress';accountBtn.onclick=()=>openAuth('upgrade');signOutBtn.style.display='none'}else if(user){accountTitle.textContent='Signed in';accountCopy.textContent=user.email||'Your plan is saved to your account.';accountBadge.textContent='Synced';accountBtn.style.display='none';signOutBtn.style.display='inline-flex'}else{accountTitle.textContent='Local profile';accountCopy.textContent='Your setup is saved only on this device.';accountBadge.textContent='Local';accountBtn.style.display='inline-flex';accountBtn.textContent='Create account';accountBtn.onclick=()=>openAuth('signup');signOutBtn.style.display='none'}}
 async function requestPasswordReset(){
   const email=authEmail.value.trim();if(!email){authMessage.textContent='Enter your email address.';return}
@@ -372,8 +457,31 @@ async function finishPasswordReset(){
   if(error){authMessage.textContent=error.message;return}
   authSheet.classList.remove('show');await refreshAccountUI();go('home');showFeedback('Password updated');
 }
-async function upgradeGuestUser(){const email=authEmail.value.trim();if(!email){authMessage.textContent='Enter an email address.';return}const user=await getUser();if(!user?.is_anonymous){setAuthMode('signup');return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Sending…';const {error}=await sb.auth.updateUser({email:email,data:{guest_upgrading:true,source:'jk-form'}},{emailRedirectTo:window.location.origin});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Send verification';if(error){authMessage.textContent=error.message;return}authMessage.textContent='Check your email and confirm the address. Your current training history will stay attached to this profile.'}async function finishGuestAccount(){const password=authPassword.value,confirm=authConfirmPassword.value;if(password.length<8){authMessage.textContent='Use a password with at least 8 characters.';return}if(password!==confirm){authMessage.textContent='The passwords do not match.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Saving…';const {error}=await sb.auth.updateUser({password:password,data:{guest_upgrading:false,source:'jk-form'}});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Set password';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');authSheet.classList.remove('show');await refreshAccountUI();showFeedback('Progress secured')}async function signUpUser(){const existing=await getUser();if(existing?.is_anonymous){setAuthMode('upgrade');return upgradeGuestUser()}const email=authEmail.value.trim(),password=authPassword.value,confirm=authConfirmPassword.value;if(!email||password.length<8){authMessage.textContent='Use a valid email and a password with at least 8 characters.';return}if(password!==confirm){authMessage.textContent='The passwords do not match.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Creating…';const raw=localStorage.getItem(KEY);const name=raw?JSON.parse(raw).name||'':'';const {data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:window.location.origin}});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Create account';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');if(data.session){await syncProfileToCloud();authSheet.classList.remove('show');await refreshAccountUI();showFeedback('Account created')}else{authMessage.textContent='Check your email to confirm your account. You can close this and keep using your plan while you wait.'}}
-async function signInUser(){const email=authEmail.value.trim(),password=authPassword.value;if(!email||!password){authMessage.textContent='Enter your email and password.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Signing in…';const {error}=await sb.auth.signInWithPassword({email,password});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Sign in';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');const restored=await restoreCloudProfile();if(!restored)await syncProfileToCloud();authSheet.classList.remove('show');entryGate.classList.remove('show');await refreshAccountUI();go('home');showFeedback('Welcome back')}
+async function upgradeGuestUser(){const email=authEmail.value.trim();if(!email){authMessage.textContent='Enter an email address.';return}const user=await getUser();if(!user?.is_anonymous){setAuthMode('signup');return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Sending…';const {error}=await sb.auth.updateUser({email:email,data:{guest_upgrading:true,source:'jk-form'}},{emailRedirectTo:window.location.origin});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Send verification';if(error){authMessage.textContent=error.message;return}authMessage.textContent='Check your email and confirm the address. Your current training history will stay attached to this profile.'}async function finishGuestAccount(){const password=authPassword.value,confirm=authConfirmPassword.value;if(password.length<8){authMessage.textContent='Use a password with at least 8 characters.';return}if(password!==confirm){authMessage.textContent='The passwords do not match.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Saving…';const {error}=await sb.auth.updateUser({password:password,data:{guest_upgrading:false,source:'jk-form'}});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Set password';if(error){authMessage.textContent=friendlyAuthError(error.message);return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');authSheet.classList.remove('show');await refreshAccountUI();await refreshProgress();go('home');showFeedback('Progress secured')}async function signUpUser(){const existing=await getUser();if(existing?.is_anonymous){setAuthMode('upgrade');return upgradeGuestUser()}const email=authEmail.value.trim(),password=authPassword.value,confirm=authConfirmPassword.value;if(!email||password.length<8){authMessage.textContent='Use a valid email and a password with at least 8 characters.';return}if(password!==confirm){authMessage.textContent='The passwords do not match.';return}authSubmitBtn.disabled=true;authSubmitBtn.textContent='Creating…';const raw=localStorage.getItem(KEY);const name=raw?JSON.parse(raw).name||'':'';const {data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:window.location.origin}});authSubmitBtn.disabled=false;authSubmitBtn.textContent='Create account';if(error){authMessage.textContent=error.message;return}localStorage.setItem(HAD_ACCOUNT_KEY,'1');if(data.session){await syncProfileToCloud();authSheet.classList.remove('show');await refreshAccountUI();showFeedback('Account created')}else{authMessage.textContent='Check your email to confirm your account. You can close this and keep using your plan while you wait.'}}
+function friendlyAuthError(message){
+  const m=String(message||'').toLowerCase();
+  if(m.includes('invalid login credentials'))return 'Email or password doesn’t match.';
+  if(m.includes('email not confirmed'))return 'Confirm your email first, then sign in.';
+  if(m.includes('user already registered'))return 'An account already exists for this email. Try signing in.';
+  if(m.includes('password'))return 'Check the password requirements and try again.';
+  if(m.includes('rate limit'))return 'Too many attempts. Wait a moment and try again.';
+  return message||'Something went wrong. Please try again.';
+}
+async function signInUser(){
+  const email=authEmail.value.trim(),password=authPassword.value;
+  if(!email||!password){authMessage.textContent='Enter your email and password.';return}
+  authSubmitBtn.disabled=true;authSubmitBtn.textContent='Signing in…';
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  authSubmitBtn.disabled=false;authSubmitBtn.textContent='Sign in';
+  if(error){authMessage.textContent=friendlyAuthError(error.message);return}
+  localStorage.setItem(HAD_ACCOUNT_KEY,'1');
+  authSheet.classList.remove('show');
+  entryGate.classList.remove('show');
+  await routeAuthenticatedUser();
+  await refreshAccountUI();
+  await refreshProgress();
+  showFeedback('Welcome back');
+}
 async function signOutUser(){const user=await getUser();localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();cloudWorkoutId=null;if(user&&!user.is_anonymous){localStorage.removeItem(KEY);localStorage.removeItem(SAVE_PROMPT_KEY)}await refreshAccountUI();showEntry('returning')}
 function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
 const REPDB_BASE='https://exercise-dataset.com/images/flat/';const REPDB_FALLBACK='https://raw.githubusercontent.com/RepDB/exercise-dataset/main/images/flat/';
@@ -583,18 +691,60 @@ function toggleTimer(){if(tick){clearInterval(tick);tick=null;timerBtn.textConte
 async function nextExercise(){
   if(tick){clearInterval(tick);tick=null}
   const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);await ensureWorkoutSession();const user=await getUser();
-  if(user&&cloudWorkoutId){await sb.from('exercise_logs').insert({user_id:user.id,workout_session_id:cloudWorkoutId,exercise_name:current[0],sets_completed:1,reps:current[1]})}
+  if(user&&cloudWorkoutId){await sb.from('exercise_logs').insert({user_id:user.id,workout_session_id:cloudWorkoutId,exercise_name:current[0],sets_completed:1,reps:String(current[1]).replace(/^\s*\d+\s*[×x]\s*/,'')})}
   const exerciseDone=setIndex>=totalSets;const sessionDone=exerciseDone&&exIndex===data.length-1;
   if(sessionDone&&user&&cloudWorkoutId){await sb.from('workout_sessions').update({completed:true,completed_at:new Date().toISOString(),exercises_completed:data.length}).eq('id',cloudWorkoutId)}
   if(!exerciseDone){setIndex++}else if(!sessionDone){exIndex++;setIndex=1}
   secs=30;timer.textContent='00:30';timerBtn.textContent='Start rest';
   if(!sessionDone){renderWorkout();showFeedback(exerciseDone?'Exercise complete':'Set '+(setIndex-1)+' saved')}
-  else{renderWorkout();showFeedback('Workout complete');await refreshProgress();showWorkoutComplete(user,data);cloudWorkoutId=null;setIndex=1;exIndex=0}
+  else{showFeedback('Workout complete');await refreshProgress();showWorkoutComplete(user,data);cloudWorkoutId=null;setIndex=1;exIndex=0;renderWorkout()}
 }
 function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
 function generateMeals(){const d=diet.value,count=+mealsPerDay.value;let rows=[...(meals[d]||meals.Balanced)];if(count===3)rows=[rows[0],rows[1],rows[3]];if(count===5)rows=[rows[0],rows[1],['Snack 1','Fruit + protein source'],rows[2],rows[3]];mealPlan.innerHTML=rows.map((x,i)=>`<div class="item"><div class="icon">${String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');mealSnapshot.innerHTML=rows.slice(0,3).map(x=>`<div class="item" style="margin-bottom:8px"><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');dietTag.textContent=d;const g=nutritionGoal.value;if(g==='Fat loss'){cal.textContent='1,850';protein.textContent='145g';carbs.textContent='175g';fats.textContent='62g'}else if(g==='Muscle gain'){cal.textContent='2,450';protein.textContent='165g';carbs.textContent='285g';fats.textContent='78g'}else{cal.textContent='2,150';protein.textContent='145g';carbs.textContent='230g';fats.textContent='72g'}persistNutritionPrefs()}
 function persistNutritionPrefs(){const raw=localStorage.getItem(KEY);if(!raw)return;try{const p=JSON.parse(raw);p.diet=diet.value;p.nutritionGoal=nutritionGoal.value;p.meals=mealsPerDay.value;p.restrictions=[...restrictions];localStorage.setItem(KEY,JSON.stringify(p));syncProfileToCloud()}catch(e){}}
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {})); }
-(async function init(){sb.auth.onAuthStateChange((event)=>{setTimeout(async()=>{await refreshAccountUI();if(event==='PASSWORD_RECOVERY'){openAuth('reset');return}if(event==='SIGNED_IN'){entryGate.classList.remove('show');await refreshProgress()}},0)});document.querySelector('#goalChoices [data-value="General fitness"]').classList.add('selected');document.querySelector('#levelChoices [data-value="Beginner"]').classList.add('selected');document.querySelector('#equipChoices [data-value="No equipment"]').classList.add('selected');updateOb();const user=await getUser();if(user){if(!user.is_anonymous)localStorage.setItem(HAD_ACCOUNT_KEY,'1');await restoreCloudProfile();const raw=localStorage.getItem(KEY);if(raw){applyProfile(JSON.parse(raw));go('home')}else if(user.is_anonymous){obStep=1;updateOb();onboarding.classList.add('show')}else{go('home')}}else{const raw=localStorage.getItem(KEY);if(raw){try{applyProfile(JSON.parse(raw));if(localStorage.getItem(HAD_ACCOUNT_KEY)==='1'){showEntry('returning')}else{const guest=await ensureGuestUser();if(guest){await syncProfileToCloud()}go('home')}}catch(e){localStorage.removeItem(KEY);showEntry('new')}}else{showEntry('new')}}await refreshAccountUI();await refreshProgress();const finalUser=await getUser();if(finalUser&&!finalUser.is_anonymous&&finalUser.user_metadata?.guest_upgrading===true){setTimeout(()=>openAuth('finish'),350)}})();
+(async function init(){
+  sb.auth.onAuthStateChange((event)=>{
+    setTimeout(async()=>{
+      await refreshAccountUI();
+      if(event==='PASSWORD_RECOVERY'){openAuth('reset');return}
+      if(event==='SIGNED_IN'){entryGate.classList.remove('show');await refreshProgress()}
+    },0)
+  });
+
+  prepareOnboarding();
+
+  const user=await getUser();
+  if(user){
+    await routeAuthenticatedUser();
+  }else{
+    const raw=localStorage.getItem(KEY);
+    if(raw){
+      try{
+        applyProfile(JSON.parse(raw));
+        if(localStorage.getItem(HAD_ACCOUNT_KEY)==='1'){
+          showEntry('returning');
+        }else{
+          const guest=await ensureGuestUser();
+          if(guest)await syncProfileToCloud();
+          go('home');
+        }
+      }catch(e){
+        localStorage.removeItem(KEY);
+        showEntry('new');
+      }
+    }else{
+      showEntry('new');
+    }
+  }
+
+  await refreshAccountUI();
+  await refreshProgress();
+
+  const finalUser=await getUser();
+  if(finalUser&&!finalUser.is_anonymous&&finalUser.user_metadata?.guest_upgrading===true){
+    setTimeout(()=>openAuth('finish'),350);
+  }
+})();
 </script>
 </body></html>
