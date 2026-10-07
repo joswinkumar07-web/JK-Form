@@ -282,6 +282,23 @@ linear-gradient(180deg,#16100D,#090605)}
 .swapOption b{display:block;font-size:13px;font-weight:500}
 .swapOption span{display:block;font-size:8px;color:var(--muted);letter-spacing:.08em;margin-top:4px;text-transform:uppercase}
 .swapOption i{font-style:normal;color:var(--accent);font-size:12px}
+
+.mealPrefs{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.mealPrefs .field:last-child{grid-column:1/-1}
+.nutritionFocusCard h3{font-size:24px;line-height:1.05;letter-spacing:-.7px;margin:12px 0 9px}
+.nutritionFocusCard p{font-size:11px;line-height:1.55;color:var(--muted);margin:0}
+.nutritionMeta{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.nutritionMeta span{font-size:8px;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(233,225,215,.1);padding:6px 8px;color:#CFC5BC}
+.mealCard{padding:17px 0;border-bottom:1px solid rgba(233,225,215,.1)}
+.mealCard:first-child{border-top:1px solid rgba(233,225,215,.1)}
+.mealCardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.mealCard .mealSlot{font-size:8px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+.mealCard h3{font-size:17px;line-height:1.15;margin:7px 0 5px;font-weight:600}
+.mealCard p{font-size:10px;color:var(--muted);line-height:1.5;margin:0}
+.mealTags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.mealTags span{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mealSwapBtn{border:0;background:none;color:var(--text);font-size:8px;letter-spacing:.14em;text-transform:uppercase;min-height:38px;padding:0}
+@media(max-width:420px){.mealPrefs{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -322,9 +339,30 @@ linear-gradient(180deg,#16100D,#090605)}
 
   <section id="plan" class="screen"><div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Your week</h1><p>Your training split is built from your goal, experience, equipment and available days.</p></div><div class="programSummary" id="programSummary"></div><div id="weeklyPlan"></div></section>
 
-  <section id="meals" class="screen"><div class="pageHead"><div class="eyebrow">FORM / LIVE</div><h1>Eat for the goal</h1><p>Simple meal guidance built around your goal and food limits.</p></div><div class="card"><div class="field"><label>Diet style</label><select id="diet" onchange="generateMeals()"><option>Balanced</option><option>Vegetarian</option><option>Vegan</option><option>High protein</option></select></div><div class="field"><label>Goal</label><select id="nutritionGoal" onchange="generateMeals()"><option>Maintain</option><option>Fat loss</option><option>Muscle gain</option></select></div><div class="field"><label>Meals per day</label><select id="mealsPerDay" onchange="generateMeals()"><option>3</option><option>4</option><option>5</option></select></div><div class="field"><label>Food limitations</label><div class="chips" id="restrictionChips"><button class="chip" data-value="Dairy">Dairy</button><button class="chip" data-value="Gluten">Gluten</button><button class="chip" data-value="Eggs">Eggs</button><button class="chip" data-value="Nuts">Nuts</button><button class="chip" data-value="Soy">Soy</button></div></div></div><div class="card"><div class="mealMacros"><div class="macro"><b id="cal">2,150</b><span>kcal</span></div><div class="macro"><b id="protein">145g</b><span>protein</span></div><div class="macro"><b id="carbs">230g</b><span>carbs</span></div><div class="macro"><b id="fats">72g</b><span>fats</span></div></div></div><div id="mealPlan"></div><p style="color:var(--muted);font-size:11px;line-height:1.5">Prototype guidance only. Meal plans should be adjusted for individual medical needs, allergies and professional nutrition advice.</p></section>
+  <section id="meals" class="screen">
+  <div class="pageHead"><div class="eyebrow">FORM / LIVE</div><h1>Eat for the goal</h1><p>Flexible meal guidance shaped around what you actually eat and have time for.</p></div>
+  <div class="card mealPrefs">
+    <div class="field"><label>Diet style</label><select id="diet" onchange="generateMeals(true)"><option>Balanced</option><option>Vegetarian</option><option>Vegan</option><option>High protein</option></select></div>
+    <div class="field"><label>Goal</label><select id="nutritionGoal" onchange="generateMeals(true)"><option>Maintain</option><option>Fat loss</option><option>Muscle gain</option></select></div>
+    <div class="field"><label>Meals per day</label><select id="mealsPerDay" onchange="generateMeals(true)"><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="field"><label>Cuisine</label><select id="mealCuisine" onchange="generateMeals(true)"><option>Indian</option><option>Mixed</option><option>Simple global</option></select></div>
+    <div class="field"><label>Preferred protein</label><select id="preferredProtein" onchange="generateMeals(true)"><option>Flexible</option><option>Chicken</option><option>Eggs</option><option>Paneer</option><option>Tofu</option><option>Fish</option></select></div>
+    <div class="field"><label>Prep time</label><select id="mealPrepTime" onchange="generateMeals(true)"><option value="10">10 minutes</option><option value="20" selected>20 minutes</option><option value="30">30 minutes</option><option value="45">45+ minutes</option></select></div>
+    <div class="field"><label>Budget</label><select id="foodBudget" onchange="generateMeals(true)"><option>Value</option><option selected>Balanced</option><option>Flexible</option></select></div>
+    <div class="field"><label>Food limitations</label><div class="chips" id="restrictionChips"><button class="chip" data-value="Dairy">Dairy</button><button class="chip" data-value="Gluten">Gluten</button><button class="chip" data-value="Eggs">Eggs</button><button class="chip" data-value="Nuts">Nuts</button><button class="chip" data-value="Soy">Soy</button></div></div>
+  </div>
+  <div class="card nutritionFocusCard">
+    <div class="eyebrow">TODAY'S NUTRITION FOCUS</div>
+    <h3 id="nutritionFocusTitle">Build meals around protein.</h3>
+    <p id="nutritionFocusCopy">Use a consistent protein source, add vegetables or fruit, then adjust carbs and portions around appetite and training.</p>
+    <div class="nutritionMeta" id="nutritionFocusMeta"></div>
+  </div>
+  <div class="sectionTitle"><h3>Your meals</h3><span id="mealPlanMeta">Personalized</span></div>
+  <div id="mealPlan"></div>
+  <p style="color:var(--muted);font-size:11px;line-height:1.5;margin-top:18px">General meal guidance only. JK Form does not currently calculate medical nutrition needs or personalized calorie targets. Allergies, health conditions, pregnancy and therapeutic diets should be reviewed with a qualified professional.</p>
+</section>
 
-  <section id="progress" class="screen"><div class="pageHead"><div class="eyebrow">FORM / BUILD</div><h1>Build consistency</h1><p>Real progress from the sessions you complete.</p></div><div class="card"><div class="sectionTitle" style="margin-top:0"><h3>Weekly completion</h3><span id="progressWeekLabel">0 of 4</span></div><div class="progressbar"><span id="progressWeekBar" style="width:0%"></span></div></div><div class="card"><div class="stats"><div class="stat"><b id="progressStreak">0</b><span>Streak</span></div><div class="stat"><b id="progressSessions">0</b><span>Sessions</span></div><div class="stat"><b id="progressTraining">0m</b><span>Training</span></div></div></div><div class="sectionTitle"><h3>Recent sessions</h3><span>History</span></div><div id="progressRecent"><div class="emptyState">Complete a workout and it will appear here.</div></div></section>
+<section id="progress" class="screen"><div class="pageHead"><div class="eyebrow">FORM / BUILD</div><h1>Build consistency</h1><p>Real progress from the sessions you complete.</p></div><div class="card"><div class="sectionTitle" style="margin-top:0"><h3>Weekly completion</h3><span id="progressWeekLabel">0 of 4</span></div><div class="progressbar"><span id="progressWeekBar" style="width:0%"></span></div></div><div class="card"><div class="stats"><div class="stat"><b id="progressStreak">0</b><span>Streak</span></div><div class="stat"><b id="progressSessions">0</b><span>Sessions</span></div><div class="stat"><b id="progressTraining">0m</b><span>Training</span></div></div></div><div class="sectionTitle"><h3>Recent sessions</h3><span>History</span></div><div id="progressRecent"><div class="emptyState">Complete a workout and it will appear here.</div></div></section>
 
   <section id="profile" class="screen"><div class="pageHead"><div class="eyebrow">JK FORM</div><h1>Your setup</h1><p>Update the inputs JK Form uses to personalize your plan.</p></div><div class="card authCard"><div class="eyebrow">ACCOUNT</div><div class="authState"><div><b id="accountTitle">Save your plan</b><span id="accountCopy">Create an account to keep your plan and progress across devices.</span></div><span class="accountBadge" id="accountBadge">Local</span></div><button class="btn secondary" id="accountBtn" style="width:100%;margin-top:14px" onclick="openAuth()">Create account / Sign in</button><button class="btn secondary" id="signOutBtn" style="width:100%;margin-top:8px;display:none" onclick="signOutUser()">Sign out</button></div><div class="card"><div class="field"><label>Name</label><input id="profileName" readonly></div><div class="field"><label>Primary goal</label><input id="profileGoal" readonly></div><div class="field"><label>Training level</label><input id="profileLevel" readonly></div><div class="field"><label>Equipment</label><input id="profileEquip" readonly></div><div class="field"><label>Routine</label><input id="profileDays" readonly></div><button class="btn primary" style="width:100%" onclick="restartOnboarding()">Edit training setup</button></div>
 <div class="sectionTitle"><h3>Training preferences</h3><span>Personalize</span></div>
@@ -377,6 +415,7 @@ linear-gradient(180deg,#16100D,#090605)}
     <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
   </div></div>
 </div>
+<div class="utilitySheet" id="mealSwapSheet" onclick="if(event.target===this)closeMealSwap()"><div class="utilityPanel"><button class="authClose" onclick="closeMealSwap()">×</button><div class="eyebrow">SWAP MEAL</div><h2 id="mealSwapTitle">Choose another option.</h2><p>Alternatives keep your current diet, food limits, prep time and budget in mind.</p><div id="mealSwapOptions" class="swapOptions"></div></div></div>
 <div class="utilitySheet" id="fitTodaySheet" onclick="if(event.target===this)closeFitToday()"><div class="utilityPanel"><button class="authClose" onclick="closeFitToday()">×</button><div class="eyebrow">FIT TODAY</div><h2>Adjust this session.</h2><p>Changes apply only to today. Your weekly plan stays intact.</p><div class="field"><label>Time available</label><select id="fitTime"><option value="">Keep planned time</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option></select></div><div class="field"><label>Equipment today</label><select id="fitEquip"><option value="">Keep planned equipment</option><option>No equipment</option><option>Dumbbells</option><option>Resistance bands</option><option>Gym access</option></select></div><div class="field"><label>How should today feel?</label><select id="fitEffort"><option value="normal">Normal session</option><option value="lighter">Lighter day</option></select></div><button class="btn primary" style="width:100%" onclick="applyFitToday()">Update today</button><button class="authInlineAction" style="width:100%;text-align:center;margin-top:8px" onclick="resetFitToday()">Reset to plan</button></div></div>
 <div class="utilitySheet" id="swapSheet" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button class="authClose" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
 <div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
@@ -393,7 +432,7 @@ linear-gradient(180deg,#16100D,#090605)}
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,completedSessionMinutes=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={},sessionDraft=null,todayAdjustment={time:null,equip:null,lighter:false},currentExerciseSetsDone=0;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,completedSessionMinutes=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={},sessionDraft=null,todayAdjustment={time:null,equip:null,lighter:false},currentExerciseSetsDone=0;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();let mealSelections=[],mealSwapIndex=null;
 const exercisePools={
   'No equipment':{
     lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
@@ -692,14 +731,49 @@ function restSecondsFor(exercise){
   return rest;
 }
 function formatClock(total){const s=Math.max(0,total|0),m=Math.floor(s/60),r=s%60;return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
-const meals={Balanced:[['Breakfast','Oats + Greek yogurt + banana'],['Lunch','Rice + grilled chicken + vegetables'],['Snack','Fruit + yogurt'],['Dinner','Chapati + dal + paneer + salad']],Vegetarian:[['Breakfast','Vegetable poha + curd'],['Lunch','Rice + dal + paneer + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + paneer bhurji + salad']],Vegan:[['Breakfast','Oats + soy milk + banana'],['Lunch','Rice + dal + tofu + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + chickpea curry + salad']],"High protein":[['Breakfast','Eggs + oats + fruit'],['Lunch','Chicken rice bowl + vegetables'],['Snack','Greek yogurt + fruit'],['Dinner','Paneer/chicken wrap + salad']]};
+const mealLibrary=[
+{id:'in_oats_yogurt',slot:'Breakfast',name:'Oats + yogurt bowl',desc:'Oats, Greek yogurt or curd, banana and cinnamon.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Paneer'],minutes:10,budget:'Value',allergens:['Dairy'],tags:['protein-forward','training fuel']},
+{id:'in_eggs_roti',slot:'Breakfast',name:'Eggs + roti + fruit',desc:'Eggs with roti and a piece of fruit.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Eggs'],minutes:15,budget:'Value',allergens:['Eggs','Gluten'],tags:['protein-forward']},
+{id:'in_poha_curd',slot:'Breakfast',name:'Vegetable poha + curd',desc:'Poha with vegetables and a side of curd.',cuisine:'Indian',diet:['Balanced','Vegetarian'],protein:['Paneer'],minutes:20,budget:'Value',allergens:['Dairy'],tags:['quick','balanced']},
+{id:'in_moong_chilla',slot:'Breakfast',name:'Moong chilla + chutney',desc:'Moong dal chilla with coriander chutney and vegetables.',cuisine:'Indian',diet:['Balanced','Vegetarian','Vegan','High protein'],protein:['Flexible'],minutes:20,budget:'Value',allergens:[],tags:['protein-forward','value']},
+{id:'in_paneer_bhurji',slot:'Breakfast',name:'Paneer bhurji + toast',desc:'Paneer bhurji with toast or roti and vegetables.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Paneer'],minutes:20,budget:'Balanced',allergens:['Dairy','Gluten'],tags:['protein-forward']},
+{id:'in_tofu_bhurji',slot:'Breakfast',name:'Tofu bhurji + roti',desc:'Tofu bhurji with vegetables and roti.',cuisine:'Indian',diet:['Vegan','Vegetarian','High protein'],protein:['Tofu'],minutes:20,budget:'Balanced',allergens:['Soy','Gluten'],tags:['protein-forward']},
+{id:'gl_yogurt_oats',slot:'Breakfast',name:'Yogurt, oats + berries',desc:'Greek yogurt, oats, fruit and seeds.',cuisine:'Simple global',diet:['Balanced','Vegetarian','High protein'],protein:['Flexible'],minutes:10,budget:'Balanced',allergens:['Dairy'],tags:['quick','protein-forward']},
+{id:'gl_egg_toast',slot:'Breakfast',name:'Eggs + whole-grain toast',desc:'Eggs, toast and fruit or vegetables.',cuisine:'Simple global',diet:['Balanced','High protein'],protein:['Eggs'],minutes:10,budget:'Value',allergens:['Eggs','Gluten'],tags:['quick','protein-forward']},
+{id:'gl_tofu_oats',slot:'Breakfast',name:'Overnight oats + soy yogurt',desc:'Oats, soy yogurt, banana and seeds.',cuisine:'Simple global',diet:['Vegan','Vegetarian'],protein:['Tofu'],minutes:10,budget:'Balanced',allergens:['Soy'],tags:['quick']},
+
+{id:'in_chicken_rice',slot:'Lunch',name:'Chicken rice bowl',desc:'Rice, grilled chicken, vegetables and curd or chutney.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Chicken'],minutes:30,budget:'Balanced',allergens:['Dairy'],tags:['protein-forward','training fuel']},
+{id:'in_dal_paneer',slot:'Lunch',name:'Dal + rice + paneer',desc:'Dal, rice, paneer and a vegetable side.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Paneer'],minutes:30,budget:'Balanced',allergens:['Dairy'],tags:['protein-forward']},
+{id:'in_chole_rice',slot:'Lunch',name:'Chole + rice + salad',desc:'Chickpeas, rice and a simple salad.',cuisine:'Indian',diet:['Vegan','Vegetarian','Balanced'],protein:['Flexible'],minutes:30,budget:'Value',allergens:[],tags:['value','plant-based']},
+{id:'in_rajma_rice',slot:'Lunch',name:'Rajma + rice + vegetables',desc:'Kidney beans, rice and cooked vegetables.',cuisine:'Indian',diet:['Vegan','Vegetarian','Balanced'],protein:['Flexible'],minutes:30,budget:'Value',allergens:[],tags:['value','plant-based']},
+{id:'in_fish_rice',slot:'Lunch',name:'Fish + rice + vegetables',desc:'Pan-cooked fish with rice and vegetables.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Fish'],minutes:30,budget:'Flexible',allergens:[],tags:['protein-forward']},
+{id:'in_tofu_rice',slot:'Lunch',name:'Tofu rice bowl',desc:'Tofu, rice and stir-fried vegetables with Indian spices.',cuisine:'Indian',diet:['Vegan','Vegetarian','High protein'],protein:['Tofu'],minutes:25,budget:'Balanced',allergens:['Soy'],tags:['protein-forward','plant-based']},
+{id:'gl_chicken_wrap',slot:'Lunch',name:'Chicken wrap + salad',desc:'Chicken, vegetables and yogurt-style dressing in a wrap.',cuisine:'Simple global',diet:['Balanced','High protein'],protein:['Chicken'],minutes:20,budget:'Balanced',allergens:['Gluten','Dairy'],tags:['quick','protein-forward']},
+{id:'gl_tuna_bowl',slot:'Lunch',name:'Fish grain bowl',desc:'Fish, rice or grains, greens and vegetables.',cuisine:'Simple global',diet:['Balanced','High protein'],protein:['Fish'],minutes:20,budget:'Flexible',allergens:[],tags:['quick','protein-forward']},
+{id:'gl_tofu_bowl',slot:'Lunch',name:'Tofu grain bowl',desc:'Tofu, rice or grains, vegetables and herbs.',cuisine:'Simple global',diet:['Vegan','Vegetarian','High protein'],protein:['Tofu'],minutes:20,budget:'Balanced',allergens:['Soy'],tags:['quick','plant-based']},
+
+{id:'sn_yogurt_fruit',slot:'Snack',name:'Yogurt + fruit',desc:'Greek yogurt or curd with seasonal fruit.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Flexible'],minutes:5,budget:'Value',allergens:['Dairy'],tags:['quick']},
+{id:'sn_roasted_chana',slot:'Snack',name:'Roasted chana + fruit',desc:'Roasted chana with a piece of fruit.',cuisine:'Indian',diet:['Balanced','Vegetarian','Vegan'],protein:['Flexible'],minutes:5,budget:'Value',allergens:[],tags:['quick','value']},
+{id:'sn_eggs_fruit',slot:'Snack',name:'Boiled eggs + fruit',desc:'Boiled eggs with seasonal fruit.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Eggs'],minutes:10,budget:'Value',allergens:['Eggs'],tags:['protein-forward','quick']},
+{id:'sn_paneer_cucumber',slot:'Snack',name:'Paneer + cucumber',desc:'Paneer cubes with cucumber and simple seasoning.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Paneer'],minutes:5,budget:'Balanced',allergens:['Dairy'],tags:['protein-forward','quick']},
+{id:'sn_hummus',slot:'Snack',name:'Hummus + vegetables',desc:'Hummus with sliced vegetables.',cuisine:'Simple global',diet:['Vegan','Vegetarian','Balanced'],protein:['Flexible'],minutes:5,budget:'Balanced',allergens:[],tags:['quick','plant-based']},
+{id:'sn_nuts_fruit',slot:'Snack',name:'Fruit + nuts',desc:'Seasonal fruit with a small handful of nuts.',cuisine:'Simple global',diet:['Balanced','Vegetarian','Vegan'],protein:['Flexible'],minutes:2,budget:'Flexible',allergens:['Nuts'],tags:['quick']},
+
+{id:'in_chicken_roti',slot:'Dinner',name:'Chicken + roti + vegetables',desc:'Chicken curry or grilled chicken with roti and vegetables.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Chicken'],minutes:30,budget:'Balanced',allergens:['Gluten'],tags:['protein-forward']},
+{id:'in_dal_roti_paneer',slot:'Dinner',name:'Dal + roti + paneer',desc:'Dal, roti, paneer and vegetables.',cuisine:'Indian',diet:['Balanced','Vegetarian','High protein'],protein:['Paneer'],minutes:30,budget:'Balanced',allergens:['Dairy','Gluten'],tags:['protein-forward']},
+{id:'in_tofu_curry',slot:'Dinner',name:'Tofu curry + rice',desc:'Tofu curry with rice and vegetables.',cuisine:'Indian',diet:['Vegan','Vegetarian','High protein'],protein:['Tofu'],minutes:30,budget:'Balanced',allergens:['Soy'],tags:['plant-based','protein-forward']},
+{id:'in_khichdi_side',slot:'Dinner',name:'Dal khichdi + vegetable side',desc:'Rice-and-dal khichdi with vegetables.',cuisine:'Indian',diet:['Balanced','Vegetarian','Vegan'],protein:['Flexible'],minutes:30,budget:'Value',allergens:[],tags:['value','simple']},
+{id:'in_fish_roti',slot:'Dinner',name:'Fish + roti + vegetables',desc:'Fish with roti and a cooked vegetable side.',cuisine:'Indian',diet:['Balanced','High protein'],protein:['Fish'],minutes:30,budget:'Flexible',allergens:['Gluten'],tags:['protein-forward']},
+{id:'gl_chicken_salad',slot:'Dinner',name:'Chicken + potato + salad',desc:'Chicken with potato and a large vegetable salad.',cuisine:'Simple global',diet:['Balanced','High protein'],protein:['Chicken'],minutes:25,budget:'Balanced',allergens:[],tags:['protein-forward']},
+{id:'gl_tofu_pasta',slot:'Dinner',name:'Tofu pasta + vegetables',desc:'Pasta, tofu and vegetables with a simple tomato sauce.',cuisine:'Simple global',diet:['Vegan','Vegetarian'],protein:['Tofu'],minutes:25,budget:'Balanced',allergens:['Soy','Gluten'],tags:['plant-based']}
+];
 function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
 function selected(id,fallback){return document.querySelector(`#${id} .choice.selected`)?.dataset.value||fallback}
 function bindChoices(id){document.querySelectorAll(`#${id} .choice`).forEach(c=>c.onclick=()=>{document.querySelectorAll(`#${id} .choice`).forEach(x=>x.classList.remove('selected'));c.classList.add('selected')})}['goalChoices','levelChoices','equipChoices'].forEach(bindChoices);
-document.querySelectorAll('#obRestrictions .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?obRestrictions.add(c.dataset.value):obRestrictions.delete(c.dataset.value)});document.querySelectorAll('#restrictionChips .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?restrictions.add(c.dataset.value):restrictions.delete(c.dataset.value);generateMeals()});document.querySelectorAll('#avoidMovementChips .chip').forEach(ch=>ch.onclick=()=>{ch.classList.toggle('on');ch.classList.contains('on')?avoidPrefs.add(ch.dataset.value):avoidPrefs.delete(ch.dataset.value);saveTrainingPreferences()});
-function profileFromOb(){return{name:(obName.value||'Athlete').trim(),goal:selected('goalChoices','General fitness'),level:selected('levelChoices','Beginner'),equip:selected('equipChoices','No equipment'),days:obDays.value,time:obTime.value,diet:'Balanced',meals:'4',restrictions:[],priorityArea:'Balanced',trainingStyle:'Balanced',avoidMovements:[]}}
-function localToDbProfile(p,user){return{id:user.id,email:user.email||null,name:p.name||null,goal:p.goal||null,experience_level:p.level||null,equipment:p.equip||null,training_days:parseInt(p.days)||null,session_minutes:parseInt(p.time)||null,diet_style:p.diet||null,nutrition_goal:p.nutritionGoal||null,meals_per_day:parseInt(p.meals)||null,food_restrictions:p.restrictions||[],priority_area:p.priorityArea||'Balanced',training_style:p.trainingStyle||'Balanced',avoid_movements:p.avoidMovements||[],onboarding_completed:true}}
-function dbToLocalProfile(p){return{name:p.name||'Athlete',goal:p.goal||'General fitness',level:p.experience_level||'Beginner',equip:p.equipment||'No equipment',days:(p.training_days||4)+' days',time:(p.session_minutes||30)+' minutes',diet:p.diet_style||'Balanced',nutritionGoal:p.nutrition_goal||null,meals:String(p.meals_per_day||4),restrictions:p.food_restrictions||[],priorityArea:p.priority_area||'Balanced',trainingStyle:p.training_style||'Balanced',avoidMovements:p.avoid_movements||[]}}
+document.querySelectorAll('#obRestrictions .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?obRestrictions.add(c.dataset.value):obRestrictions.delete(c.dataset.value)});document.querySelectorAll('#restrictionChips .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?restrictions.add(c.dataset.value):restrictions.delete(c.dataset.value);generateMeals(true)});document.querySelectorAll('#avoidMovementChips .chip').forEach(ch=>ch.onclick=()=>{ch.classList.toggle('on');ch.classList.contains('on')?avoidPrefs.add(ch.dataset.value):avoidPrefs.delete(ch.dataset.value);saveTrainingPreferences()});
+function profileFromOb(){return{name:(obName.value||'Athlete').trim(),goal:selected('goalChoices','General fitness'),level:selected('levelChoices','Beginner'),equip:selected('equipChoices','No equipment'),days:obDays.value,time:obTime.value,diet:'Balanced',nutritionGoal:'Maintain',meals:'4',restrictions:[],mealCuisine:'Indian',preferredProtein:'Flexible',mealPrepMinutes:20,foodBudget:'Balanced',mealChoices:[],priorityArea:'Balanced',trainingStyle:'Balanced',avoidMovements:[]}}
+function localToDbProfile(p,user){return{id:user.id,email:user.email||null,name:p.name||null,goal:p.goal||null,experience_level:p.level||null,equipment:p.equip||null,training_days:parseInt(p.days)||null,session_minutes:parseInt(p.time)||null,diet_style:p.diet||null,nutrition_goal:p.nutritionGoal||null,meals_per_day:parseInt(p.meals)||null,food_restrictions:p.restrictions||[],cuisine_preference:p.mealCuisine||'Indian',preferred_protein:p.preferredProtein||'Flexible',meal_prep_minutes:parseInt(p.mealPrepMinutes)||20,food_budget:p.foodBudget||'Balanced',meal_choices:p.mealChoices||[],priority_area:p.priorityArea||'Balanced',training_style:p.trainingStyle||'Balanced',avoid_movements:p.avoidMovements||[],onboarding_completed:true}}
+function dbToLocalProfile(p){return{name:p.name||'Athlete',goal:p.goal||'General fitness',level:p.experience_level||'Beginner',equip:p.equipment||'No equipment',days:(p.training_days||4)+' days',time:(p.session_minutes||30)+' minutes',diet:p.diet_style||'Balanced',nutritionGoal:p.nutrition_goal||null,meals:String(p.meals_per_day||4),restrictions:p.food_restrictions||[],mealCuisine:p.cuisine_preference||'Indian',preferredProtein:p.preferred_protein||'Flexible',mealPrepMinutes:p.meal_prep_minutes||20,foodBudget:p.food_budget||'Balanced',mealChoices:Array.isArray(p.meal_choices)?p.meal_choices:[],priorityArea:p.priority_area||'Balanced',trainingStyle:p.training_style||'Balanced',avoidMovements:p.avoid_movements||[]}}
 async function getUser(){const {data}=await sb.auth.getUser();return data.user||null}
 async function syncProfileToCloud(){const user=await getUser();const raw=localStorage.getItem(KEY);if(!user||!raw)return false;const p=JSON.parse(raw);const {error}=await sb.from('profiles').upsert(localToDbProfile(p,user),{onConflict:'id'});if(error){console.error(error);return false}return true}
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
@@ -717,7 +791,7 @@ function applyProfile(p){
   greeting.textContent=hello+', '+first+'.';avatar.textContent=first.slice(0,2).toUpperCase();goalEyebrow.textContent=p.goal||'YOUR PLAN';
   weekCount.textContent='0/'+(parseInt(p.days)||4);
   profileName.value=p.name||'';profileGoal.value=p.goal||'';profileLevel.value=p.level||'';profileEquip.value=p.equip||'';profileDays.value=p.days+' · '+p.time;
-  diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.nutritionGoal||(p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain');
+  diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.nutritionGoal||(p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain');mealCuisine.value=p.mealCuisine||'Indian';preferredProtein.value=p.preferredProtein||'Flexible';mealPrepTime.value=String(p.mealPrepMinutes||20);foodBudget.value=p.foodBudget||'Balanced';mealSelections=Array.isArray(p.mealChoices)?p.mealChoices.slice():[];
   profilePriority.value=p.priorityArea||'Balanced';profileStyle.value=p.trainingStyle||'Balanced';
   avoidPrefs.clear();document.querySelectorAll('#avoidMovementChips .chip').forEach(ch=>{const on=(p.avoidMovements||[]).includes(ch.dataset.value);ch.classList.toggle('on',on);if(on)avoidPrefs.add(ch.dataset.value)});
   prefImpact.textContent=((p.priorityArea&&p.priorityArea!=='Balanced')?p.priorityArea+' priority · ':'')+((p.trainingStyle&&p.trainingStyle!=='Balanced')?p.trainingStyle+' · ':'')+((p.avoidMovements||[]).length?(p.avoidMovements||[]).length+' movement preference'+((p.avoidMovements||[]).length>1?'s':''):'Plan balanced by default');
@@ -1429,8 +1503,118 @@ async function completeCurrentSet(){
   renderActiveSessionContext(JSON.parse(localStorage.getItem(KEY)||'{}'));renderWorkout();
 }
 async function nextExercise(){return completeCurrentSet()}
-function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
-function generateMeals(){const d=diet.value,count=+mealsPerDay.value;let rows=[...(meals[d]||meals.Balanced)];if(count===3)rows=[rows[0],rows[1],rows[3]];if(count===5)rows=[rows[0],rows[1],['Snack 1','Fruit + protein source'],rows[2],rows[3]];mealPlan.innerHTML=rows.map((x,i)=>`<div class="item"><div class="icon">${String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');mealSnapshot.innerHTML=rows.slice(0,3).map(x=>`<div class="item" style="margin-bottom:8px"><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');dietTag.textContent=d;const g=nutritionGoal.value;if(g==='Fat loss'){cal.textContent='1,850';protein.textContent='145g';carbs.textContent='175g';fats.textContent='62g'}else if(g==='Muscle gain'){cal.textContent='2,450';protein.textContent='165g';carbs.textContent='285g';fats.textContent='78g'}else{cal.textContent='2,150';protein.textContent='145g';carbs.textContent='230g';fats.textContent='72g'}persistNutritionPrefs()}
+function mealPrefs(){
+  return{
+    diet:diet.value,
+    goal:nutritionGoal.value,
+    count:+mealsPerDay.value,
+    cuisine:mealCuisine.value,
+    protein:preferredProtein.value,
+    maxMinutes:+mealPrepTime.value,
+    budget:foodBudget.value,
+    restrictions:[...restrictions]
+  };
+}
+function normalizeProteinPreference(p){
+  if(p.diet==='Vegan'&&!['Flexible','Tofu'].includes(p.protein))return'Flexible';
+  if(p.diet==='Vegetarian'&&['Chicken','Eggs','Fish'].includes(p.protein))return'Flexible';
+  return p.protein;
+}
+function mealAllowed(meal,p){
+  if(!meal.diet.includes(p.diet))return false;
+  if(p.cuisine!=='Mixed'&&meal.cuisine!==p.cuisine)return false;
+  if(meal.minutes>p.maxMinutes)return false;
+  if(p.budget==='Value'&&meal.budget!=='Value')return false;
+  if(p.budget==='Balanced'&&meal.budget==='Flexible')return false;
+  if(meal.allergens.some(a=>p.restrictions.includes(a)))return false;
+  return true;
+}
+function mealScore(meal,p){
+  let s=0,protein=normalizeProteinPreference(p);
+  if(protein!=='Flexible'&&meal.protein.includes(protein))s+=5;
+  if(p.goal==='Muscle gain'&&meal.tags.includes('protein-forward'))s+=3;
+  if(p.goal==='Fat loss'&&meal.tags.includes('protein-forward'))s+=2;
+  if(p.goal==='Maintain'&&meal.tags.includes('balanced'))s+=2;
+  if(meal.tags.includes('quick')&&p.maxMinutes<=20)s+=2;
+  if(meal.tags.includes('value')&&p.budget==='Value')s+=2;
+  if(meal.cuisine==='Indian'&&p.cuisine==='Indian')s+=1;
+  return s;
+}
+function slotSequence(count){
+  if(count===3)return['Breakfast','Lunch','Dinner'];
+  if(count===5)return['Breakfast','Snack','Lunch','Snack','Dinner'];
+  return['Breakfast','Lunch','Snack','Dinner'];
+}
+function candidatesFor(slot,p,currentId){
+  return mealLibrary.filter(m=>m.slot===slot&&mealAllowed(m,p)&&m.id!==currentId).sort((a,b)=>mealScore(b,p)-mealScore(a,p)||a.minutes-b.minutes||a.name.localeCompare(b.name));
+}
+function fallbackCandidates(slot,p,currentId){
+  const relaxed={...p,cuisine:'Mixed',budget:'Flexible',maxMinutes:45};
+  return mealLibrary.filter(m=>m.slot===slot&&mealAllowed(m,relaxed)&&m.id!==currentId).sort((a,b)=>mealScore(b,p)-mealScore(a,p)||a.minutes-b.minutes);
+}
+function chooseMeal(slot,p,usedIds,preferredId){
+  const preferred=preferredId&&mealLibrary.find(m=>m.id===preferredId&&m.slot===slot&&mealAllowed(m,p)&&!usedIds.has(m.id));
+  if(preferred)return preferred;
+  let list=candidatesFor(slot,p).filter(m=>!usedIds.has(m.id));
+  if(!list.length)list=fallbackCandidates(slot,p).filter(m=>!usedIds.has(m.id));
+  return list[0]||null;
+}
+function nutritionFocus(p){
+  if(p.goal==='Muscle gain')return{title:'Support training with consistent meals.',copy:'Anchor each meal around a useful protein source, include enough carbohydrate around training, and use portions that support steady progress.',tags:['Protein each meal','Carbs around training','Consistent meals']};
+  if(p.goal==='Fat loss')return{title:'Keep meals filling and repeatable.',copy:'Start with a protein source and vegetables or fruit, then use carbohydrate and fat portions that fit hunger, training and consistency.',tags:['Protein first','Produce daily','Repeatable portions']};
+  return{title:'Build a balanced routine.',copy:'Use a regular protein source, include fruit or vegetables, and adjust carbohydrate and fat portions around appetite and activity.',tags:['Balanced plates','Regular protein','Flexible choices']};
+}
+function renderMealPlan(){
+  const p=mealPrefs(),slots=slotSequence(p.count),used=new Set(),chosen=[];
+  for(let i=0;i<slots.length;i++){
+    const meal=chooseMeal(slots[i],p,used,mealSelections[i]);
+    if(meal){used.add(meal.id);chosen.push(meal)}else chosen.push(null);
+  }
+  mealSelections=chosen.map(m=>m?.id||null);
+  mealPlan.innerHTML=chosen.map((m,i)=>{
+    if(!m)return'<div class="mealCard"><div class="mealSlot">'+slots[i]+'</div><h3>No compatible meal found</h3><p>Try relaxing prep time, budget or one food limitation.</p></div>';
+    const tags=[m.minutes+' min',m.budget,...m.tags.slice(0,2)];
+    return'<div class="mealCard"><div class="mealCardTop"><div><div class="mealSlot">'+slots[i]+'</div><h3>'+m.name+'</h3><p>'+m.desc+'</p></div><button class="mealSwapBtn" onclick="openMealSwap('+i+')">Swap</button></div><div class="mealTags">'+tags.map(t=>'<span>'+t+'</span>').join('')+'</div></div>';
+  }).join('');
+  mealSnapshot.innerHTML=chosen.slice(0,3).filter(Boolean).map(m=>'<div class="item" style="margin-bottom:8px"><div class="grow"><b>'+m.slot+'</b><span>'+m.name+'</span></div></div>').join('');
+  dietTag.textContent=p.diet;
+  mealPlanMeta.textContent=p.cuisine+' · '+p.maxMinutes+' min max';
+  const focus=nutritionFocus(p);nutritionFocusTitle.textContent=focus.title;nutritionFocusCopy.textContent=focus.copy;nutritionFocusMeta.innerHTML=focus.tags.map(x=>'<span>'+x+'</span>').join('');
+}
+function generateMeals(resetChoices=false){
+  if(resetChoices)mealSelections=[];
+  const p=mealPrefs(),normalized=normalizeProteinPreference(p);
+  if(preferredProtein.value!==normalized)preferredProtein.value=normalized;
+  renderMealPlan();
+  persistNutritionPrefs();
+}
+function openMealSwap(index){
+  mealSwapIndex=index;
+  const p=mealPrefs(),slots=slotSequence(p.count),currentId=mealSelections[index],slot=slots[index];
+  let options=candidatesFor(slot,p,currentId);
+  if(!options.length)options=fallbackCandidates(slot,p,currentId);
+  options=options.slice(0,5);
+  mealSwapTitle.textContent='Swap '+slot.toLowerCase()+'.';
+  mealSwapOptions.innerHTML=options.length?options.map((m,i)=>'<button class="swapOption" data-meal="'+i+'"><div><b>'+m.name+'</b><span>'+m.minutes+' min · '+m.budget+' · '+m.tags.slice(0,2).join(' · ')+'</span></div><i>→</i></button>').join(''):'<div class="emptyState">No compatible alternative is available with the current filters.</div>';
+  mealSwapOptions.querySelectorAll('[data-meal]').forEach((btn,i)=>btn.onclick=()=>applyMealSwap(options[i].id));
+  mealSwapSheet.classList.add('show');
+}
+function closeMealSwap(){mealSwapSheet.classList.remove('show');mealSwapIndex=null}
+function applyMealSwap(id){
+  if(mealSwapIndex===null)return;
+  mealSelections[mealSwapIndex]=id;
+  mealSwapSheet.classList.remove('show');mealSwapIndex=null;
+  renderMealPlan();persistNutritionPrefs();showFeedback('Meal swapped');
+}
+async function persistNutritionPrefs(){
+  const raw=localStorage.getItem(KEY);if(!raw)return;
+  try{
+    const p=JSON.parse(raw),prefs=mealPrefs();
+    p.diet=prefs.diet;p.nutritionGoal=prefs.goal;p.meals=String(prefs.count);p.restrictions=prefs.restrictions;
+    p.mealCuisine=prefs.cuisine;p.preferredProtein=normalizeProteinPreference(prefs);p.mealPrepMinutes=prefs.maxMinutes;p.foodBudget=prefs.budget;p.mealChoices=mealSelections.filter(Boolean);
+    localStorage.setItem(KEY,JSON.stringify(p));await syncProfileToCloud();
+  }catch(e){console.error(e)}
+}
 async function saveTrainingPreferences(){
   const raw=localStorage.getItem(KEY);if(!raw)return;
   try{
@@ -1446,7 +1630,7 @@ async function saveTrainingPreferences(){
     showFeedback('Training plan updated');
   }catch(e){console.error(e)}
 }
-function persistNutritionPrefs(){const raw=localStorage.getItem(KEY);if(!raw)return;try{const p=JSON.parse(raw);p.diet=diet.value;p.nutritionGoal=nutritionGoal.value;p.meals=mealsPerDay.value;p.restrictions=[...restrictions];localStorage.setItem(KEY,JSON.stringify(p));syncProfileToCloud()}catch(e){}}
+
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {})); }
 (async function init(){
   sb.auth.onAuthStateChange((event)=>{
