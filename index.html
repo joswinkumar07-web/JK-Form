@@ -507,6 +507,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 <div class="utilitySheet" id="mealSwapSheet" role="dialog" aria-modal="true" aria-labelledby="mealSwapTitle" onclick="if(event.target===this)closeMealSwap()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeMealSwap()">×</button><div class="eyebrow">SWAP MEAL</div><h2 id="mealSwapTitle">Choose another option.</h2><p>Alternatives keep your current diet, food limits, prep time and budget in mind.</p><div id="mealSwapOptions" class="swapOptions"></div></div></div>
 <div class="utilitySheet" id="fitTodaySheet" role="dialog" aria-modal="true" aria-label="Adjust today’s workout" onclick="if(event.target===this)closeFitToday()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeFitToday()">×</button><div class="eyebrow">FIT TODAY</div><h2>Adjust this session.</h2><p>Changes apply only to today. Your weekly plan stays intact.</p><div class="field"><label>Time available</label><select id="fitTime"><option value="">Keep planned time</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option></select></div><div class="field"><label>Equipment today</label><select id="fitEquip"><option value="">Keep planned equipment</option><option>No equipment</option><option>Dumbbells</option><option>Resistance bands</option><option>Gym access</option></select></div><div class="field"><label>How should today feel?</label><select id="fitEffort"><option value="normal">Normal session</option><option value="lighter">Lighter day</option></select></div><button class="btn primary" style="width:100%" onclick="applyFitToday()">Update today</button><button class="authInlineAction" style="width:100%;text-align:center;margin-top:8px" onclick="resetFitToday()">Reset to plan</button></div></div>
 <div class="utilitySheet" id="swapSheet" role="dialog" aria-modal="true" aria-labelledby="swapTitle" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
+<div class="utilitySheet" id="leaveWorkoutSheet" role="dialog" aria-modal="true" aria-labelledby="leaveWorkoutTitle" onclick="if(event.target===this)cancelLeaveWorkout()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="cancelLeaveWorkout()">×</button><div class="eyebrow">WORKOUT IN PROGRESS</div><h2 id="leaveWorkoutTitle">Leave this workout?</h2><p>JK Form can’t resume an unfinished session yet. If you end now, this session won’t count toward Progress.</p><button class="btn primary" style="width:100%" onclick="cancelLeaveWorkout()">Keep training</button><button class="btn secondary" id="endWorkoutBtn" style="width:100%;margin-top:8px" onclick="confirmLeaveWorkout()">End workout</button></div></div>
 <div class="completeSheet" id="completeSheet" role="dialog" aria-modal="true" aria-label="Workout complete" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button type="button" class="authClose" aria-label="Close" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
@@ -521,7 +522,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,completedSessionMinutes=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={},sessionDraft=null,todayAdjustment={time:null,equip:null,lighter:false},currentExerciseSetsDone=0;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();let mealSelections=[],mealSwapIndex=null;
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,completedSessionMinutes=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={},sessionDraft=null,todayAdjustment={time:null,equip:null,lighter:false},currentExerciseSetsDone=0,workoutInProgress=false,workoutActionPending=false,sessionStartPending=false,pendingDestination=null,workoutSyncHealthy=true;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();let mealSelections=[],mealSwapIndex=null;
 const exercisePools={
   'No equipment':{
     lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
@@ -868,7 +869,23 @@ function updateConnectivity(){
 }
 window.addEventListener('online',()=>{updateConnectivity();showFeedback('Back online')});
 window.addEventListener('offline',()=>{updateConnectivity();showFeedback('Cloud saving unavailable')});
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>{const on=b.dataset.screen===id;b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
+function activeScreenId(){return document.querySelector('.screen.active')?.id||'home'}
+function cancelLeaveWorkout(){pendingDestination=null;leaveWorkoutSheet.classList.remove('show')}
+async function confirmLeaveWorkout(){
+  const destination=pendingDestination||'home';
+  endWorkoutBtn.disabled=true;endWorkoutBtn.textContent='Ending…';
+  stopRestTimer();
+  workoutInProgress=false;workoutActionPending=false;sessionStartPending=false;
+  cloudWorkoutId=null;exIndex=0;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';
+  todayAdjustment={time:null,equip:null,lighter:false};sessionDraft=null;updateTodayFitLabel();
+  leaveWorkoutSheet.classList.remove('show');pendingDestination=null;
+  endWorkoutBtn.disabled=false;endWorkoutBtn.textContent='End workout';
+  renderActiveSessionContext(JSON.parse(localStorage.getItem(KEY)||'{}'));renderWorkout();
+  go(destination,true);
+  showFeedback('Workout ended');
+}
+window.addEventListener('beforeunload',e=>{if(workoutInProgress){e.preventDefault();e.returnValue=''}});
+function go(id,force=false){if(!force&&workoutInProgress&&activeScreenId()==='train'&&id!=='train'){pendingDestination=id;leaveWorkoutSheet.classList.add('show');return false}document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>{const on=b.dataset.screen===id;b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress();return true}
 function selected(id,fallback){return document.querySelector(`#${id} .choice.selected`)?.dataset.value||fallback}
 function bindChoices(id){document.querySelectorAll(`#${id} .choice`).forEach(c=>{c.setAttribute('aria-pressed',c.classList.contains('selected')?'true':'false');c.onclick=()=>{document.querySelectorAll(`#${id} .choice`).forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});c.classList.add('selected');c.setAttribute('aria-pressed','true')}})}['goalChoices','levelChoices','equipChoices'].forEach(bindChoices);
 document.querySelectorAll('#obRestrictions .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?obRestrictions.add(c.dataset.value):obRestrictions.delete(c.dataset.value)});document.querySelectorAll('#restrictionChips .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?restrictions.add(c.dataset.value):restrictions.delete(c.dataset.value);generateMeals(true)});document.querySelectorAll('#avoidMovementChips .chip').forEach(ch=>ch.onclick=()=>{ch.classList.toggle('on');ch.classList.contains('on')?avoidPrefs.add(ch.dataset.value):avoidPrefs.delete(ch.dataset.value);saveTrainingPreferences()});
@@ -1079,7 +1096,7 @@ async function signInUser(){
   await refreshProgress();
   showFeedback('Welcome back');
 }
-async function signOutUser(){const user=await getUser();localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();cloudWorkoutId=null;if(user&&!user.is_anonymous){localStorage.removeItem(KEY);localStorage.removeItem(SAVE_PROMPT_KEY)}await refreshAccountUI();showEntry('returning')}
+async function signOutUser(){const user=await getUser();localStorage.setItem(HAD_ACCOUNT_KEY,'1');stopRestTimer();workoutInProgress=false;workoutActionPending=false;sessionStartPending=false;await sb.auth.signOut();cloudWorkoutId=null;if(user&&!user.is_anonymous){localStorage.removeItem(KEY);localStorage.removeItem(SAVE_PROMPT_KEY)}await refreshAccountUI();showEntry('returning')}
 const REPDB_BASE='https://raw.githubusercontent.com/RepDB/exercise-dataset/main/images/flat/';const REPDB_FALLBACK='https://exercise-dataset.com/images/flat/';
 const exerciseGuides={
 'Tempo Squat':{
@@ -1499,7 +1516,9 @@ function showWorkoutComplete(user,data){
   completeMinutes.textContent=String(completedSessionMinutes||parseInt(p.time)||30);
   document.querySelectorAll('.feedbackChoices button').forEach(b=>b.classList.remove('active'));
   feedbackImpact.textContent='Optional · helps adjust the next time this workout appears.';
-  if(user?.is_anonymous){
+  if(!workoutSyncHealthy){
+    completeCopy.textContent='Workout finished, but some progress could not be saved. Check your connection before the next session.';
+  }else if(user?.is_anonymous){
     completeCopy.textContent='Workout saved. Create an account to keep this progress across devices.';
     completePrimaryBtn.textContent='Save my progress';
     completeSecondaryBtn.textContent='View progress';
@@ -1570,33 +1589,49 @@ function showExerciseAdvance(completed,next){
   clearTimeout(showExerciseAdvance.t);
   showExerciseAdvance.t=setTimeout(()=>exerciseAdvance.classList.remove('show'),2200);
 }
-function handleWorkoutPrimary(){
+async function handleWorkoutPrimary(){
+  if(workoutActionPending)return;
   if(['rest','between'].includes(workoutPhase)){startNextSet();return}
-  completeCurrentSet();
+  workoutActionPending=true;completeSetBtn.disabled=true;completeSetBtn.setAttribute('aria-busy','true');completeSetBtn.textContent='Saving…';
+  try{await completeCurrentSet()}
+  catch(e){console.error(e);workoutSyncHealthy=false;showFeedback('Could not save this set')}
+  finally{
+    workoutActionPending=false;completeSetBtn.disabled=false;completeSetBtn.removeAttribute('aria-busy');
+    if(!completeSheet.classList.contains('show'))renderWorkout();
+  }
 }
 async function startSession(){
+  if(sessionStartPending||workoutInProgress)return;
+  sessionStartPending=true;workoutSyncHealthy=true;
   stopRestTimer();exIndex=0;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';cloudWorkoutId=null;
   const p=JSON.parse(localStorage.getItem(KEY)||'{}');renderActiveSessionContext(p);
   secs=restSecondsFor(currentWorkout()[0]);timer.textContent=formatClock(secs);
-  await ensureWorkoutSession();renderWorkout();
-  setTimeout(()=>exerciseReference.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  try{
+    const id=await ensureWorkoutSession();
+    workoutInProgress=true;
+    if(!id){workoutSyncHealthy=false;showFeedback('Workout started · cloud sync unavailable')}
+    renderWorkout();
+    setTimeout(()=>exerciseReference.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  }finally{sessionStartPending=false}
 }
 async function completeCurrentSet(){
-  stopRestTimer();
+  stopRestTimer();workoutInProgress=true;
   const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);
-  await ensureWorkoutSession();const user=await getUser();
+  const id=await ensureWorkoutSession();const user=await getUser();
+  if(!id&&user)workoutSyncHealthy=false;
 
-  currentExerciseSetsDone++;
   if(user&&cloudWorkoutId){
-    await sb.from('exercise_logs').insert({
+    const {error}=await sb.from('exercise_logs').insert({
       user_id:user.id,
       workout_session_id:cloudWorkoutId,
       exercise_name:current[0],
       sets_completed:1,
       reps:getRepTarget(current[1])
     });
+    if(error){console.error(error);workoutSyncHealthy=false;showFeedback('Set complete · sync unavailable')}
   }
 
+  currentExerciseSetsDone++;
   const finalSet=setIndex>=totalSets;
   const finalExercise=exIndex===data.length-1;
 
@@ -1616,17 +1651,19 @@ async function completeCurrentSet(){
   }
 
   if(user&&cloudWorkoutId){
-    await sb.from('workout_sessions').update({
+    const {error}=await sb.from('workout_sessions').update({
       completed:true,
       completed_at:new Date().toISOString(),
       exercises_completed:data.length
     }).eq('id',cloudWorkoutId);
-  }
+    if(error){console.error(error);workoutSyncHealthy=false}
+  }else if(user){workoutSyncHealthy=false}
 
   completedWorkoutId=cloudWorkoutId;
   completedSessionKey=baseSession().key;
   completedSessionMinutes=sessionMinutes();
-  showFeedback('Workout complete');
+  workoutInProgress=false;
+  showFeedback(workoutSyncHealthy?'Workout complete':'Workout finished · sync incomplete');
   cloudWorkoutId=null;setIndex=1;exIndex=0;currentExerciseSetsDone=0;workoutPhase='work';
   await refreshProgress();
   showWorkoutComplete(user,data);
