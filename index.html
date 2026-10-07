@@ -236,6 +236,20 @@ linear-gradient(180deg,#16100D,#090605)}
 .nextExercisePreview b{display:block;font-size:12px;font-weight:500}
 .nextExercisePreview small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
 .exerciseControls.single{grid-template-columns:1fr}
+
+.programSummary{padding:18px 0 24px;border-bottom:1px solid rgba(233,225,215,.1)}
+.programSummary .programName{font-size:24px;line-height:1;letter-spacing:-.8px;font-weight:600}
+.programSummary p{font-size:11px;line-height:1.55;color:var(--muted);margin:9px 0 0;max-width:430px}
+.programRule{margin-top:15px;padding-left:12px;border-left:1px solid var(--accent);font-size:10px;line-height:1.55;color:#CFC5BC}
+.planDay{padding:18px 0;border-bottom:1px solid rgba(233,225,215,.1)}
+.planDay.active{border-bottom-color:var(--accent)}
+.planDayTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.planDay .dayMeta{font-size:8px;letter-spacing:.17em;color:var(--accent);text-transform:uppercase}
+.planDay h3{font-size:19px;line-height:1.05;margin:7px 0 5px;font-weight:600}
+.planDay p{font-size:10px;color:var(--muted);margin:0}
+.planDay .planStart{border:0;background:none;color:var(--text);font-size:8px;letter-spacing:.15em;text-transform:uppercase;min-height:42px;padding:0}
+.planExercisePreview{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.planExercisePreview span{font-size:8px;color:var(--muted);border:1px solid rgba(233,225,215,.1);padding:5px 7px}
 </style>
 </head>
 <body>
@@ -249,7 +263,7 @@ linear-gradient(180deg,#16100D,#090605)}
   </section>
 
   <section id="train" class="screen">
-    <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Guided workout</h1><p>Clear guidance. One exercise at a time.</p></div>
+    <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1 id="trainTitle">Guided workout</h1><p id="trainSubtitle">Clear guidance. One exercise at a time.</p></div>
     <div class="card workoutStage">
 <div class="workoutStateBar" id="workoutStateBar"><div><span id="workoutStateKicker">WORK SET</span><b id="workoutStateText">Set 1 of 3</b><small id="workoutStateDetail">15 reps</small></div><div class="timer" id="timer" style="display:none">00:30</div></div>
 <div class="exerciseAdvance" id="exerciseAdvance"><span>EXERCISE COMPLETE</span><b id="advanceText">Up next</b></div>
@@ -273,7 +287,7 @@ linear-gradient(180deg,#16100D,#090605)}
     <div class="sectionTitle"><h3>Session</h3><span id="sessionMeta">Beginner · 30 min</span></div><div id="exerciseList"></div>
   </section>
 
-  <section id="plan" class="screen"><div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Your week</h1><p>Your plan adapts to the training frequency chosen during onboarding.</p></div><div id="weeklyPlan"></div></section>
+  <section id="plan" class="screen"><div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Your week</h1><p>Your training split is built from your goal, experience, equipment and available days.</p></div><div class="programSummary" id="programSummary"></div><div id="weeklyPlan"></div></section>
 
   <section id="meals" class="screen"><div class="pageHead"><div class="eyebrow">FORM / LIVE</div><h1>Eat for the goal</h1><p>Simple meal guidance built around your goal and food limits.</p></div><div class="card"><div class="field"><label>Diet style</label><select id="diet" onchange="generateMeals()"><option>Balanced</option><option>Vegetarian</option><option>Vegan</option><option>High protein</option></select></div><div class="field"><label>Goal</label><select id="nutritionGoal" onchange="generateMeals()"><option>Maintain</option><option>Fat loss</option><option>Muscle gain</option></select></div><div class="field"><label>Meals per day</label><select id="mealsPerDay" onchange="generateMeals()"><option>3</option><option>4</option><option>5</option></select></div><div class="field"><label>Food limitations</label><div class="chips" id="restrictionChips"><button class="chip" data-value="Dairy">Dairy</button><button class="chip" data-value="Gluten">Gluten</button><button class="chip" data-value="Eggs">Eggs</button><button class="chip" data-value="Nuts">Nuts</button><button class="chip" data-value="Soy">Soy</button></div></div></div><div class="card"><div class="mealMacros"><div class="macro"><b id="cal">2,150</b><span>kcal</span></div><div class="macro"><b id="protein">145g</b><span>protein</span></div><div class="macro"><b id="carbs">230g</b><span>carbs</span></div><div class="macro"><b id="fats">72g</b><span>fats</span></div></div></div><div id="mealPlan"></div><p style="color:var(--muted);font-size:11px;line-height:1.5">Prototype guidance only. Meal plans should be adjusted for individual medical needs, allergies and professional nutrition advice.</p></section>
 
@@ -336,8 +350,158 @@ linear-gradient(180deg,#16100D,#090605)}
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,authMode='signin',workoutPhase='work';const restrictions=new Set(),obRestrictions=new Set();
-const workoutMap={"No equipment":[['Tempo Squat','3 × 15'],['Push-up','3 × 10'],['Reverse Lunge','3 × 10/side'],['Pike Push-up','3 × 8'],['Plank Shoulder Tap','3 × 20']],"Dumbbells":[['DB Squat','3 × 12'],['DB Floor Press','3 × 10'],['One-arm Row','3 × 12'],['DB RDL','3 × 12'],['Dead Bug','3 × 10/side']],"Resistance bands":[['Band Squat','3 × 15'],['Band Row','3 × 12'],['Band Chest Press','3 × 12'],['Band RDL','3 × 15'],['Pallof Press','3 × 10/side']],"Gym access":[['Leg Press','3 × 12'],['Chest Press','3 × 10'],['Lat Pulldown','3 × 12'],['Romanian Deadlift','3 × 10'],['Cable Crunch','3 × 12']]};
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null;const restrictions=new Set(),obRestrictions=new Set();
+const exercisePools={
+  'No equipment':{
+    lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
+    lowerHinge:['Glute Bridge','Single-leg Glute Bridge'],
+    upperPush:['Push-up','Pike Push-up','Close-grip Push-up'],
+    upperPull:['Prone Y Raise','Reverse Snow Angel'],
+    accessory:['Calf Raise','Prone Y Raise'],
+    core:['Dead Bug','Plank Shoulder Tap','Side Plank'],
+    conditioning:['Mountain Climber','Squat to Reach'],
+    mobility:['90/90 Hip Switch','World’s Greatest Stretch']
+  },
+  'Dumbbells':{
+    lowerKnee:['DB Squat','DB Reverse Lunge','Goblet Split Squat'],
+    lowerHinge:['DB RDL','DB Glute Bridge'],
+    upperPush:['DB Floor Press','DB Shoulder Press','DB Close-grip Press'],
+    upperPull:['One-arm Row','DB Pullover','DB Rear Delt Row'],
+    accessory:['DB Lateral Raise','DB Curl','DB Triceps Extension','Calf Raise'],
+    core:['Dead Bug','Plank Shoulder Tap','Suitcase Hold'],
+    conditioning:['DB Thruster','Mountain Climber'],
+    mobility:['90/90 Hip Switch','World’s Greatest Stretch']
+  },
+  'Resistance bands':{
+    lowerKnee:['Band Squat','Band Reverse Lunge','Band Split Squat'],
+    lowerHinge:['Band RDL','Band Good Morning'],
+    upperPush:['Band Chest Press','Band Shoulder Press','Band Push-up'],
+    upperPull:['Band Row','Band Pulldown','Band Pull Apart'],
+    accessory:['Band Lateral Raise','Band Curl','Band Triceps Pressdown','Band Lateral Walk'],
+    core:['Pallof Press','Dead Bug','Plank Shoulder Tap'],
+    conditioning:['Band Squat to Press','Mountain Climber'],
+    mobility:['90/90 Hip Switch','World’s Greatest Stretch']
+  },
+  'Gym access':{
+    lowerKnee:['Leg Press','Reverse Lunge','Leg Extension'],
+    lowerHinge:['Romanian Deadlift','Leg Curl','Hip Thrust'],
+    upperPush:['Chest Press','Shoulder Press','Incline Chest Press'],
+    upperPull:['Lat Pulldown','Seated Cable Row','Chest-supported Row'],
+    accessory:['Cable Lateral Raise','Biceps Curl','Triceps Pressdown','Calf Raise'],
+    core:['Cable Crunch','Dead Bug','Pallof Press'],
+    conditioning:['Incline Walk','Mountain Climber'],
+    mobility:['90/90 Hip Switch','World’s Greatest Stretch']
+  }
+};
+
+function poolItem(pool,key,index=0){const list=pool[key]||[];return list[index%Math.max(1,list.length)]||''}
+function sessionExercise(name,role='accessory'){return{name,role}}
+function profileMinutes(p){return parseInt(p.time)||30}
+function exerciseLimit(p){const m=profileMinutes(p);return m<=20?4:m<=30?5:m<=45?6:7}
+function setCountFor(p,role){
+  if(role==='mobility')return 2;
+  if(role==='conditioning')return p.level==='Beginner'?2:3;
+  let sets=p.level==='Beginner'?2:3;
+  if(profileMinutes(p)>=30&&p.level==='Beginner')sets=3;
+  if(role==='main'&&profileMinutes(p)>=45&&p.level!=='Beginner')sets=4;
+  if(role==='main'&&p.level==='Advanced'&&profileMinutes(p)>=60)sets=4;
+  return sets;
+}
+function repRangeFor(p,role){
+  if(role==='mobility')return '30 sec';
+  if(role==='conditioning')return p.goal==='Fat loss'?'30–40 sec':'30 sec';
+  if(role==='core')return p.goal==='Mobility'?'8–10/side':'10–15';
+  if(p.goal==='Build muscle'){
+    if(p.equip==='No equipment')return role==='main'?'8–15':'10–20';
+    return role==='main'?'6–10':'10–15';
+  }
+  if(p.goal==='Fat loss')return role==='main'?'8–12':'12–15';
+  if(p.goal==='Mobility')return role==='main'?'8–10 controlled':'10–12 controlled';
+  return role==='main'?'8–12':'10–15';
+}
+function prescribeExercise(item,p){return[item.name,setCountFor(p,item.role)+' × '+repRangeFor(p,item.role),item.role]}
+function progressionRule(p){
+  if(p.goal==='Build muscle')return p.equip==='No equipment'
+    ?'Reach the top of the rep range with clean form, then add reps, tempo or a harder variation.'
+    :'Reach the top of the rep range on every set with clean form, then increase load slightly.';
+  if(p.goal==='Fat loss')return 'Keep the strength work controlled. Progress reps or resistance before reducing rest.';
+  if(p.goal==='Mobility')return 'Progress range and control first. Never force extra range to chase reps.';
+  return 'Add reps first. When the top of the range feels controlled, add a little resistance.';
+}
+function programReason(p,split){
+  return split+' built around '+p.goal.toLowerCase()+', '+p.level.toLowerCase()+' experience and '+String(p.equip).toLowerCase()+'.';
+}
+function rawSession(type,variant,p){
+  const pool=exercisePools[p.equip]||exercisePools['No equipment'];
+  const v=variant||0;
+  const S=(key,i,role)=>sessionExercise(poolItem(pool,key,i),role);
+  const map={
+    fullA:{title:'Full Body A',focus:'Squat · push · pull',items:[S('lowerKnee',0,'main'),S('upperPush',0,'main'),S('upperPull',0,'main'),S('lowerHinge',0,'accessory'),S('core',0,'core'),S('accessory',0,'accessory'),S('conditioning',0,'conditioning')]},
+    fullB:{title:'Full Body B',focus:'Hinge · pull · unilateral',items:[S('lowerHinge',0,'main'),S('upperPull',1,'main'),S('lowerKnee',1,'main'),S('upperPush',1,'accessory'),S('core',1,'core'),S('accessory',1,'accessory'),S('conditioning',1,'conditioning')]},
+    fullC:{title:'Full Body C',focus:'Balanced strength · control',items:[S('lowerKnee',2,'main'),S('upperPush',0,'main'),S('upperPull',0,'main'),S('lowerHinge',1,'accessory'),S('core',2,'core'),S('accessory',2,'accessory'),S('conditioning',0,'conditioning')]},
+    upperA:{title:'Upper A',focus:'Push · pull · shoulders',items:[S('upperPush',0,'main'),S('upperPull',0,'main'),S('upperPush',1,'accessory'),S('upperPull',1,'accessory'),S('accessory',0,'accessory'),S('accessory',1,'accessory'),S('core',0,'core')]},
+    upperB:{title:'Upper B',focus:'Back · chest · arms',items:[S('upperPull',1,'main'),S('upperPush',0,'main'),S('upperPull',0,'accessory'),S('upperPush',1,'accessory'),S('accessory',1,'accessory'),S('accessory',2,'accessory'),S('core',1,'core')]},
+    lowerA:{title:'Lower A',focus:'Squat · hinge · core',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',3,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
+    lowerB:{title:'Lower B',focus:'Hinge · unilateral · core',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',0,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',0,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
+    pushA:{title:'Push A',focus:'Chest · shoulders · triceps',items:[S('upperPush',0,'main'),S('upperPush',1,'main'),S('upperPush',2,'accessory'),S('accessory',0,'accessory'),S('accessory',2,'accessory'),S('core',0,'core')]},
+    pushB:{title:'Push B',focus:'Shoulders · chest · triceps',items:[S('upperPush',1,'main'),S('upperPush',0,'main'),S('accessory',0,'accessory'),S('upperPush',2,'accessory'),S('accessory',2,'accessory'),S('core',1,'core')]},
+    pullA:{title:'Pull A',focus:'Back · rear delts · biceps',items:[S('upperPull',0,'main'),S('upperPull',1,'main'),S('upperPull',2,'accessory'),S('accessory',1,'accessory'),S('core',0,'core'),S('mobility',0,'mobility')]},
+    pullB:{title:'Pull B',focus:'Back · biceps · trunk',items:[S('upperPull',1,'main'),S('upperPull',0,'main'),S('upperPull',2,'accessory'),S('accessory',1,'accessory'),S('core',1,'core'),S('mobility',1,'mobility')]},
+    legsA:{title:'Legs A',focus:'Quads · glutes · hamstrings',items:[S('lowerKnee',0,'main'),S('lowerHinge',0,'main'),S('lowerKnee',1,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',3,'accessory'),S('core',0,'core')]},
+    legsB:{title:'Legs B',focus:'Posterior chain · unilateral',items:[S('lowerHinge',0,'main'),S('lowerKnee',1,'main'),S('lowerKnee',2,'accessory'),S('lowerHinge',1,'accessory'),S('accessory',0,'accessory'),S('core',1,'core')]},
+    conditioning:{title:'Conditioning + Core',focus:'Work capacity · trunk',items:[S('conditioning',0,'conditioning'),S('lowerKnee',1,'accessory'),S('upperPush',0,'accessory'),S('conditioning',1,'conditioning'),S('core',0,'core'),S('core',1,'core')]},
+    mobility:{title:'Mobility + Control',focus:'Range · control · core',items:[S('mobility',0,'mobility'),S('mobility',1,'mobility'),S('core',0,'core'),S('lowerHinge',0,'accessory'),S('core',1,'core')]}
+  };
+  const base=map[type]||map.fullA;
+  const items=base.items.filter(x=>x.name).slice(0,exerciseLimit(p));
+  return{key:type+(v?'-'+v:''),title:base.title+(v&&['fullA','fullB','upperA','upperB','lowerA','lowerB'].includes(type)?'':''),
+    focus:base.focus,exercises:items.map(x=>prescribeExercise(x,p))};
+}
+function buildProgram(p){
+  const days=Math.max(2,Math.min(6,parseInt(p.days)||4));
+  let types=[],split='';
+  if(p.goal==='Mobility'){
+    split='Strength + mobility';
+    const base=['fullA','mobility','fullB','mobility','fullC','mobility'];
+    types=base.slice(0,days);
+  }else if(days===2){
+    split='2-day full body';types=['fullA','fullB'];
+  }else if(days===3){
+    split='3-day full body';types=['fullA','fullB','fullC'];
+  }else if(days===4){
+    split='Upper / Lower';types=['upperA','lowerA','upperB','lowerB'];
+  }else if(days===5&&p.goal==='Build muscle'&&p.level!=='Beginner'){
+    split='Push / Pull / Legs + Upper / Lower';types=['pushA','pullA','legsA','upperB','lowerB'];
+  }else if(days===5){
+    split='Balanced 5-day';types=['fullA','upperA','lowerA','conditioning','fullB'];
+  }else if(days===6&&p.goal==='Build muscle'&&p.level!=='Beginner'){
+    split='Push / Pull / Legs × 2';types=['pushA','pullA','legsA','pushB','pullB','legsB'];
+  }else{
+    split='Balanced 6-day';types=['upperA','lowerA','conditioning','upperB','lowerB','fullC'];
+  }
+  const sessions=types.map((t,i)=>{const s=rawSession(t,i,p);return{...s,day:i+1}});
+  return{name:split,reason:programReason(p,split),progression:progressionRule(p),sessions};
+}
+function currentProgram(){
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}');
+  activeProgram=buildProgram(p);
+  activeSessionIndex=Math.max(0,Math.min(activeSessionIndex,activeProgram.sessions.length-1));
+  return activeProgram;
+}
+function currentSession(){const program=currentProgram();return program.sessions[activeSessionIndex]||program.sessions[0]}
+function currentWorkout(){return currentSession().exercises}
+function restSecondsFor(exercise){
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}'),role=exercise?.[2]||'accessory';
+  if(role==='mobility')return 30;
+  if(role==='conditioning')return p.goal==='Fat loss'?30:40;
+  if(p.goal==='Build muscle'){
+    if(role==='main')return p.level==='Advanced'?90:75;
+    return 60;
+  }
+  if(p.goal==='Fat loss')return role==='main'?60:40;
+  return role==='main'?60:45;
+}
+function formatClock(total){const s=Math.max(0,total|0),m=Math.floor(s/60),r=s%60;return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
 const meals={Balanced:[['Breakfast','Oats + Greek yogurt + banana'],['Lunch','Rice + grilled chicken + vegetables'],['Snack','Fruit + yogurt'],['Dinner','Chapati + dal + paneer + salad']],Vegetarian:[['Breakfast','Vegetable poha + curd'],['Lunch','Rice + dal + paneer + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + paneer bhurji + salad']],Vegan:[['Breakfast','Oats + soy milk + banana'],['Lunch','Rice + dal + tofu + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + chickpea curry + salad']],"High protein":[['Breakfast','Eggs + oats + fruit'],['Lunch','Chicken rice bowl + vegetables'],['Snack','Greek yogurt + fruit'],['Dinner','Paneer/chicken wrap + salad']]};
 function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
 function selected(id,fallback){return document.querySelector(`#${id} .choice.selected`)?.dataset.value||fallback}
@@ -349,7 +513,24 @@ function dbToLocalProfile(p){return{name:p.name||'Athlete',goal:p.goal||'General
 async function getUser(){const {data}=await sb.auth.getUser();return data.user||null}
 async function syncProfileToCloud(){const user=await getUser();const raw=localStorage.getItem(KEY);if(!user||!raw)return false;const p=JSON.parse(raw);const {error}=await sb.from('profiles').upsert(localToDbProfile(p,user),{onConflict:'id'});if(error){console.error(error);return false}return true}
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
-function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll('#'+id+' .choice').forEach(ch=>ch.classList.toggle('selected',ch.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function applyProfile(p){const first=(p.name||'Athlete').split(' ')[0];const hr=new Date().getHours();const hello=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';greeting.textContent=hello+', '+first+'.';avatar.textContent=first.slice(0,2).toUpperCase();goalEyebrow.textContent=p.goal||'YOUR PLAN';todayTitle.textContent='Full Body · '+(p.time||'30 minutes').replace(' minutes',' min');todayCopy.textContent=p.level+' session using '+String(p.equip||'no equipment').toLowerCase()+'.';weekCount.textContent='0/'+(parseInt(p.days)||4);sessionMeta.textContent=p.level+' · '+p.time;profileName.value=p.name||'';profileGoal.value=p.goal||'';profileLevel.value=p.level||'';profileEquip.value=p.equip||'';profileDays.value=p.days+' · '+p.time;diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.nutritionGoal||(p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain');restrictions.clear();document.querySelectorAll('#restrictionChips .chip').forEach(ch=>{const on=(p.restrictions||[]).includes(ch.dataset.value);ch.classList.toggle('on',on);if(on)restrictions.add(ch.dataset.value)});renderWorkout();renderWeek(p);generateMeals();refreshProgress()}
+function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll('#'+id+' .choice').forEach(ch=>ch.classList.toggle('selected',ch.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function renderActiveSessionContext(p){
+  const program=currentProgram(),session=program.sessions[activeSessionIndex]||program.sessions[0];
+  todayTitle.textContent=session.title+' · '+String(p.time||'30 minutes').replace(' minutes',' min');
+  todayCopy.textContent=session.focus+' · '+p.level+' · '+String(p.equip).toLowerCase();
+  sessionMeta.textContent=session.title+' · '+p.time;
+  trainTitle.textContent=session.title;
+  trainSubtitle.textContent=session.focus+' · '+p.goal;
+}
+function applyProfile(p){
+  const first=(p.name||'Athlete').split(' ')[0],hr=new Date().getHours(),hello=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  greeting.textContent=hello+', '+first+'.';avatar.textContent=first.slice(0,2).toUpperCase();goalEyebrow.textContent=p.goal||'YOUR PLAN';
+  weekCount.textContent='0/'+(parseInt(p.days)||4);
+  profileName.value=p.name||'';profileGoal.value=p.goal||'';profileLevel.value=p.level||'';profileEquip.value=p.equip||'';profileDays.value=p.days+' · '+p.time;
+  diet.value=p.diet||'Balanced';mealsPerDay.value=p.meals||'4';nutritionGoal.value=p.nutritionGoal||(p.goal==='Fat loss'?'Fat loss':p.goal==='Build muscle'?'Muscle gain':'Maintain');
+  restrictions.clear();document.querySelectorAll('#restrictionChips .chip').forEach(ch=>{const on=(p.restrictions||[]).includes(ch.dataset.value);ch.classList.toggle('on',on);if(on)restrictions.add(ch.dataset.value)});
+  activeProgram=buildProgram(p);activeSessionIndex=Math.min(activeSessionIndex,activeProgram.sessions.length-1);
+  renderActiveSessionContext(p);renderWorkout();renderWeek(p);generateMeals();refreshProgress();
+}
 function setAuthMode(mode){
   authMode=mode;
   const special=['upgrade','finish','forgot','reset'].includes(mode);
@@ -503,7 +684,6 @@ async function signInUser(){
   showFeedback('Welcome back');
 }
 async function signOutUser(){const user=await getUser();localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();cloudWorkoutId=null;if(user&&!user.is_anonymous){localStorage.removeItem(KEY);localStorage.removeItem(SAVE_PROMPT_KEY)}await refreshAccountUI();showEntry('returning')}
-function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
 const REPDB_BASE='https://raw.githubusercontent.com/RepDB/exercise-dataset/main/images/flat/';const REPDB_FALLBACK='https://exercise-dataset.com/images/flat/';
 const exerciseGuides={
 'Tempo Squat':{
@@ -661,7 +841,7 @@ function renderExerciseGuide(name){
 }
 function getRepTarget(spec){return String(spec).replace(/^\s*\d+\s*[×x]\s*/,'').trim()}
 function renderWorkout(){
-  const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);
+  const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]),session=currentSession();
   homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>{
     const g=exerciseGuides[x[0]]||genericGuide(x[0]);
     const thumb=g.images?.[0]||'';
@@ -685,7 +865,7 @@ function renderWorkout(){
     setProgress.textContent='SET '+completedSet+' COMPLETE · NEXT SET '+setIndex;
     workoutStateKicker.textContent='REST';
     workoutStateText.textContent='Set '+completedSet+' complete';
-    workoutStateDetail.textContent='Next · Set '+setIndex+' of '+totalSets;
+    workoutStateDetail.textContent='Next · Set '+setIndex+' of '+totalSets+' · '+restSecondsFor(current)+'s rest';
     timer.style.display='block';
     timerBtn.style.display='inline-flex';
     exerciseControls.classList.remove('single');
@@ -695,7 +875,7 @@ function renderWorkout(){
     setProgress.textContent='NEXT · SET 1 OF '+totalSets;
     workoutStateKicker.textContent='EXERCISE COMPLETE';
     workoutStateText.textContent='Up next · '+current[0];
-    workoutStateDetail.textContent='Rest, then begin set 1';
+    workoutStateDetail.textContent='Rest, then begin set 1 · '+restSecondsFor(current)+'s';
     timer.style.display='block';
     timerBtn.style.display='inline-flex';
     exerciseControls.classList.remove('single');
@@ -705,7 +885,7 @@ function renderWorkout(){
     setProgress.textContent='SET '+setIndex+' OF '+totalSets;
     workoutStateKicker.textContent='WORK SET';
     workoutStateText.textContent='Set '+setIndex+' of '+totalSets;
-    workoutStateDetail.textContent=getRepTarget(current[1])+' reps';
+    workoutStateDetail.textContent=getRepTarget(current[1])+' reps · '+session.focus;
     timer.style.display='none';
     timerBtn.style.display='none';
     exerciseControls.classList.add('single');
@@ -714,13 +894,29 @@ function renderWorkout(){
 }
 function openExercise(i){exIndex=i;setIndex=1;workoutPhase='work';stopRestTimer();go('train');renderWorkout();exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});showFeedback('Exercise opened')}
 function showFeedback(msg){feedbackToast.textContent=msg;feedbackToast.classList.add('show');clearTimeout(showFeedback.t);showFeedback.t=setTimeout(()=>feedbackToast.classList.remove('show'),1400)}
-function renderWeek(p){const n=parseInt(p.days)||4;weeklyPlan.innerHTML=Array.from({length:n},(_,i)=>`<div class="card"><div class="eyebrow">DAY ${i+1}</div><h3 style="margin:8px 0 4px">${['Full Body Strength','Upper Body','Lower Body','Conditioning','Full Body Strength','Mobility'][i%6]}</h3><p style="color:var(--muted);font-size:12px;margin:0">${p.time} · ${p.equip}</p></div>`).join('')}
+function renderWeek(p){
+  const program=buildProgram(p);
+  programSummary.innerHTML='<div class="eyebrow">YOUR SPLIT</div><div class="programName">'+program.name+'</div><p>'+program.reason+'</p><div class="programRule"><b>Progression:</b> '+program.progression+'</div>';
+  weeklyPlan.innerHTML=program.sessions.map((s,i)=>{
+    const preview=s.exercises.slice(0,4).map(x=>'<span>'+x[0]+'</span>').join('');
+    return '<div class="planDay '+(i===activeSessionIndex?'active':'')+'"><div class="planDayTop"><div><div class="dayMeta">DAY '+(i+1)+(i===activeSessionIndex?' · NEXT':'')+'</div><h3>'+s.title+'</h3><p>'+s.focus+' · '+p.time+'</p></div><button class="planStart" onclick="startPlanSession('+i+')">Start →</button></div><div class="planExercisePreview">'+preview+'</div></div>';
+  }).join('');
+}
+function selectPlanSession(i){
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}'),program=buildProgram(p);
+  activeSessionIndex=Math.max(0,Math.min(i,program.sessions.length-1));exIndex=0;setIndex=1;workoutPhase='work';
+  renderActiveSessionContext(p);renderWorkout();renderWeek(p);
+}
+async function startPlanSession(i){selectPlanSession(i);go('train');await startSession()}
 function getTotalSets(spec){const n=parseInt(String(spec));return Number.isFinite(n)&&n>0?n:1}
 async function ensureWorkoutSession(){
   if(cloudWorkoutId)return cloudWorkoutId;
   const user=await getUser();if(!user)return null;
-  const p=JSON.parse(localStorage.getItem(KEY)||'{}');
-  const {data,error}=await sb.from('workout_sessions').insert({user_id:user.id,workout_name:'Full Body',equipment:p.equip||null,duration_minutes:parseInt(p.time)||null}).select('id').single();
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}'),session=currentSession();
+  const {data,error}=await sb.from('workout_sessions').insert({
+    user_id:user.id,workout_name:session.title,equipment:p.equip||null,duration_minutes:parseInt(p.time)||null,
+    plan_index:activeSessionIndex,session_key:session.key
+  }).select('id').single();
   if(error){console.error(error);return null}cloudWorkoutId=data?.id||null;return cloudWorkoutId;
 }
 function localDateKey(d){return new Date(d).toLocaleDateString('en-CA')}
@@ -738,6 +934,7 @@ async function refreshProgress(){
   const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
   if(error){console.error(error);return}
   const sessions=data||[];const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
+  const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){activeSessionIndex=weekly.length%program.sessions.length;renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
   weekCount.textContent=weekly.length+'/'+target;homeActiveMin.textContent=String(weeklyMin);homeStreak.textContent=String(streak);
   progressWeekLabel.textContent=weekly.length+' of '+target;progressWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';progressStreak.textContent=String(streak);progressSessions.textContent=String(sessions.length);progressTraining.textContent=totalMin>=60?(Math.floor(totalMin/60)+'h '+(totalMin%60?totalMin%60+'m':'')):totalMin+'m';
   progressRecent.innerHTML=sessions.length?sessions.slice(0,6).map(s=>'<div class="historyRow"><div><b>'+(s.workout_name||'Workout')+'</b><span>'+(s.duration_minutes||0)+' min · completed</span></div><time>'+new Date(s.completed_at||s.created_at).toLocaleDateString(undefined,{day:'numeric',month:'short'})+'</time></div>').join(''):'<div class="emptyState">Complete a workout and it will appear here.</div>';
@@ -773,9 +970,9 @@ function handleCompleteSecondary(){
 }
 function stopRestTimer(){if(tick){clearInterval(tick);tick=null}}
 function beginRest(){
-  stopRestTimer();workoutPhase='rest';secs=30;timer.textContent='00:30';renderWorkout();
+  stopRestTimer();workoutPhase='rest';secs=restSecondsFor(currentWorkout()[exIndex]);timer.textContent=formatClock(secs);renderWorkout();
   tick=setInterval(()=>{
-    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    secs--;timer.textContent=formatClock(secs);
     if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Rest complete';showFeedback('Ready for set '+setIndex)}
   },1000);
   timerBtn.textContent='Pause rest';
@@ -783,20 +980,20 @@ function beginRest(){
 function toggleTimer(){
   if(!['rest','between'].includes(workoutPhase))return;
   if(tick){stopRestTimer();timerBtn.textContent='Resume rest';return}
-  if(secs<=0){secs=30;timer.textContent='00:30'}
+  if(secs<=0){secs=restSecondsFor(currentWorkout()[exIndex]);timer.textContent=formatClock(secs)}
   tick=setInterval(()=>{
-    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    secs--;timer.textContent=formatClock(secs);
     if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Rest complete';showFeedback('Ready for set '+setIndex)}
   },1000);
   timerBtn.textContent='Pause rest';
 }
 function startNextSet(){
-  stopRestTimer();workoutPhase='work';secs=30;timer.textContent='00:30';renderWorkout();showFeedback('Set '+setIndex+' ready')
+  stopRestTimer();workoutPhase='work';secs=restSecondsFor(currentWorkout()[exIndex]);timer.textContent=formatClock(secs);renderWorkout();showFeedback('Set '+setIndex+' ready')
 }
 function beginBetweenExerciseRest(){
-  stopRestTimer();workoutPhase='between';secs=30;timer.textContent='00:30';renderWorkout();
+  stopRestTimer();workoutPhase='between';secs=restSecondsFor(currentWorkout()[exIndex]);timer.textContent=formatClock(secs);renderWorkout();
   tick=setInterval(()=>{
-    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    secs--;timer.textContent=formatClock(secs);
     if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Ready · '+currentWorkout()[exIndex][0];showFeedback('Next exercise ready')}
   },1000);
   timerBtn.textContent='Pause rest';
@@ -812,7 +1009,9 @@ function handleWorkoutPrimary(){
   completeCurrentSet();
 }
 async function startSession(){
-  stopRestTimer();exIndex=0;setIndex=1;workoutPhase='work';secs=30;cloudWorkoutId=null;
+  stopRestTimer();exIndex=0;setIndex=1;workoutPhase='work';cloudWorkoutId=null;
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}');renderActiveSessionContext(p);
+  secs=restSecondsFor(currentWorkout()[0]);timer.textContent=formatClock(secs);
   await ensureWorkoutSession();renderWorkout();
   setTimeout(()=>exerciseReference.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
@@ -842,7 +1041,7 @@ async function completeCurrentSet(){
 
   if(!finalExercise){
     const completedName=current[0];
-    exIndex++;setIndex=1;secs=30;
+    exIndex++;setIndex=1;secs=restSecondsFor(data[exIndex]);
     beginBetweenExerciseRest();
     showExerciseAdvance(completedName,data[exIndex][0]);
     exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});
