@@ -263,6 +263,25 @@ linear-gradient(180deg,#16100D,#090605)}
 .feedbackChoices button.active{border-color:var(--accent);color:var(--accent)}
 .sessionFeedback small{display:block;font-size:9px;line-height:1.45;color:var(--muted);margin-top:10px}
 .adaptiveHint{margin:10px 0 0;padding-left:11px;border-left:1px solid var(--accent);font-size:9px;line-height:1.5;color:#CFC5BC}
+
+.sessionAdjustBar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0 16px;margin:-10px 0 14px;border-bottom:1px solid rgba(233,225,215,.1)}
+.sessionAdjustBar span{display:block;font-size:7px;letter-spacing:.18em;color:var(--muted);margin-bottom:4px}
+.sessionAdjustBar b{display:block;font-size:11px;font-weight:500}
+.sessionAdjustBar button,.exerciseUtility button{border:0;background:none;color:var(--text);font-size:8px;letter-spacing:.14em;text-transform:uppercase;min-height:38px;padding:0}
+.exerciseUtility{display:flex;justify-content:flex-end;padding-top:8px}
+.exerciseUtility button{color:var(--muted);border-bottom:1px solid rgba(233,225,215,.16)}
+.exerciseUtility button:disabled{opacity:.35}
+.utilitySheet{position:fixed;inset:0;z-index:132;display:none;align-items:flex-end;background:rgba(0,0,0,.62);backdrop-filter:blur(7px)}
+.utilitySheet.show{display:flex}
+.utilityPanel{position:relative;width:min(520px,100%);max-height:88vh;overflow:auto;margin:0 auto;background:#0D0908;border-top:1px solid rgba(233,225,215,.14);padding:28px 20px calc(24px + env(safe-area-inset-bottom))}
+.utilityPanel h2{font-size:34px;line-height:.98;letter-spacing:-1.4px;margin:18px 0 10px}
+.utilityPanel>p{font-size:11px;line-height:1.55;color:var(--muted);margin:0 0 20px}
+.swapOptions{display:grid}
+.swapOption{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-top:1px solid rgba(233,225,215,.1);background:none;color:var(--text);padding:16px 0;text-align:left}
+.swapOption:last-child{border-bottom:1px solid rgba(233,225,215,.1)}
+.swapOption b{display:block;font-size:13px;font-weight:500}
+.swapOption span{display:block;font-size:8px;color:var(--muted);letter-spacing:.08em;margin-top:4px;text-transform:uppercase}
+.swapOption i{font-style:normal;color:var(--accent);font-size:12px}
 </style>
 </head>
 <body>
@@ -277,6 +296,7 @@ linear-gradient(180deg,#16100D,#090605)}
 
   <section id="train" class="screen">
     <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1 id="trainTitle">Guided workout</h1><p id="trainSubtitle">Clear guidance. One exercise at a time.</p></div>
+    <div class="sessionAdjustBar"><div><span>TODAY'S SETUP</span><b id="todayFitLabel">Plan as scheduled</b></div><button type="button" onclick="openFitToday()">Fit today →</button></div>
     <div class="card workoutStage">
 <div class="workoutStateBar" id="workoutStateBar"><div><span id="workoutStateKicker">WORK SET</span><b id="workoutStateText">Set 1 of 3</b><small id="workoutStateDetail">15 reps</small></div><div class="timer" id="timer" style="display:none">00:30</div></div>
 <div class="exerciseAdvance" id="exerciseAdvance"><span>EXERCISE COMPLETE</span><b id="advanceText">Up next</b></div>
@@ -288,7 +308,7 @@ linear-gradient(180deg,#16100D,#090605)}
 <div class="exerciseInfo">
   <div class="eyebrow" id="exerciseLabel">EXERCISE 1</div>
   <div class="exerciseSummary"><h2 id="exerciseName" style="margin:7px 0 0;font-size:28px;letter-spacing:-1px">Tempo Squat</h2><div class="sets" id="exerciseSets">3 × 15</div></div><div class="setProgress" id="setProgress">SET 1 OF 3</div>
-  <div class="exerciseMetaLine"><span id="exerciseTarget">QUADS · GLUTES</span><span id="exerciseEquipment">BODYWEIGHT</span></div><div class="adaptiveHint" id="adaptiveHint" style="display:none"></div>
+  <div class="exerciseMetaLine"><span id="exerciseTarget">QUADS · GLUTES</span><span id="exerciseEquipment">BODYWEIGHT</span></div><div class="exerciseUtility"><button type="button" id="swapExerciseBtn" onclick="openSwapSheet()">Swap exercise</button></div><div class="adaptiveHint" id="adaptiveHint" style="display:none"></div>
   <div class="guideBlock"><div class="guideLabel">HOW TO</div><div class="guideSteps" id="guideSteps"></div></div>
   <div class="guideSplit">
     <div><div class="guideLabel">FORM CUE</div><div class="guideText" id="cue">Brace first. Control the lowering phase.</div></div>
@@ -357,6 +377,8 @@ linear-gradient(180deg,#16100D,#090605)}
     <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
   </div></div>
 </div>
+<div class="utilitySheet" id="fitTodaySheet" onclick="if(event.target===this)closeFitToday()"><div class="utilityPanel"><button class="authClose" onclick="closeFitToday()">×</button><div class="eyebrow">FIT TODAY</div><h2>Adjust this session.</h2><p>Changes apply only to today. Your weekly plan stays intact.</p><div class="field"><label>Time available</label><select id="fitTime"><option value="">Keep planned time</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option></select></div><div class="field"><label>Equipment today</label><select id="fitEquip"><option value="">Keep planned equipment</option><option>No equipment</option><option>Dumbbells</option><option>Resistance bands</option><option>Gym access</option></select></div><div class="field"><label>How should today feel?</label><select id="fitEffort"><option value="normal">Normal session</option><option value="lighter">Lighter day</option></select></div><button class="btn primary" style="width:100%" onclick="applyFitToday()">Update today</button><button class="authInlineAction" style="width:100%;text-align:center;margin-top:8px" onclick="resetFitToday()">Reset to plan</button></div></div>
+<div class="utilitySheet" id="swapSheet" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button class="authClose" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
 <div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
@@ -371,7 +393,7 @@ linear-gradient(180deg,#16100D,#090605)}
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={};const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,completedWorkoutId=null,completedSessionKey=null,completedSessionMinutes=null,authMode='signin',workoutPhase='work',activeSessionIndex=0,activeProgram=null,adaptiveFeedback={},sessionDraft=null,todayAdjustment={time:null,equip:null,lighter:false},currentExerciseSetsDone=0;const restrictions=new Set(),obRestrictions=new Set(),avoidPrefs=new Set();
 const exercisePools={
   'No equipment':{
     lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
@@ -471,7 +493,7 @@ function adaptSpecFor(sessionKey,p,role,spec){
   if(!range||/sec|side/i.test(spec))return spec;
   return String(spec).replace(/\d+\s*[–-]\s*\d+/, (range.low+2)+'–'+(range.high+2));
 }
-function prescribeExercise(item,p,sessionKey){const base=setCountFor(p,item.role)+' × '+repRangeFor(p,item.role);const spec=adaptSpecFor(sessionKey,p,item.role,base);return[item.name,spec,item.role,adaptiveNoteFor(sessionKey,p,item.role,base)]}
+function prescribeExercise(item,p,sessionKey){const base=setCountFor(p,item.role)+' × '+repRangeFor(p,item.role);const spec=adaptSpecFor(sessionKey,p,item.role,base);return[item.name,spec,item.role,adaptiveNoteFor(sessionKey,p,item.role,base),item.key||'accessory']}
 function progressionRule(p){
   if(p.goal==='Build muscle')return p.equip==='No equipment'
     ?'Reach the top of the rep range with clean form, then add reps, tempo or a harder variation.'
@@ -626,10 +648,38 @@ function currentProgram(){
   activeSessionIndex=Math.max(0,Math.min(activeSessionIndex,activeProgram.sessions.length-1));
   return activeProgram;
 }
-function currentSession(){const program=currentProgram();return program.sessions[activeSessionIndex]||program.sessions[0]}
+function baseSession(){const program=currentProgram();return program.sessions[activeSessionIndex]||program.sessions[0]}
+function currentSession(){return sessionDraft||baseSession()}
 function currentWorkout(){return currentSession().exercises}
+function sessionProfile(base){
+  const p={...(base||JSON.parse(localStorage.getItem(KEY)||'{}'))};
+  if(todayAdjustment.time)p.time=todayAdjustment.time+' minutes';
+  if(todayAdjustment.equip)p.equip=todayAdjustment.equip;
+  return p;
+}
+function sessionMinutes(){return parseInt(sessionProfile().time)||30}
+function updateTodayFitLabel(){
+  if(typeof todayFitLabel==='undefined')return;
+  const bits=[];
+  if(todayAdjustment.time)bits.push(todayAdjustment.time+' min');
+  if(todayAdjustment.equip)bits.push(todayAdjustment.equip);
+  if(todayAdjustment.lighter)bits.push('Lighter');
+  todayFitLabel.textContent=bits.length?bits.join(' · '):'Plan as scheduled';
+}
+function resetTodayAdjustment(){todayAdjustment={time:null,equip:null,lighter:false};sessionDraft=null;currentExerciseSetsDone=0;updateTodayFitLabel()}
+function reduceSetsSpec(spec){return String(spec).replace(/^\s*(\d+)/,(m,n)=>String(Math.max(2,(+n||3)-1)))}
+function sessionTypeFromKey(key){return String(key||'fullA').split('-')[0]}
+function buildTodaySession(){
+  const p=sessionProfile(),base=baseSession(),type=sessionTypeFromKey(base.key);
+  let draft=rawSession(type,activeSessionIndex,p);
+  draft={...draft,key:base.key,title:base.title,focus:base.focus,exercises:draft.exercises.map(x=>[...x])};
+  if(todayAdjustment.lighter){
+    draft.exercises=draft.exercises.map(x=>[x[0],reduceSetsSpec(x[1]),x[2],(x[3]?x[3]+' · ':'')+'Lighter day · one less working set',x[4]]);
+  }
+  return draft;
+}
 function restSecondsFor(exercise){
-  const p=JSON.parse(localStorage.getItem(KEY)||'{}'),role=exercise?.[2]||'accessory';
+  const p=sessionProfile(),role=exercise?.[2]||'accessory';
   let rest;
   if(role==='mobility')rest=30;
   else if(role==='conditioning')rest=p.goal==='Fat loss'?30:40;
@@ -638,6 +688,7 @@ function restSecondsFor(exercise){
   else rest=role==='main'?60:45;
   if(p.trainingStyle==='Strength-biased'&&role==='main')rest+=30;
   if(p.trainingStyle==='Faster-paced')rest=Math.max(30,rest-15);
+  if(todayAdjustment.lighter)rest+=15;
   return rest;
 }
 function formatClock(total){const s=Math.max(0,total|0),m=Math.floor(s/60),r=s%60;return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
@@ -653,12 +704,13 @@ async function getUser(){const {data}=await sb.auth.getUser();return data.user||
 async function syncProfileToCloud(){const user=await getUser();const raw=localStorage.getItem(KEY);if(!user||!raw)return false;const p=JSON.parse(raw);const {error}=await sb.from('profiles').upsert(localToDbProfile(p,user),{onConflict:'id'});if(error){console.error(error);return false}return true}
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
 function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>document.querySelectorAll('#'+id+' .choice').forEach(ch=>ch.classList.toggle('selected',ch.dataset.value===v)));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function renderActiveSessionContext(p){
-  const program=currentProgram(),session=program.sessions[activeSessionIndex]||program.sessions[0];
-  todayTitle.textContent=session.title+' · '+String(p.time||'30 minutes').replace(' minutes',' min');
-  todayCopy.textContent=session.focus+' · '+p.level+' · '+String(p.equip).toLowerCase()+(p.priorityArea&&p.priorityArea!=='Balanced'?' · '+p.priorityArea+' priority':'');
-  sessionMeta.textContent=session.title+' · '+p.time;
+  const effective=sessionProfile(p),session=currentSession();
+  todayTitle.textContent=session.title+' · '+String(effective.time||'30 minutes').replace(' minutes',' min');
+  todayCopy.textContent=session.focus+' · '+effective.level+' · '+String(effective.equip).toLowerCase()+(effective.priorityArea&&effective.priorityArea!=='Balanced'?' · '+effective.priorityArea+' priority':'');
+  sessionMeta.textContent=session.title+' · '+effective.time;
   trainTitle.textContent=session.title;
-  trainSubtitle.textContent=session.focus+' · '+p.goal;
+  trainSubtitle.textContent=session.focus+' · '+effective.goal+(todayAdjustment.lighter?' · lighter day':'');
+  updateTodayFitLabel();
 }
 function applyProfile(p){
   const first=(p.name||'Athlete').split(' ')[0],hr=new Date().getHours(),hello=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
@@ -1078,6 +1130,60 @@ function renderExerciseGuide(name){
   }
 }
 function getRepTarget(spec){return String(spec).replace(/^\s*\d+\s*[×x]\s*/,'').trim()}
+function openFitToday(){
+  if(currentExerciseSetsDone>0||exIndex>0){showFeedback('Adjust today before the workout begins');return}
+  fitTime.value=todayAdjustment.time?String(todayAdjustment.time):'';
+  fitEquip.value=todayAdjustment.equip||'';
+  fitEffort.value=todayAdjustment.lighter?'lighter':'normal';
+  fitTodaySheet.classList.add('show');
+}
+function closeFitToday(){fitTodaySheet.classList.remove('show')}
+async function syncActiveSessionMeta(){
+  if(!cloudWorkoutId)return;
+  const p=sessionProfile(),session=currentSession();
+  const {error}=await sb.from('workout_sessions').update({workout_name:session.title,equipment:p.equip||null,duration_minutes:sessionMinutes(),session_key:baseSession().key,plan_index:activeSessionIndex}).eq('id',cloudWorkoutId);
+  if(error)console.error(error);
+}
+async function applyFitToday(){
+  if(currentExerciseSetsDone>0||exIndex>0){closeFitToday();showFeedback('Finish this workout before changing the setup');return}
+  todayAdjustment={time:fitTime.value?parseInt(fitTime.value):null,equip:fitEquip.value||null,lighter:fitEffort.value==='lighter'};
+  sessionDraft=buildTodaySession();exIndex=0;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}');renderActiveSessionContext(p);renderWorkout();await syncActiveSessionMeta();closeFitToday();showFeedback('Today adjusted');
+}
+async function resetFitToday(){
+  if(currentExerciseSetsDone>0||exIndex>0){closeFitToday();showFeedback('Finish this workout before resetting');return}
+  todayAdjustment={time:null,equip:null,lighter:false};sessionDraft=null;exIndex=0;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}');renderActiveSessionContext(p);renderWorkout();await syncActiveSessionMeta();closeFitToday();showFeedback('Back to planned session');
+}
+function swapCandidates(current){
+  const p=sessionProfile(),pool=exercisePools[p.equip]||exercisePools['No equipment'],key=current[4]||'accessory',used=new Set(currentWorkout().map(x=>x[0]));
+  const keys=[key,...relatedPoolKeys(key).filter(k=>k!==key)],out=[];
+  for(const k of keys){
+    for(const name of (pool[k]||[])){
+      if(name===current[0]||used.has(name)||isAvoidedExercise(name,p)||out.some(x=>x.name===name))continue;
+      out.push({name,key:k});if(out.length>=5)return out;
+    }
+  }
+  return out;
+}
+function openSwapSheet(){
+  if(currentExerciseSetsDone>0){showFeedback('Swap before starting this exercise');return}
+  const current=currentWorkout()[exIndex],options=swapCandidates(current);
+  swapTitle.textContent='Swap '+current[0]+'.';
+  swapOptions.innerHTML=options.length?options.map((o,i)=>'<button class="swapOption" data-index="'+i+'"><div><b>'+o.name+'</b><span>'+((exerciseGuides[o.name]||genericGuide(o.name)).target||'Same movement intent')+'</span></div><i>→</i></button>').join(''):'<div class="emptyState">No close alternative is available for this setup.</div>';
+  swapOptions.querySelectorAll('.swapOption').forEach((btn,i)=>btn.onclick=()=>applyExerciseSwap(options[i].name,options[i].key));
+  swapSheet.classList.add('show');
+}
+function closeSwapSheet(){swapSheet.classList.remove('show')}
+function applyExerciseSwap(name,key){
+  if(currentExerciseSetsDone>0){closeSwapSheet();showFeedback('Swap before starting this exercise');return}
+  if(!sessionDraft){const base=baseSession();sessionDraft={...base,exercises:base.exercises.map(x=>[...x])}}
+  const p=sessionProfile(),current=sessionDraft.exercises[exIndex],role=current[2]||'accessory';
+  const replacement=prescribeExercise(sessionExercise(name,role,key),p,baseSession().key);
+  replacement[3]=(replacement[3]?replacement[3]+' · ':'')+'Swapped for today';
+  sessionDraft.exercises[exIndex]=replacement;
+  closeSwapSheet();renderActiveSessionContext(JSON.parse(localStorage.getItem(KEY)||'{}'));renderWorkout();exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});showFeedback('Exercise swapped');
+}
 function renderWorkout(){
   const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]),session=currentSession();
   homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>{
@@ -1094,6 +1200,8 @@ function renderWorkout(){
   mediaStep.textContent=String(exIndex+1).padStart(2,'0')+' / '+String(data.length).padStart(2,'0');
   renderExerciseGuide(current[0]);
   const adaptiveNote=current[3]||'';
+  swapExerciseBtn.disabled=currentExerciseSetsDone>0;
+  swapExerciseBtn.textContent=currentExerciseSetsDone>0?'Swap locked':'Swap exercise';
   adaptiveHint.style.display=adaptiveNote?'block':'none';
   adaptiveHint.textContent=adaptiveNote;
 
@@ -1133,7 +1241,7 @@ function renderWorkout(){
     completeSetBtn.textContent='Complete set '+setIndex;
   }
 }
-function openExercise(i){exIndex=i;setIndex=1;workoutPhase='work';stopRestTimer();go('train');renderWorkout();exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});showFeedback('Exercise opened')}
+function openExercise(i){exIndex=i;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';stopRestTimer();go('train');renderWorkout();exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});showFeedback('Exercise opened')}
 function showFeedback(msg){feedbackToast.textContent=msg;feedbackToast.classList.add('show');clearTimeout(showFeedback.t);showFeedback.t=setTimeout(()=>feedbackToast.classList.remove('show'),1400)}
 function renderWeek(p){
   const program=buildProgram(p);
@@ -1145,7 +1253,7 @@ function renderWeek(p){
 }
 function selectPlanSession(i){
   const p=JSON.parse(localStorage.getItem(KEY)||'{}'),program=buildProgram(p);
-  activeSessionIndex=Math.max(0,Math.min(i,program.sessions.length-1));exIndex=0;setIndex=1;workoutPhase='work';
+  activeSessionIndex=Math.max(0,Math.min(i,program.sessions.length-1));exIndex=0;setIndex=1;workoutPhase='work';resetTodayAdjustment();
   renderActiveSessionContext(p);renderWorkout();renderWeek(p);
 }
 async function startPlanSession(i){selectPlanSession(i);go('train');await startSession()}
@@ -1153,9 +1261,9 @@ function getTotalSets(spec){const n=parseInt(String(spec));return Number.isFinit
 async function ensureWorkoutSession(){
   if(cloudWorkoutId)return cloudWorkoutId;
   const user=await getUser();if(!user)return null;
-  const p=JSON.parse(localStorage.getItem(KEY)||'{}'),session=currentSession();
+  const p=sessionProfile(),session=currentSession();
   const {data,error}=await sb.from('workout_sessions').insert({
-    user_id:user.id,workout_name:session.title,equipment:p.equip||null,duration_minutes:parseInt(p.time)||null,
+    user_id:user.id,workout_name:session.title,equipment:p.equip||null,duration_minutes:sessionMinutes(),
     plan_index:activeSessionIndex,session_key:session.key
   }).select('id').single();
   if(error){console.error(error);return null}cloudWorkoutId=data?.id||null;return cloudWorkoutId;
@@ -1183,7 +1291,7 @@ async function refreshProgress(){
 function showWorkoutComplete(user,data){
   completeExercises.textContent=String(data.length);
   const p=JSON.parse(localStorage.getItem(KEY)||'{}');
-  completeMinutes.textContent=String(parseInt(p.time)||30);
+  completeMinutes.textContent=String(completedSessionMinutes||parseInt(p.time)||30);
   document.querySelectorAll('.feedbackChoices button').forEach(b=>b.classList.remove('active'));
   feedbackImpact.textContent='Optional · helps adjust the next time this workout appears.';
   if(user?.is_anonymous){
@@ -1209,7 +1317,7 @@ async function saveWorkoutFeedback(value){
   const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);activeProgram=buildProgram(p);renderWeek(p)}
   showFeedback('Feedback saved');
 }
-function closeWorkoutComplete(){completeSheet.classList.remove('show');completedWorkoutId=null;completedSessionKey=null}
+function closeWorkoutComplete(){completeSheet.classList.remove('show');completedWorkoutId=null;completedSessionKey=null;completedSessionMinutes=null}
 function dismissWorkoutComplete(){closeWorkoutComplete();go('home')}
 function handleCompletePrimary(){
   const mode=completeSheet.dataset.mode;closeWorkoutComplete();
@@ -1262,7 +1370,7 @@ function handleWorkoutPrimary(){
   completeCurrentSet();
 }
 async function startSession(){
-  stopRestTimer();exIndex=0;setIndex=1;workoutPhase='work';cloudWorkoutId=null;
+  stopRestTimer();exIndex=0;setIndex=1;currentExerciseSetsDone=0;workoutPhase='work';cloudWorkoutId=null;
   const p=JSON.parse(localStorage.getItem(KEY)||'{}');renderActiveSessionContext(p);
   secs=restSecondsFor(currentWorkout()[0]);timer.textContent=formatClock(secs);
   await ensureWorkoutSession();renderWorkout();
@@ -1273,6 +1381,7 @@ async function completeCurrentSet(){
   const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);
   await ensureWorkoutSession();const user=await getUser();
 
+  currentExerciseSetsDone++;
   if(user&&cloudWorkoutId){
     await sb.from('exercise_logs').insert({
       user_id:user.id,
@@ -1294,7 +1403,7 @@ async function completeCurrentSet(){
 
   if(!finalExercise){
     const completedName=current[0];
-    exIndex++;setIndex=1;secs=restSecondsFor(data[exIndex]);
+    exIndex++;setIndex=1;currentExerciseSetsDone=0;secs=restSecondsFor(data[exIndex]);
     beginBetweenExerciseRest();
     showExerciseAdvance(completedName,data[exIndex][0]);
     exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1310,12 +1419,14 @@ async function completeCurrentSet(){
   }
 
   completedWorkoutId=cloudWorkoutId;
-  completedSessionKey=currentSession().key;
+  completedSessionKey=baseSession().key;
+  completedSessionMinutes=sessionMinutes();
   showFeedback('Workout complete');
-  cloudWorkoutId=null;setIndex=1;exIndex=0;workoutPhase='work';
+  cloudWorkoutId=null;setIndex=1;exIndex=0;currentExerciseSetsDone=0;workoutPhase='work';
   await refreshProgress();
   showWorkoutComplete(user,data);
-  renderWorkout();
+  todayAdjustment={time:null,equip:null,lighter:false};sessionDraft=null;updateTodayFitLabel();
+  renderActiveSessionContext(JSON.parse(localStorage.getItem(KEY)||'{}'));renderWorkout();
 }
 async function nextExercise(){return completeCurrentSet()}
 function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
