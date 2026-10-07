@@ -340,9 +340,24 @@ linear-gradient(180deg,#16100D,#090605)}
   .homeActions{grid-template-columns:1fr}
   .homeTextAction{text-align:left}
 }
+
+.offlineBanner{position:fixed;z-index:180;left:50%;top:calc(8px + env(safe-area-inset-top));transform:translate(-50%,-16px);opacity:0;pointer-events:none;background:#E9E1D7;color:#0B0807;padding:9px 12px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:.18s ease;white-space:nowrap}
+.offlineBanner.show{opacity:1;transform:translate(-50%,0)}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.passwordWrap{position:relative}
+.passwordWrap input{padding-right:64px}
+.passwordWrap button{position:absolute;right:4px;top:4px;bottom:4px;width:56px;border:0;background:transparent;color:var(--muted);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.screen.active{animation:screenIn .18s ease both}
+@keyframes screenIn{from{opacity:.72;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(max-width:360px){.app{padding-left:16px;padding-right:16px}.homeHello h1{font-size:34px}.homePrimary h2{font-size:32px}.pageHead h1{font-size:28px}}
+@media(prefers-reduced-motion:reduce){.screen.active{animation:none}.offlineBanner{transition:none}}
 </style>
 </head>
 <body>
+<div class="offlineBanner" id="offlineBanner" role="status" aria-live="polite">Offline · cloud saving is unavailable</div>
 <div class="app">
   <section id="home" class="screen active">
     <div class="topbar"><div class="brand">JK FORM</div><div class="avatar" id="avatar">JK</div></div>
@@ -372,7 +387,7 @@ linear-gradient(180deg,#16100D,#090605)}
     <div class="homeWeek">
       <div class="homeWeekHead"><b id="homeWeekText">0 of 4 sessions</b><span id="homeWeekStatus">Week in progress</span></div>
       <div class="progressbar homeWeekBar"><span id="homeWeekBar" style="width:0%"></span></div>
-      <div class="stats homeStats"><div class="stat"><b id="weekCount">0/4</b><span>Sessions</span></div><div class="stat"><b id="homeActiveMin">0</b><span>Active min</span></div><div class="stat"><b id="homeStreak">0</b><span>Day streak</span></div></div>
+      <div class="stats homeStats"><div class="stat"><b id="weekCount">0/4</b><span>Sessions</span></div><div class="stat"><b id="homeActiveMin">0</b><span>Training min</span></div><div class="stat"><b id="homeStreak">0</b><span>Day streak</span></div></div>
     </div>
 
     <div class="sectionTitle homeSectionLink"><h3>Session preview</h3><button onclick="go('plan')">Full plan →</button></div>
@@ -448,8 +463,8 @@ linear-gradient(180deg,#16100D,#090605)}
 </div>
 <div style="padding:16px 0 0;font-size:8px;line-height:1.5;color:#6F655F;letter-spacing:.08em;text-transform:uppercase">Exercise data by <a href="https://repdb.co" target="_blank" rel="noopener" style="color:#9B9086">RepDB (repdb.co)</a></div></section>
 
-  <div class="feedbackToast" id="feedbackToast">Saved</div>
-  <nav class="bottomnav"><button class="navbtn active" data-screen="home" onclick="go('home')"><i>01</i>Home</button><button class="navbtn" data-screen="train" onclick="go('train')"><i>02</i>Train</button><button class="navbtn" data-screen="meals" onclick="go('meals')"><i>03</i>Meals</button><button class="navbtn" data-screen="progress" onclick="go('progress')"><i>04</i>Build</button><button class="navbtn" data-screen="profile" onclick="go('profile')"><i>05</i>Profile</button></nav>
+  <div class="feedbackToast" id="feedbackToast" role="status" aria-live="polite" aria-atomic="true">Saved</div>
+  <nav class="bottomnav" aria-label="Primary navigation"><button class="navbtn active" data-screen="home" onclick="go('home')"><i>01</i>Home</button><button class="navbtn" data-screen="train" onclick="go('train')"><i>02</i>Train</button><button class="navbtn" data-screen="meals" onclick="go('meals')"><i>03</i>Meals</button><button class="navbtn" data-screen="progress" onclick="go('progress')"><i>04</i>Build</button><button class="navbtn" data-screen="profile" onclick="go('profile')"><i>05</i>Profile</button></nav>
 </div>
 
 
@@ -469,9 +484,9 @@ linear-gradient(180deg,#16100D,#090605)}
   </div>
 </div>
 
-<div class="authSheet" id="authSheet" onclick="if(event.target===this)closeAuth()">
+<div class="authSheet" id="authSheet" role="dialog" aria-modal="true" aria-labelledby="authTitle" onclick="if(event.target===this)closeAuth()">
   <div class="authPanel"><div class="authPanelWrap">
-    <button class="authClose" onclick="closeAuth()">×</button>
+    <button type="button" class="authClose" aria-label="Close" onclick="closeAuth()">×</button>
     <div class="authHandle"></div>
     <div class="eyebrow" id="authEyebrow">JK FORM ACCOUNT</div>
     <h2 id="authTitle">Welcome back.</h2>
@@ -481,18 +496,18 @@ linear-gradient(180deg,#16100D,#090605)}
       <button class="authModeTab" id="authSignUpTab" onclick="setAuthMode('signup')">Create account</button>
     </div>
     <div class="field" id="authEmailField"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
-    <div class="field" id="authPasswordField"><label id="authPasswordLabel">Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="8+ characters"></div>
-    <div class="field" id="authConfirmPasswordField" style="display:none"><label>Confirm password</label><input id="authConfirmPassword" type="password" autocomplete="new-password" placeholder="Repeat password"></div>
+    <div class="field" id="authPasswordField"><label id="authPasswordLabel">Password</label><div class="passwordWrap"><input id="authPassword" type="password" autocomplete="current-password" placeholder="8+ characters"><button type="button" aria-label="Show password" onclick="togglePasswordVisibility('authPassword',this)">Show</button></div></div>
+    <div class="field" id="authConfirmPasswordField" style="display:none"><label>Confirm password</label><div class="passwordWrap"><input id="authConfirmPassword" type="password" autocomplete="new-password" placeholder="Repeat password"><button type="button" aria-label="Show confirm password" onclick="togglePasswordVisibility('authConfirmPassword',this)">Show</button></div></div>
     <button class="authInlineAction" id="authForgotBtn" onclick="openAuth('forgot')">Forgot password?</button>
     <button class="btn primary authSubmit" id="authSubmitBtn" onclick="submitAuth()">Sign in</button>
     <button class="authInlineAction authBackAction" id="authBackBtn" style="display:none" onclick="openAuth('signin')">Back to sign in</button>
-    <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
+    <div id="authMessage" role="status" aria-live="polite" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
   </div></div>
 </div>
-<div class="utilitySheet" id="mealSwapSheet" onclick="if(event.target===this)closeMealSwap()"><div class="utilityPanel"><button class="authClose" onclick="closeMealSwap()">×</button><div class="eyebrow">SWAP MEAL</div><h2 id="mealSwapTitle">Choose another option.</h2><p>Alternatives keep your current diet, food limits, prep time and budget in mind.</p><div id="mealSwapOptions" class="swapOptions"></div></div></div>
-<div class="utilitySheet" id="fitTodaySheet" onclick="if(event.target===this)closeFitToday()"><div class="utilityPanel"><button class="authClose" onclick="closeFitToday()">×</button><div class="eyebrow">FIT TODAY</div><h2>Adjust this session.</h2><p>Changes apply only to today. Your weekly plan stays intact.</p><div class="field"><label>Time available</label><select id="fitTime"><option value="">Keep planned time</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option></select></div><div class="field"><label>Equipment today</label><select id="fitEquip"><option value="">Keep planned equipment</option><option>No equipment</option><option>Dumbbells</option><option>Resistance bands</option><option>Gym access</option></select></div><div class="field"><label>How should today feel?</label><select id="fitEffort"><option value="normal">Normal session</option><option value="lighter">Lighter day</option></select></div><button class="btn primary" style="width:100%" onclick="applyFitToday()">Update today</button><button class="authInlineAction" style="width:100%;text-align:center;margin-top:8px" onclick="resetFitToday()">Reset to plan</button></div></div>
-<div class="utilitySheet" id="swapSheet" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button class="authClose" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
-<div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
+<div class="utilitySheet" id="mealSwapSheet" role="dialog" aria-modal="true" aria-labelledby="mealSwapTitle" onclick="if(event.target===this)closeMealSwap()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeMealSwap()">×</button><div class="eyebrow">SWAP MEAL</div><h2 id="mealSwapTitle">Choose another option.</h2><p>Alternatives keep your current diet, food limits, prep time and budget in mind.</p><div id="mealSwapOptions" class="swapOptions"></div></div></div>
+<div class="utilitySheet" id="fitTodaySheet" role="dialog" aria-modal="true" aria-label="Adjust today’s workout" onclick="if(event.target===this)closeFitToday()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeFitToday()">×</button><div class="eyebrow">FIT TODAY</div><h2>Adjust this session.</h2><p>Changes apply only to today. Your weekly plan stays intact.</p><div class="field"><label>Time available</label><select id="fitTime"><option value="">Keep planned time</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option></select></div><div class="field"><label>Equipment today</label><select id="fitEquip"><option value="">Keep planned equipment</option><option>No equipment</option><option>Dumbbells</option><option>Resistance bands</option><option>Gym access</option></select></div><div class="field"><label>How should today feel?</label><select id="fitEffort"><option value="normal">Normal session</option><option value="lighter">Lighter day</option></select></div><button class="btn primary" style="width:100%" onclick="applyFitToday()">Update today</button><button class="authInlineAction" style="width:100%;text-align:center;margin-top:8px" onclick="resetFitToday()">Reset to plan</button></div></div>
+<div class="utilitySheet" id="swapSheet" role="dialog" aria-modal="true" aria-labelledby="swapTitle" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
+<div class="completeSheet" id="completeSheet" role="dialog" aria-modal="true" aria-label="Workout complete" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button type="button" class="authClose" aria-label="Close" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
 <div class="obStep" data-step="2"><div class="eyebrow">YOUR GOAL</div><h1>What are you training for?</h1><p>Choose the outcome that matters most right now.</p><div class="choiceGrid" id="goalChoices"><button class="choice" data-value="Build muscle"><b>Build muscle</b><span>Strength, muscle and progressive overload.</span></button><button class="choice" data-value="Fat loss"><b>Fat loss</b><span>Higher activity with strength retention.</span></button><button class="choice" data-value="General fitness"><b>General fitness</b><span>Strength, energy and consistency.</span></button><button class="choice" data-value="Mobility"><b>Mobility</b><span>Move better and improve control.</span></button></div></div>
@@ -841,9 +856,21 @@ const mealLibrary=[
 {id:'gl_chicken_salad',slot:'Dinner',name:'Chicken + potato + salad',desc:'Chicken with potato and a large vegetable salad.',cuisine:'Simple global',diet:['Balanced','High protein'],protein:['Chicken'],minutes:25,budget:'Balanced',allergens:[],tags:['protein-forward']},
 {id:'gl_tofu_pasta',slot:'Dinner',name:'Tofu pasta + vegetables',desc:'Pasta, tofu and vegetables with a simple tomato sauce.',cuisine:'Simple global',diet:['Vegan','Vegetarian'],protein:['Tofu'],minutes:25,budget:'Balanced',allergens:['Soy','Gluten'],tags:['plant-based']}
 ];
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
+function togglePasswordVisibility(id,button){
+  const input=document.getElementById(id);if(!input)return;
+  const show=input.type==='password';input.type=show?'text':'password';
+  button.textContent=show?'Hide':'Show';
+  button.setAttribute('aria-label',(show?'Hide ':'Show ')+(id==='authConfirmPassword'?'confirm password':'password'));
+}
+function updateConnectivity(){
+  if(typeof offlineBanner==='undefined')return;
+  offlineBanner.classList.toggle('show',!navigator.onLine);
+}
+window.addEventListener('online',()=>{updateConnectivity();showFeedback('Back online')});
+window.addEventListener('offline',()=>{updateConnectivity();showFeedback('Cloud saving unavailable')});
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>{const on=b.dataset.screen===id;b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
 function selected(id,fallback){return document.querySelector(`#${id} .choice.selected`)?.dataset.value||fallback}
-function bindChoices(id){document.querySelectorAll(`#${id} .choice`).forEach(c=>c.onclick=()=>{document.querySelectorAll(`#${id} .choice`).forEach(x=>x.classList.remove('selected'));c.classList.add('selected')})}['goalChoices','levelChoices','equipChoices'].forEach(bindChoices);
+function bindChoices(id){document.querySelectorAll(`#${id} .choice`).forEach(c=>{c.setAttribute('aria-pressed',c.classList.contains('selected')?'true':'false');c.onclick=()=>{document.querySelectorAll(`#${id} .choice`).forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});c.classList.add('selected');c.setAttribute('aria-pressed','true')}})}['goalChoices','levelChoices','equipChoices'].forEach(bindChoices);
 document.querySelectorAll('#obRestrictions .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?obRestrictions.add(c.dataset.value):obRestrictions.delete(c.dataset.value)});document.querySelectorAll('#restrictionChips .chip').forEach(c=>c.onclick=()=>{c.classList.toggle('on');c.classList.contains('on')?restrictions.add(c.dataset.value):restrictions.delete(c.dataset.value);generateMeals(true)});document.querySelectorAll('#avoidMovementChips .chip').forEach(ch=>ch.onclick=()=>{ch.classList.toggle('on');ch.classList.contains('on')?avoidPrefs.add(ch.dataset.value):avoidPrefs.delete(ch.dataset.value);saveTrainingPreferences()});
 function profileFromOb(){return{name:(obName.value||'Athlete').trim(),goal:selected('goalChoices','General fitness'),level:selected('levelChoices','Beginner'),equip:selected('equipChoices','No equipment'),days:obDays.value,time:obTime.value,diet:'Balanced',nutritionGoal:'Maintain',meals:'4',restrictions:[],mealCuisine:'Indian',preferredProtein:'Flexible',mealPrepMinutes:20,foodBudget:'Balanced',mealChoices:[],priorityArea:'Balanced',trainingStyle:'Balanced',avoidMovements:[]}}
 function localToDbProfile(p,user){return{id:user.id,email:user.email||null,name:p.name||null,goal:p.goal||null,experience_level:p.level||null,equipment:p.equip||null,training_days:parseInt(p.days)||null,session_minutes:parseInt(p.time)||null,diet_style:p.diet||null,nutrition_goal:p.nutritionGoal||null,meals_per_day:parseInt(p.meals)||null,food_restrictions:p.restrictions||[],cuisine_preference:p.mealCuisine||'Indian',preferred_protein:p.preferredProtein||'Flexible',meal_prep_minutes:parseInt(p.mealPrepMinutes)||20,food_budget:p.foodBudget||'Balanced',meal_choices:p.mealChoices||[],priority_area:p.priorityArea||'Balanced',training_style:p.trainingStyle||'Balanced',avoid_movements:p.avoidMovements||[],onboarding_completed:true}}
@@ -898,7 +925,7 @@ function applyProfile(p){
   prefImpact.textContent=((p.priorityArea&&p.priorityArea!=='Balanced')?p.priorityArea+' priority · ':'')+((p.trainingStyle&&p.trainingStyle!=='Balanced')?p.trainingStyle+' · ':'')+((p.avoidMovements||[]).length?(p.avoidMovements||[]).length+' movement preference'+((p.avoidMovements||[]).length>1?'s':''):'Plan balanced by default');
   restrictions.clear();document.querySelectorAll('#restrictionChips .chip').forEach(ch=>{const on=(p.restrictions||[]).includes(ch.dataset.value);ch.classList.toggle('on',on);if(on)restrictions.add(ch.dataset.value)});
   activeProgram=buildProgram(p);activeSessionIndex=Math.min(activeSessionIndex,activeProgram.sessions.length-1);
-  renderActiveSessionContext(p);renderWorkout();renderWeek(p);generateMeals();refreshProgress();
+  renderActiveSessionContext(p);renderWorkout();renderWeek(p);generateMeals(false,false);refreshProgress();
 }
 function setAuthMode(mode){
   authMode=mode;
@@ -1301,7 +1328,7 @@ function renderExerciseGuide(name){
     poseGrid.innerHTML=g.images.map((src,i)=>{const file=src.split('/').pop();return '<div class="poseFrame"><img src="'+src+'" data-fallback="'+REPDB_FALLBACK+file+'" alt="'+name+' '+(g.labels[i]||'reference')+'" loading="eager" onerror="handleGuideImageError(this)"><div class="poseTag">'+(g.labels[i]||('STEP '+(i+1)))+'</div></div>'}).join('');
   }else{
     poseGrid.classList.add('single');
-    poseGrid.innerHTML='<div class="referencePlaceholder">Reference illustration<br>coming next</div>';
+    poseGrid.innerHTML='<div class="referencePlaceholder">No image reference available<br>Follow the technique steps below</div>';
   }
 }
 function getRepTarget(spec){return String(spec).replace(/^\s*\d+\s*[×x]\s*/,'').trim()}
@@ -1456,7 +1483,7 @@ async function refreshProgress(){
   const user=await getUser();
   if(!user){weekCount.textContent='0/'+target;homeActiveMin.textContent='0';homeStreak.textContent='0';homeWeekText.textContent='0 of '+target+' sessions';homeWeekStatus.textContent='Start with today';homeWeekBar.style.width='0%';progressWeekLabel.textContent='0 of '+target;progressWeekBar.style.width='0%';progressStreak.textContent='0';progressSessions.textContent='0';progressTraining.textContent='0m';progressRecent.innerHTML='<div class="emptyState">Sign in or start as a guest to track progress.</div>';return}
   const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at,plan_index,session_key,difficulty_feedback').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
-  if(error){console.error(error);return}
+  if(error){console.error(error);homeWeekStatus.textContent='Sync unavailable';progressRecent.innerHTML='<div class="emptyState">Progress could not be refreshed. Check your connection and try again.</div>';return}
   const sessions=data||[];adaptiveFeedback={};for(const s of sessions){if(s.session_key&&s.difficulty_feedback&&adaptiveFeedback[s.session_key]===undefined)adaptiveFeedback[s.session_key]=s.difficulty_feedback}const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
   const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){const lastPlanned=weekly.find(s=>Number.isInteger(s.plan_index));activeSessionIndex=lastPlanned?((lastPlanned.plan_index+1)%program.sessions.length):(weekly.length%program.sessions.length);renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
   weekCount.textContent=weekly.length+'/'+target;homeActiveMin.textContent=String(weeklyMin);homeStreak.textContent=String(streak);
@@ -1681,12 +1708,12 @@ function renderMealPlan(){
   mealPlanMeta.textContent=p.cuisine+' · '+p.maxMinutes+' min max';
   const focus=nutritionFocus(p);nutritionFocusTitle.textContent=focus.title;nutritionFocusCopy.textContent=focus.copy;nutritionFocusMeta.innerHTML=focus.tags.map(x=>'<span>'+x+'</span>').join('');
 }
-function generateMeals(resetChoices=false){
+function generateMeals(resetChoices=false,persist=true){
   if(resetChoices)mealSelections=[];
   const p=mealPrefs(),normalized=normalizeProteinPreference(p);
   if(preferredProtein.value!==normalized)preferredProtein.value=normalized;
   renderMealPlan();
-  persistNutritionPrefs();
+  if(persist)persistNutritionPrefs();
 }
 function openMealSwap(index){
   mealSwapIndex=index;
@@ -1721,7 +1748,7 @@ async function saveTrainingPreferences(){
     p.trainingStyle=profileStyle.value||'Balanced';
     p.avoidMovements=[...avoidPrefs];
     localStorage.setItem(KEY,JSON.stringify(p));
-    activeSessionIndex=0;activeProgram=buildProgram(p);exIndex=0;setIndex=1;workoutPhase='work';
+    activeProgram=buildProgram(p);activeSessionIndex=Math.min(activeSessionIndex,activeProgram.sessions.length-1);exIndex=0;setIndex=1;workoutPhase='work';
     renderActiveSessionContext(p);renderWorkout();renderWeek(p);
     prefImpact.textContent=(p.priorityArea!=='Balanced'?p.priorityArea+' priority · ':'')+(p.trainingStyle!=='Balanced'?p.trainingStyle+' · ':'')+(p.avoidMovements.length?p.avoidMovements.length+' movement preference'+(p.avoidMovements.length>1?'s':''):'Plan balanced by default');
     await syncProfileToCloud();
@@ -1731,6 +1758,7 @@ async function saveTrainingPreferences(){
 
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {})); }
 (async function init(){
+  updateConnectivity();
   sb.auth.onAuthStateChange((event)=>{
     setTimeout(async()=>{
       await refreshAccountUI();
