@@ -1548,15 +1548,10 @@ function slotSequence(count){
 function candidatesFor(slot,p,currentId){
   return mealLibrary.filter(m=>m.slot===slot&&mealAllowed(m,p)&&m.id!==currentId).sort((a,b)=>mealScore(b,p)-mealScore(a,p)||a.minutes-b.minutes||a.name.localeCompare(b.name));
 }
-function fallbackCandidates(slot,p,currentId){
-  const relaxed={...p,cuisine:'Mixed',budget:'Flexible',maxMinutes:45};
-  return mealLibrary.filter(m=>m.slot===slot&&mealAllowed(m,relaxed)&&m.id!==currentId).sort((a,b)=>mealScore(b,p)-mealScore(a,p)||a.minutes-b.minutes);
-}
 function chooseMeal(slot,p,usedIds,preferredId){
   const preferred=preferredId&&mealLibrary.find(m=>m.id===preferredId&&m.slot===slot&&mealAllowed(m,p)&&!usedIds.has(m.id));
   if(preferred)return preferred;
-  let list=candidatesFor(slot,p).filter(m=>!usedIds.has(m.id));
-  if(!list.length)list=fallbackCandidates(slot,p).filter(m=>!usedIds.has(m.id));
+  const list=candidatesFor(slot,p).filter(m=>!usedIds.has(m.id));
   return list[0]||null;
 }
 function nutritionFocus(p){
@@ -1591,9 +1586,7 @@ function generateMeals(resetChoices=false){
 function openMealSwap(index){
   mealSwapIndex=index;
   const p=mealPrefs(),slots=slotSequence(p.count),currentId=mealSelections[index],slot=slots[index];
-  let options=candidatesFor(slot,p,currentId);
-  if(!options.length)options=fallbackCandidates(slot,p,currentId);
-  options=options.slice(0,5);
+  const options=candidatesFor(slot,p,currentId).slice(0,5);
   mealSwapTitle.textContent='Swap '+slot.toLowerCase()+'.';
   mealSwapOptions.innerHTML=options.length?options.map((m,i)=>'<button class="swapOption" data-meal="'+i+'"><div><b>'+m.name+'</b><span>'+m.minutes+' min · '+m.budget+' · '+m.tags.slice(0,2).join(' · ')+'</span></div><i>→</i></button>').join(''):'<div class="emptyState">No compatible alternative is available with the current filters.</div>';
   mealSwapOptions.querySelectorAll('[data-meal]').forEach((btn,i)=>btn.onclick=()=>applyMealSwap(options[i].id));
@@ -1611,7 +1604,7 @@ async function persistNutritionPrefs(){
   try{
     const p=JSON.parse(raw),prefs=mealPrefs();
     p.diet=prefs.diet;p.nutritionGoal=prefs.goal;p.meals=String(prefs.count);p.restrictions=prefs.restrictions;
-    p.mealCuisine=prefs.cuisine;p.preferredProtein=normalizeProteinPreference(prefs);p.mealPrepMinutes=prefs.maxMinutes;p.foodBudget=prefs.budget;p.mealChoices=mealSelections.filter(Boolean);
+    p.mealCuisine=prefs.cuisine;p.preferredProtein=normalizeProteinPreference(prefs);p.mealPrepMinutes=prefs.maxMinutes;p.foodBudget=prefs.budget;p.mealChoices=mealSelections;
     localStorage.setItem(KEY,JSON.stringify(p));await syncProfileToCloud();
   }catch(e){console.error(e)}
 }
