@@ -219,6 +219,23 @@ linear-gradient(180deg,#16100D,#090605)}
 .historyRow b{display:block;font-size:14px;font-weight:500}
 .historyRow span{display:block;margin-top:4px;color:var(--muted);font-size:9px;letter-spacing:.08em}
 .historyRow time{font-size:9px;color:var(--muted);white-space:nowrap}
+
+.workoutStateBar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 0 16px;margin-bottom:2px;border-bottom:1px solid rgba(233,225,215,.1)}
+.workoutStateBar>div:first-child{min-width:0}
+.workoutStateBar span{display:block;font-size:8px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:5px}
+.workoutStateBar b{display:block;font-size:15px;font-weight:600;letter-spacing:-.2px}
+.workoutStateBar small{display:block;font-size:9px;color:var(--muted);margin-top:4px}
+.workoutStateBar .timer{position:static;font-size:24px;min-width:68px;text-align:right;color:var(--text);letter-spacing:-.8px}
+.exerciseAdvance{display:none;align-items:center;justify-content:space-between;gap:12px;margin:12px -20px 0;padding:12px 20px;background:var(--text);color:var(--bg)}
+.exerciseAdvance.show{display:flex}
+.exerciseAdvance span{font-size:7px;letter-spacing:.17em;font-weight:700}
+.exerciseAdvance b{font-size:11px;font-weight:600}
+.nextExercisePreview{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid rgba(233,225,215,.1)}
+.nextExercisePreview>span{font-size:8px;letter-spacing:.18em;color:var(--muted)}
+.nextExercisePreview>div{text-align:right}
+.nextExercisePreview b{display:block;font-size:12px;font-weight:500}
+.nextExercisePreview small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+.exerciseControls.single{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -233,7 +250,9 @@ linear-gradient(180deg,#16100D,#090605)}
 
   <section id="train" class="screen">
     <div class="pageHead"><div class="eyebrow">FORM / TRAIN</div><h1>Guided workout</h1><p>Clear guidance. One exercise at a time.</p></div>
-    <div class="card workoutStage"><div class="timer" id="timer">00:30</div>
+    <div class="card workoutStage">
+<div class="workoutStateBar" id="workoutStateBar"><div><span id="workoutStateKicker">WORK SET</span><b id="workoutStateText">Set 1 of 3</b><small id="workoutStateDetail">15 reps</small></div><div class="timer" id="timer" style="display:none">00:30</div></div>
+<div class="exerciseAdvance" id="exerciseAdvance"><span>EXERCISE COMPLETE</span><b id="advanceText">Up next</b></div>
 <div class="exerciseReference" id="exerciseReference">
   <div class="referenceTop"><span>FORM / TRAIN</span><span id="mediaStep">01 / 05</span></div>
   <div class="poseGrid" id="poseGrid"></div>
@@ -249,7 +268,8 @@ linear-gradient(180deg,#16100D,#090605)}
     <div><div class="guideLabel">AVOID</div><div class="guideText" id="avoidCue">Rushing the lowering phase.</div></div>
   </div>
 </div></div>
-    <div class="exerciseControls"><button class="btn secondary" onclick="toggleTimer()" id="timerBtn">Start timer</button><button class="btn primary" onclick="nextExercise()">Complete set</button></div>
+    <div class="exerciseControls" id="exerciseControls"><button class="btn secondary" onclick="toggleTimer()" id="timerBtn" style="display:none">Pause rest</button><button class="btn primary" onclick="handleWorkoutPrimary()" id="completeSetBtn">Complete set 1</button></div>
+    <div class="nextExercisePreview" id="nextExercisePreview"><span>UP NEXT</span><div><b id="nextExerciseName">Push-up</b><small id="nextExerciseSpec">3 × 10</small></div></div>
     <div class="sectionTitle"><h3>Session</h3><span id="sessionMeta">Beginner · 30 min</span></div><div id="exerciseList"></div>
   </section>
 
@@ -302,7 +322,7 @@ linear-gradient(180deg,#16100D,#090605)}
     <div id="authMessage" style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px"></div>
   </div></div>
 </div>
-<div class="completeSheet" id="completeSheet" onclick="if(event.target===this)closeWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="closeWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><button class="btn primary" style="width:100%" onclick="closeWorkoutComplete();go('progress');refreshProgress()">View progress</button><button class="btn secondary" id="completeSaveBtn" style="width:100%;margin-top:8px;display:none" onclick="closeWorkoutComplete();openAuth('upgrade')">Save across devices</button><button class="authInlineAction" style="width:100%;margin-top:10px" onclick="closeWorkoutComplete();go('home')">Done</button></div></div>
+<div class="completeSheet" id="completeSheet" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button class="authClose" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
 <div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
 <div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
 <div class="obStep" data-step="2"><div class="eyebrow">YOUR GOAL</div><h1>What are you training for?</h1><p>Choose the outcome that matters most right now.</p><div class="choiceGrid" id="goalChoices"><button class="choice" data-value="Build muscle"><b>Build muscle</b><span>Strength, muscle and progressive overload.</span></button><button class="choice" data-value="Fat loss"><b>Fat loss</b><span>Higher activity with strength retention.</span></button><button class="choice" data-value="General fitness"><b>General fitness</b><span>Strength, energy and consistency.</span></button><button class="choice" data-value="Mobility"><b>Mobility</b><span>Move better and improve control.</span></button></div></div>
@@ -316,7 +336,7 @@ linear-gradient(180deg,#16100D,#090605)}
 const SUPABASE_URL="https://pnfgumtaqsmstqprfdtw.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QkQIGPtkigC_HCXPuWLHCQ_UuTOjJ--";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,authMode='signin';const restrictions=new Set(),obRestrictions=new Set();
+const KEY='jkform_mobile_profile_v1',HAD_ACCOUNT_KEY='jkform_had_account_v1',SAVE_PROMPT_KEY='jkform_save_prompt_seen_v1';let obStep=1,exIndex=0,setIndex=1,secs=30,tick=null,cloudWorkoutId=null,authMode='signin',workoutPhase='work';const restrictions=new Set(),obRestrictions=new Set();
 const workoutMap={"No equipment":[['Tempo Squat','3 × 15'],['Push-up','3 × 10'],['Reverse Lunge','3 × 10/side'],['Pike Push-up','3 × 8'],['Plank Shoulder Tap','3 × 20']],"Dumbbells":[['DB Squat','3 × 12'],['DB Floor Press','3 × 10'],['One-arm Row','3 × 12'],['DB RDL','3 × 12'],['Dead Bug','3 × 10/side']],"Resistance bands":[['Band Squat','3 × 15'],['Band Row','3 × 12'],['Band Chest Press','3 × 12'],['Band RDL','3 × 15'],['Pallof Press','3 × 10/side']],"Gym access":[['Leg Press','3 × 12'],['Chest Press','3 × 10'],['Lat Pulldown','3 × 12'],['Romanian Deadlift','3 × 10'],['Cable Crunch','3 × 12']]};
 const meals={Balanced:[['Breakfast','Oats + Greek yogurt + banana'],['Lunch','Rice + grilled chicken + vegetables'],['Snack','Fruit + yogurt'],['Dinner','Chapati + dal + paneer + salad']],Vegetarian:[['Breakfast','Vegetable poha + curd'],['Lunch','Rice + dal + paneer + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + paneer bhurji + salad']],Vegan:[['Breakfast','Oats + soy milk + banana'],['Lunch','Rice + dal + tofu + vegetables'],['Snack','Roasted chana + fruit'],['Dinner','Chapati + chickpea curry + salad']],"High protein":[['Breakfast','Eggs + oats + fruit'],['Lunch','Chicken rice bowl + vegetables'],['Snack','Greek yogurt + fruit'],['Dinner','Paneer/chicken wrap + salad']]};
 function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='progress')refreshProgress()}
@@ -484,7 +504,7 @@ async function signInUser(){
 }
 async function signOutUser(){const user=await getUser();localStorage.setItem(HAD_ACCOUNT_KEY,'1');await sb.auth.signOut();cloudWorkoutId=null;if(user&&!user.is_anonymous){localStorage.removeItem(KEY);localStorage.removeItem(SAVE_PROMPT_KEY)}await refreshAccountUI();showEntry('returning')}
 function currentWorkout(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');return workoutMap[p.equip]||workoutMap['No equipment']}
-const REPDB_BASE='https://exercise-dataset.com/images/flat/';const REPDB_FALLBACK='https://raw.githubusercontent.com/RepDB/exercise-dataset/main/images/flat/';
+const REPDB_BASE='https://raw.githubusercontent.com/RepDB/exercise-dataset/main/images/flat/';const REPDB_FALLBACK='https://exercise-dataset.com/images/flat/';
 const exerciseGuides={
 'Tempo Squat':{
   target:'QUADS · GLUTES',equipment:'BODYWEIGHT',
@@ -639,22 +659,50 @@ function renderExerciseGuide(name){
     poseGrid.innerHTML='<div class="referencePlaceholder">Reference illustration<br>coming next</div>';
   }
 }
+function getRepTarget(spec){return String(spec).replace(/^\s*\d+\s*[×x]\s*/,'').trim()}
 function renderWorkout(){
-  const data=currentWorkout();
+  const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);
   homeWorkout.innerHTML=data.slice(0,3).map((x,i)=>{
     const g=exerciseGuides[x[0]]||genericGuide(x[0]);
     const thumb=g.images?.[0]||'';
     return '<div class="exerciseListRow clickableRow" onclick="openExercise('+i+')"><div class="exerciseThumb '+(thumb?'hasImg':'')+'">'+(thumb?'<img src="'+thumb+'" data-fallback="'+REPDB_FALLBACK+thumb.split('/').pop()+'" alt="" loading="lazy" onerror="handleGuideImageError(this)">':'<span>REF</span>')+'</div><div class="grow"><b>'+x[0]+'</b><span>'+x[1]+' · movement guide</span></div><div class="pill">View</div></div>';
   }).join('');
-  exerciseList.innerHTML=data.map((x,i)=>'<div class="exerciseListRow" style="'+(i===exIndex?'border-color:#8A684E':'')+'"><div class="icon">'+(i===exIndex?'NOW':String(i+1).padStart(2,'0'))+'</div><div class="grow"><b>'+x[0]+'</b><span>'+x[1]+'</span></div><div class="pill">'+(i===exIndex?'Active':'Next')+'</div></div>').join('');
-  exerciseName.textContent=data[exIndex][0];
-  exerciseSets.textContent=data[exIndex][1];
-  setProgress.textContent='SET '+setIndex+' OF '+getTotalSets(data[exIndex][1]);
+
+  exerciseList.innerHTML=data.map((x,i)=>'<div class="exerciseListRow" style="'+(i===exIndex?'border-color:#8A684E':'')+'"><div class="icon">'+(i===exIndex?'NOW':String(i+1).padStart(2,'0'))+'</div><div class="grow"><b>'+x[0]+'</b><span>'+x[1]+'</span></div><div class="pill">'+(i===exIndex?'Active':i<exIndex?'Done':'Next')+'</div></div>').join('');
+
+  exerciseName.textContent=current[0];
+  exerciseSets.textContent=current[1];
   exerciseLabel.textContent='EXERCISE '+(exIndex+1)+' OF '+data.length;
   mediaStep.textContent=String(exIndex+1).padStart(2,'0')+' / '+String(data.length).padStart(2,'0');
-  renderExerciseGuide(data[exIndex][0]);
+  renderExerciseGuide(current[0]);
+
+  const next=data[exIndex+1];
+  if(next){nextExercisePreview.style.display='flex';nextExerciseName.textContent=next[0];nextExerciseSpec.textContent=next[1]}
+  else{nextExercisePreview.style.display='flex';nextExerciseName.textContent='Finish session';nextExerciseSpec.textContent='Final exercise'}
+
+  if(workoutPhase==='rest'){
+    const completedSet=Math.max(1,setIndex-1);
+    setProgress.textContent='SET '+completedSet+' COMPLETE · NEXT SET '+setIndex;
+    workoutStateKicker.textContent='REST';
+    workoutStateText.textContent='Set '+completedSet+' complete';
+    workoutStateDetail.textContent='Next · Set '+setIndex+' of '+totalSets;
+    timer.style.display='block';
+    timerBtn.style.display='inline-flex';
+    exerciseControls.classList.remove('single');
+    timerBtn.textContent=tick?'Pause rest':(secs<=0?'Restart rest':'Resume rest');
+    completeSetBtn.textContent='Start set '+setIndex;
+  }else{
+    setProgress.textContent='SET '+setIndex+' OF '+totalSets;
+    workoutStateKicker.textContent='WORK SET';
+    workoutStateText.textContent='Set '+setIndex+' of '+totalSets;
+    workoutStateDetail.textContent=getRepTarget(current[1])+' reps';
+    timer.style.display='none';
+    timerBtn.style.display='none';
+    exerciseControls.classList.add('single');
+    completeSetBtn.textContent='Complete set '+setIndex;
+  }
 }
-function openExercise(i){exIndex=i;setIndex=1;go('train');renderWorkout();showFeedback('Exercise opened')}
+function openExercise(i){exIndex=i;setIndex=1;workoutPhase='work';stopRestTimer();go('train');renderWorkout();exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});showFeedback('Exercise opened')}
 function showFeedback(msg){feedbackToast.textContent=msg;feedbackToast.classList.add('show');clearTimeout(showFeedback.t);showFeedback.t=setTimeout(()=>feedbackToast.classList.remove('show'),1400)}
 function renderWeek(p){const n=parseInt(p.days)||4;weeklyPlan.innerHTML=Array.from({length:n},(_,i)=>`<div class="card"><div class="eyebrow">DAY ${i+1}</div><h3 style="margin:8px 0 4px">${['Full Body Strength','Upper Body','Lower Body','Conditioning','Full Body Strength','Mobility'][i%6]}</h3><p style="color:var(--muted);font-size:12px;margin:0">${p.time} · ${p.equip}</p></div>`).join('')}
 function getTotalSets(spec){const n=parseInt(String(spec));return Number.isFinite(n)&&n>0?n:1}
@@ -684,21 +732,119 @@ async function refreshProgress(){
   progressWeekLabel.textContent=weekly.length+' of '+target;progressWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';progressStreak.textContent=String(streak);progressSessions.textContent=String(sessions.length);progressTraining.textContent=totalMin>=60?(Math.floor(totalMin/60)+'h '+(totalMin%60?totalMin%60+'m':'')):totalMin+'m';
   progressRecent.innerHTML=sessions.length?sessions.slice(0,6).map(s=>'<div class="historyRow"><div><b>'+(s.workout_name||'Workout')+'</b><span>'+(s.duration_minutes||0)+' min · completed</span></div><time>'+new Date(s.completed_at||s.created_at).toLocaleDateString(undefined,{day:'numeric',month:'short'})+'</time></div>').join(''):'<div class="emptyState">Complete a workout and it will appear here.</div>';
 }
-function showWorkoutComplete(user,data){completeExercises.textContent=String(data.length);const p=JSON.parse(localStorage.getItem(KEY)||'{}');completeMinutes.textContent=String(parseInt(p.time)||30);completeSaveBtn.style.display=user?.is_anonymous?'inline-flex':'none';completeCopy.textContent=user?.is_anonymous?'Your workout is saved on this device. Create an account when you want it across devices.':'The work is logged to your JK Form account.';completeSheet.classList.add('show')}
-function closeWorkoutComplete(){completeSheet.classList.remove('show')}
-async function startSession(){exIndex=0;setIndex=1;secs=30;renderWorkout();timer.textContent='00:30';timerBtn.textContent='Start rest';cloudWorkoutId=null;await ensureWorkoutSession()}
-function toggleTimer(){if(tick){clearInterval(tick);tick=null;timerBtn.textContent='Resume rest';return}if(secs<=0){secs=30;timer.textContent='00:30'}timerBtn.textContent='Pause rest';tick=setInterval(()=>{secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');if(secs<=0){clearInterval(tick);tick=null;timerBtn.textContent='Restart rest';showFeedback('Rest complete')}},1000)}
-async function nextExercise(){
-  if(tick){clearInterval(tick);tick=null}
-  const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);await ensureWorkoutSession();const user=await getUser();
-  if(user&&cloudWorkoutId){await sb.from('exercise_logs').insert({user_id:user.id,workout_session_id:cloudWorkoutId,exercise_name:current[0],sets_completed:1,reps:String(current[1]).replace(/^\s*\d+\s*[×x]\s*/,'')})}
-  const exerciseDone=setIndex>=totalSets;const sessionDone=exerciseDone&&exIndex===data.length-1;
-  if(sessionDone&&user&&cloudWorkoutId){await sb.from('workout_sessions').update({completed:true,completed_at:new Date().toISOString(),exercises_completed:data.length}).eq('id',cloudWorkoutId)}
-  if(!exerciseDone){setIndex++}else if(!sessionDone){exIndex++;setIndex=1}
-  secs=30;timer.textContent='00:30';timerBtn.textContent='Start rest';
-  if(!sessionDone){renderWorkout();showFeedback(exerciseDone?'Exercise complete':'Set '+(setIndex-1)+' saved')}
-  else{showFeedback('Workout complete');await refreshProgress();showWorkoutComplete(user,data);cloudWorkoutId=null;setIndex=1;exIndex=0;renderWorkout()}
+function showWorkoutComplete(user,data){
+  completeExercises.textContent=String(data.length);
+  const p=JSON.parse(localStorage.getItem(KEY)||'{}');
+  completeMinutes.textContent=String(parseInt(p.time)||30);
+  if(user?.is_anonymous){
+    completeCopy.textContent='Workout saved. Create an account to keep this progress across devices.';
+    completePrimaryBtn.textContent='Save my progress';
+    completeSecondaryBtn.textContent='View progress';
+    completeSheet.dataset.mode='guest';
+  }else{
+    completeCopy.textContent='Workout saved to your JK Form history.';
+    completePrimaryBtn.textContent='View progress';
+    completeSecondaryBtn.textContent='Back home';
+    completeSheet.dataset.mode='account';
+  }
+  completeSheet.classList.add('show');
 }
+function closeWorkoutComplete(){completeSheet.classList.remove('show')}
+function dismissWorkoutComplete(){closeWorkoutComplete();go('home')}
+function handleCompletePrimary(){
+  const mode=completeSheet.dataset.mode;closeWorkoutComplete();
+  if(mode==='guest'){openAuth('upgrade');return}
+  go('progress');refreshProgress();
+}
+function handleCompleteSecondary(){
+  const mode=completeSheet.dataset.mode;closeWorkoutComplete();
+  if(mode==='guest'){go('progress');refreshProgress();return}
+  go('home');
+}
+function stopRestTimer(){if(tick){clearInterval(tick);tick=null}}
+function beginRest(){
+  stopRestTimer();workoutPhase='rest';secs=30;timer.textContent='00:30';renderWorkout();
+  tick=setInterval(()=>{
+    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Rest complete';showFeedback('Ready for set '+setIndex)}
+  },1000);
+  timerBtn.textContent='Pause rest';
+}
+function toggleTimer(){
+  if(workoutPhase!=='rest')return;
+  if(tick){stopRestTimer();timerBtn.textContent='Resume rest';return}
+  if(secs<=0){secs=30;timer.textContent='00:30'}
+  tick=setInterval(()=>{
+    secs--;timer.textContent='00:'+String(Math.max(0,secs)).padStart(2,'0');
+    if(secs<=0){stopRestTimer();timerBtn.textContent='Restart rest';workoutStateText.textContent='Rest complete';showFeedback('Ready for set '+setIndex)}
+  },1000);
+  timerBtn.textContent='Pause rest';
+}
+function startNextSet(){
+  stopRestTimer();workoutPhase='work';secs=30;timer.textContent='00:30';renderWorkout();showFeedback('Set '+setIndex+' ready')
+}
+function showExerciseAdvance(completed,next){
+  advanceText.textContent=completed+' done · '+next+' next';
+  exerciseAdvance.classList.add('show');
+  clearTimeout(showExerciseAdvance.t);
+  showExerciseAdvance.t=setTimeout(()=>exerciseAdvance.classList.remove('show'),2200);
+}
+function handleWorkoutPrimary(){
+  if(workoutPhase==='rest'){startNextSet();return}
+  completeCurrentSet();
+}
+async function startSession(){
+  stopRestTimer();exIndex=0;setIndex=1;workoutPhase='work';secs=30;cloudWorkoutId=null;
+  await ensureWorkoutSession();renderWorkout();
+  setTimeout(()=>exerciseReference.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+async function completeCurrentSet(){
+  stopRestTimer();
+  const data=currentWorkout(),current=data[exIndex],totalSets=getTotalSets(current[1]);
+  await ensureWorkoutSession();const user=await getUser();
+
+  if(user&&cloudWorkoutId){
+    await sb.from('exercise_logs').insert({
+      user_id:user.id,
+      workout_session_id:cloudWorkoutId,
+      exercise_name:current[0],
+      sets_completed:1,
+      reps:getRepTarget(current[1])
+    });
+  }
+
+  const finalSet=setIndex>=totalSets;
+  const finalExercise=exIndex===data.length-1;
+
+  if(!finalSet){
+    setIndex++;
+    beginRest();
+    return;
+  }
+
+  if(!finalExercise){
+    const completedName=current[0];
+    exIndex++;setIndex=1;workoutPhase='work';secs=30;
+    renderWorkout();
+    showExerciseAdvance(completedName,data[exIndex][0]);
+    exerciseReference.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+
+  if(user&&cloudWorkoutId){
+    await sb.from('workout_sessions').update({
+      completed:true,
+      completed_at:new Date().toISOString(),
+      exercises_completed:data.length
+    }).eq('id',cloudWorkoutId);
+  }
+
+  showFeedback('Workout complete');
+  await refreshProgress();
+  showWorkoutComplete(user,data);
+  cloudWorkoutId=null;setIndex=1;exIndex=0;workoutPhase='work';renderWorkout();
+}
+async function nextExercise(){return completeCurrentSet()}
 function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
 function generateMeals(){const d=diet.value,count=+mealsPerDay.value;let rows=[...(meals[d]||meals.Balanced)];if(count===3)rows=[rows[0],rows[1],rows[3]];if(count===5)rows=[rows[0],rows[1],['Snack 1','Fruit + protein source'],rows[2],rows[3]];mealPlan.innerHTML=rows.map((x,i)=>`<div class="item"><div class="icon">${String(i+1).padStart(2,'0')}</div><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');mealSnapshot.innerHTML=rows.slice(0,3).map(x=>`<div class="item" style="margin-bottom:8px"><div class="grow"><b>${x[0]}</b><span>${swap(x[1])}</span></div></div>`).join('');dietTag.textContent=d;const g=nutritionGoal.value;if(g==='Fat loss'){cal.textContent='1,850';protein.textContent='145g';carbs.textContent='175g';fats.textContent='62g'}else if(g==='Muscle gain'){cal.textContent='2,450';protein.textContent='165g';carbs.textContent='285g';fats.textContent='78g'}else{cal.textContent='2,150';protein.textContent='145g';carbs.textContent='230g';fats.textContent='72g'}persistNutritionPrefs()}
 function persistNutritionPrefs(){const raw=localStorage.getItem(KEY);if(!raw)return;try{const p=JSON.parse(raw);p.diet=diet.value;p.nutritionGoal=nutritionGoal.value;p.meals=mealsPerDay.value;p.restrictions=[...restrictions];localStorage.setItem(KEY,JSON.stringify(p));syncProfileToCloud()}catch(e){}}
