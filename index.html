@@ -460,22 +460,29 @@ function isAvoidedExercise(name,p){
 function relatedPoolKeys(key){
   if(['lowerKnee','lowerHinge','lowerAccessory'].includes(key))return[key,'lowerKnee','lowerHinge','lowerAccessory','accessory'];
   if(['upperPush','upperPull','upperAccessory'].includes(key))return[key,'upperPush','upperPull','upperAccessory','accessory'];
-  if(key==='core')return['core','accessory'];
-  if(key==='conditioning')return['conditioning','core'];
-  if(key==='mobility')return['mobility','core'];
+  if(key==='core')return['core'];
+  if(key==='conditioning')return['conditioning'];
+  if(key==='mobility')return['mobility'];
   return['accessory','core'];
 }
 function replaceAvoidedItems(items,p,pool){
-  const used=new Set(items.filter(x=>!isAvoidedExercise(x.name,p)).map(x=>x.name));
-  return items.map(item=>{
-    if(!isAvoidedExercise(item.name,p)){used.add(item.name);return item}
-    for(const key of relatedPoolKeys(item.key)){
-      for(const name of (pool[key]||[])){
-        if(!used.has(name)&&!isAvoidedExercise(name,p)){used.add(name);return sessionExercise(name,item.role,key)}
-      }
+  const used=new Set(),out=[];
+  for(const item of items){
+    if(!isAvoidedExercise(item.name,p)&&!used.has(item.name)){
+      used.add(item.name);out.push(item);continue;
     }
-    return null;
-  }).filter(Boolean);
+    let replacement=null;
+    for(const key of relatedPoolKeys(item.key)){
+      const name=(pool[key]||[]).find(n=>!used.has(n)&&!isAvoidedExercise(n,p));
+      if(name){replacement=sessionExercise(name,item.role,key);break}
+    }
+    if(replacement){used.add(replacement.name);out.push(replacement)}
+  }
+  return out;
+}
+function dedupeSessionItems(items){
+  const seen=new Set();
+  return items.filter(item=>{if(!item?.name||seen.has(item.name))return false;seen.add(item.name);return true});
 }
 function priorityCandidates(area,pool,p){
   const values=(key)=>pool[key]||[];
@@ -542,8 +549,9 @@ function rawSession(type,variant,p){
   const base=map[type]||map.fullA;
   let items=base.items.filter(x=>x.name);
   items=replaceAvoidedItems(items,p,pool);
+  items=dedupeSessionItems(items);
   items=applyPriority(items,p,pool,base.title);
-  items=items.slice(0,exerciseLimit(p));
+  items=dedupeSessionItems(items).slice(0,exerciseLimit(p));
   if(p.trainingStyle==='Faster-paced'&&items.length<exerciseLimit(p)){
     const finisher=(pool.conditioning||[]).find(n=>!items.some(x=>x.name===n)&&!isAvoidedExercise(n,p));
     if(finisher)items.push(sessionExercise(finisher,'conditioning','conditioning'));
