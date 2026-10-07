@@ -356,8 +356,8 @@ const exercisePools={
     lowerKnee:['Tempo Squat','Reverse Lunge','Split Squat'],
     lowerHinge:['Glute Bridge','Single-leg Glute Bridge'],
     upperPush:['Push-up','Pike Push-up','Close-grip Push-up'],
-    upperPull:['Prone Y Raise','Reverse Snow Angel'],
-    accessory:['Calf Raise','Prone Y Raise'],
+    upperPull:['Superman','Bird Dog'],
+    accessory:['Standing Calf Raise','Superman'],
     core:['Dead Bug','Plank Shoulder Tap','Side Plank'],
     conditioning:['Mountain Climber','Squat to Reach'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -367,7 +367,7 @@ const exercisePools={
     lowerHinge:['DB RDL','DB Glute Bridge'],
     upperPush:['DB Floor Press','DB Shoulder Press','DB Close-grip Press'],
     upperPull:['One-arm Row','DB Pullover','DB Rear Delt Row'],
-    accessory:['DB Lateral Raise','DB Curl','DB Triceps Extension','Calf Raise'],
+    accessory:['DB Lateral Raise','DB Curl','DB Triceps Extension','Standing Calf Raise'],
     core:['Dead Bug','Plank Shoulder Tap','Suitcase Hold'],
     conditioning:['DB Thruster','Mountain Climber'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -387,7 +387,7 @@ const exercisePools={
     lowerHinge:['Romanian Deadlift','Leg Curl','Hip Thrust'],
     upperPush:['Chest Press','Shoulder Press','Incline Chest Press'],
     upperPull:['Lat Pulldown','Seated Cable Row','Chest-supported Row'],
-    accessory:['Cable Lateral Raise','Biceps Curl','Triceps Pressdown','Calf Raise'],
+    accessory:['Cable Lateral Raise','DB Curl','Triceps Pressdown','Standing Calf Raise'],
     core:['Cable Crunch','Dead Bug','Pallof Press'],
     conditioning:['Incline Walk','Mountain Climber'],
     mobility:['90/90 Hip Switch','World’s Greatest Stretch']
@@ -726,6 +726,102 @@ const exerciseGuides={
   cue:'Press the floor away and keep the hips square to the ground.',
   avoid:'Rocking the hips side to side or rushing the taps.'
 },
+'Glute Bridge':{
+  target:'GLUTES · HAMSTRINGS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'glute-bridge-start.webp',REPDB_BASE+'glute-bridge-peak.webp'],labels:['START','BRIDGE'],
+  steps:['Lie on your back with knees bent and feet planted.','Brace your trunk and drive through the feet to lift the hips.','Finish with the hips tall, then lower under control.'],
+  cue:'Keep the ribs down and squeeze the glutes at the top.',avoid:'Overarching the lower back to gain extra height.'
+},
+'Single-leg Glute Bridge':{
+  target:'GLUTES · HAMSTRINGS',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'single-leg-glute-bridge-start.webp',REPDB_BASE+'single-leg-glute-bridge-peak.webp'],labels:['START','BRIDGE'],
+  steps:['Set up as a normal bridge and lift one foot from the floor.','Drive through the planted foot to raise your hips.','Keep the pelvis level, then lower under control.'],
+  cue:'Keep both hip points level through the rep.',avoid:'Rotating the pelvis toward the lifted leg.'
+},
+'Standing Calf Raise':{
+  target:'CALVES',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'standing-calf-raise-start.webp',REPDB_BASE+'standing-calf-raise-peak.webp'],labels:['START','RISE'],
+  steps:['Stand tall with the whole forefoot planted.','Rise onto the balls of your feet as high as you can control.','Pause briefly, then lower the heels slowly.'],
+  cue:'Move straight up rather than rolling the ankles outward.',avoid:'Bouncing quickly through the bottom.'
+},
+'Superman':{
+  target:'BACK · GLUTES',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'superman-start.webp',REPDB_BASE+'superman-peak.webp'],labels:['START','LIFT'],
+  steps:['Lie face down with arms extended in front of you.','Gently lift the arms, chest and legs from the floor.','Pause without forcing the range, then lower slowly.'],
+  cue:'Think long through the arms and legs rather than lifting as high as possible.',avoid:'Throwing the head back or compressing the lower back.'
+},
+'Bird Dog':{
+  target:'CORE · BACK',equipment:'BODYWEIGHT',
+  images:[REPDB_BASE+'bird-dog-start.webp',REPDB_BASE+'bird-dog-peak.webp'],labels:['START','REACH'],
+  steps:['Start on hands and knees with the spine neutral.','Reach one arm forward and the opposite leg back.','Pause while keeping the hips square, then return and switch sides.'],
+  cue:'Reach long while keeping your trunk quiet.',avoid:'Rotating the hips or arching the lower back.'
+},
+'Side Plank':{
+  target:'CORE · OBLIQUES',equipment:'BODYWEIGHT',
+  images:[],labels:[],
+  steps:['Set your elbow below the shoulder and stack the legs.','Lift the hips until the body forms a straight line.','Hold the position while breathing normally, then switch sides.'],
+  cue:'Push the floor away and keep the hips lifted.',avoid:'Letting the waist sag toward the floor.'
+},
+'Mountain Climber':{
+  target:'CORE · CONDITIONING',equipment:'BODYWEIGHT',
+  images:[],labels:[],
+  steps:['Start in a strong high plank.','Drive one knee toward the chest without lifting the hips.','Switch legs at a controlled pace while keeping the shoulders over the hands.'],
+  cue:'Keep the trunk stable while the legs move.',avoid:'Bouncing the hips up and down.'
+},
+'DB Shoulder Press':{
+  target:'SHOULDERS · TRICEPS',equipment:'DUMBBELLS',
+  images:[REPDB_BASE+'dumbbell-shoulder-press-start.webp',REPDB_BASE+'dumbbell-shoulder-press-peak.webp'],labels:['START','PRESS'],
+  steps:['Hold the dumbbells around shoulder height with a stable torso.','Press the weights overhead without leaning back.','Lower under control to the starting position.'],
+  cue:'Keep your ribs stacked over your pelvis.',avoid:'Turning the press into a standing backbend.'
+},
+'DB Pullover':{
+  target:'LATS · CHEST',equipment:'DUMBBELL',
+  images:[REPDB_BASE+'db-pullover-start.webp',REPDB_BASE+'db-pullover-peak.webp'],labels:['START','LOWER'],
+  steps:['Lie supported and hold one dumbbell above the chest.','Lower the weight behind your head with softly bent elbows.','Pull the dumbbell back over the chest using your lats.'],
+  cue:'Keep the ribcage controlled as the arms travel overhead.',avoid:'Chasing range by excessively arching the lower back.'
+},
+'DB Lateral Raise':{
+  target:'SIDE DELTS',equipment:'DUMBBELLS',
+  images:[REPDB_BASE+'lateral-raise-start.webp',REPDB_BASE+'lateral-raise-peak.webp'],labels:['START','RAISE'],
+  steps:['Stand tall with the dumbbells by your sides.','Raise the arms out to the sides with soft elbows.','Stop around shoulder height and lower slowly.'],
+  cue:'Lead with the elbows and keep the shoulders down.',avoid:'Swinging the weights or shrugging.'
+},
+'DB Curl':{
+  target:'BICEPS',equipment:'DUMBBELLS',
+  images:[REPDB_BASE+'bicep-curl-start.webp',REPDB_BASE+'bicep-curl-peak.webp'],labels:['START','CURL'],
+  steps:['Stand tall with the arms by your sides.','Curl the dumbbells while keeping the upper arms quiet.','Squeeze briefly, then lower to full extension.'],
+  cue:'Keep the elbows close to your sides.',avoid:'Using the hips to swing the weights.'
+},
+'DB Reverse Lunge':{
+  target:'GLUTES · QUADS',equipment:'DUMBBELLS',
+  images:[REPDB_BASE+'reverse-lunge-start.webp',REPDB_BASE+'reverse-lunge-peak.webp'],labels:['START','BOTTOM'],
+  steps:['Stand tall with dumbbells held at your sides.','Step one leg back and lower under control.','Push through the front foot to return to standing.'],
+  cue:'Keep the front foot planted and torso tall.',avoid:'Stepping too narrow or letting the front knee cave inward.'
+},
+'Shoulder Press':{
+  target:'SHOULDERS · TRICEPS',equipment:'MACHINE',
+  images:[REPDB_BASE+'machine-shoulder-press-start.webp',REPDB_BASE+'machine-shoulder-press-peak.webp'],labels:['START','PRESS'],
+  steps:['Adjust the seat so the handles begin around shoulder height.','Press upward while keeping your back supported.','Lower the handles under control without bouncing.'],
+  cue:'Keep the shoulders down and wrists stacked.',avoid:'Overarching the lower back.'
+},
+'Seated Cable Row':{
+  target:'BACK · BICEPS',equipment:'CABLE',
+  images:[REPDB_BASE+'seated-cable-row-start.webp',REPDB_BASE+'seated-cable-row-peak.webp'],labels:['START','ROW'],
+  steps:['Sit tall with the cable under tension and arms extended.','Pull the handle toward your lower ribs by driving the elbows back.','Return slowly until the arms are long again.'],
+  cue:'Keep your chest tall without leaning far back.',avoid:'Using torso momentum to finish the pull.'
+},
+'Cable Lateral Raise':{
+  target:'SIDE DELTS',equipment:'CABLE',
+  images:[REPDB_BASE+'cable-lateral-raise-start.webp',REPDB_BASE+'cable-lateral-raise-peak.webp'],labels:['START','RAISE'],
+  steps:['Stand side-on to the cable with the handle in the far hand.','Raise the arm out to the side with a soft elbow.','Lower slowly while keeping cable tension.'],
+  cue:'Keep the shoulder down and lead with the elbow.',avoid:'Rotating the torso to lift the handle.'
+},
+'Leg Curl':{
+  target:'HAMSTRINGS',equipment:'MACHINE',
+  images:[REPDB_BASE+'leg-curl-start.webp',REPDB_BASE+'leg-curl-peak.webp'],labels:['START','CURL'],
+  steps:['Set the machine so the knee joint aligns comfortably with its pivot.','Curl the pad toward you by bending the knees.','Squeeze the hamstrings, then return slowly.'],
+  cue:'Keep your hips supported throughout the rep.',avoid:'Using momentum or lifting the hips from the pad.'
+},
 'DB Floor Press':{
   target:'CHEST · TRICEPS',equipment:'DUMBBELLS',
   images:[REPDB_BASE+'dumbbell-floor-press-start.webp',REPDB_BASE+'dumbbell-floor-press-peak.webp'],
@@ -931,10 +1027,10 @@ async function refreshProgress(){
   const raw=localStorage.getItem(KEY);const p=raw?JSON.parse(raw):{};const target=parseInt(p.days)||4;
   const user=await getUser();
   if(!user){weekCount.textContent='0/'+target;homeActiveMin.textContent='0';homeStreak.textContent='0';progressWeekLabel.textContent='0 of '+target;progressWeekBar.style.width='0%';progressStreak.textContent='0';progressSessions.textContent='0';progressTraining.textContent='0m';progressRecent.innerHTML='<div class="emptyState">Sign in or start as a guest to track progress.</div>';return}
-  const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
+  const {data,error}=await sb.from('workout_sessions').select('id,workout_name,duration_minutes,completed_at,created_at,plan_index,session_key').eq('completed',true).order('completed_at',{ascending:false}).limit(100);
   if(error){console.error(error);return}
   const sessions=data||[];const wk=startOfWeek();const weekly=sessions.filter(s=>new Date(s.completed_at||s.created_at)>=wk);const weeklyMin=weekly.reduce((a,s)=>a+(s.duration_minutes||0),0);const totalMin=sessions.reduce((a,s)=>a+(s.duration_minutes||0),0);const streak=calcStreak(sessions);
-  const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){activeSessionIndex=weekly.length%program.sessions.length;renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
+  const program=buildProgram(p);if(!cloudWorkoutId&&program.sessions.length){const lastPlanned=weekly.find(s=>Number.isInteger(s.plan_index));activeSessionIndex=lastPlanned?((lastPlanned.plan_index+1)%program.sessions.length):(weekly.length%program.sessions.length);renderActiveSessionContext(p);renderWorkout();renderWeek(p)}
   weekCount.textContent=weekly.length+'/'+target;homeActiveMin.textContent=String(weeklyMin);homeStreak.textContent=String(streak);
   progressWeekLabel.textContent=weekly.length+' of '+target;progressWeekBar.style.width=Math.min(100,(weekly.length/target)*100)+'%';progressStreak.textContent=String(streak);progressSessions.textContent=String(sessions.length);progressTraining.textContent=totalMin>=60?(Math.floor(totalMin/60)+'h '+(totalMin%60?totalMin%60+'m':'')):totalMin+'m';
   progressRecent.innerHTML=sessions.length?sessions.slice(0,6).map(s=>'<div class="historyRow"><div><b>'+(s.workout_name||'Workout')+'</b><span>'+(s.duration_minutes||0)+' min · completed</span></div><time>'+new Date(s.completed_at||s.created_at).toLocaleDateString(undefined,{day:'numeric',month:'short'})+'</time></div>').join(''):'<div class="emptyState">Complete a workout and it will appear here.</div>';
@@ -1057,9 +1153,10 @@ async function completeCurrentSet(){
   }
 
   showFeedback('Workout complete');
+  cloudWorkoutId=null;setIndex=1;exIndex=0;workoutPhase='work';
   await refreshProgress();
   showWorkoutComplete(user,data);
-  cloudWorkoutId=null;setIndex=1;exIndex=0;workoutPhase='work';renderWorkout();
+  renderWorkout();
 }
 async function nextExercise(){return completeCurrentSet()}
 function swap(text){if(restrictions.has('Dairy'))text=text.replace(/Greek yogurt|curd|yogurt|paneer/gi,'dairy-free alternative');if(restrictions.has('Eggs'))text=text.replace(/Eggs/gi,'Tofu scramble');if(restrictions.has('Soy'))text=text.replace(/soy milk|tofu/gi,'chickpea alternative');if(restrictions.has('Gluten'))text=text.replace(/Chapati|wrap/gi,'rice bowl');return text}
