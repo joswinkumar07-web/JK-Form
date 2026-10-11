@@ -354,6 +354,120 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 @keyframes screenIn{from{opacity:.72;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(max-width:360px){.app{padding-left:16px;padding-right:16px}.homeHello h1{font-size:34px}.homePrimary h2{font-size:32px}.pageHead h1{font-size:28px}}
 @media(prefers-reduced-motion:reduce){.screen.active{animation:none}.offlineBanner{transition:none}}
+
+/* RESPONSIVE USABILITY PASS */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+html{scroll-padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+img,video{max-width:100%}
+.app{min-height:100vh;min-height:100dvh;overflow-x:clip}
+
+.entryGate,.onboarding,.authSheet,.utilitySheet,.completeSheet{
+  min-height:100vh;
+  min-height:100dvh;
+}
+.entryShell,.obShell{
+  height:100vh;
+  height:100dvh;
+  max-height:100dvh;
+  overflow:hidden;
+}
+.entryBody{
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+.entryActions{flex:0 0 auto;padding-bottom:2px}
+
+.obShell{
+  padding-top:calc(16px + env(safe-area-inset-top));
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+}
+.obShell>div:first-child{flex:0 0 auto}
+.obBody{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  align-items:flex-start;
+  padding-top:clamp(24px,7dvh,64px);
+  padding-bottom:24px;
+  scrollbar-width:thin;
+}
+.obStep{padding-bottom:4px}
+.obActions{
+  flex:0 0 auto;
+  position:relative;
+  z-index:2;
+  padding-top:14px;
+  padding-bottom:2px;
+  background:linear-gradient(180deg,rgba(11,8,7,0),#0B0807 18%);
+}
+.obActions .btn{min-height:50px}
+
+.authPanel,.utilityPanel,.completePanel{
+  max-height:calc(100dvh - max(8px,env(safe-area-inset-top)));
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+.authSheet,.utilitySheet,.completeSheet{overflow:hidden}
+
+.bottomnav{max-height:calc(74px + env(safe-area-inset-bottom))}
+.screen{scroll-margin-bottom:calc(104px + env(safe-area-inset-bottom))}
+#home,#train,#plan,#meals,#progress,#profile{padding-bottom:16px}
+
+.btn,.choice,.navbtn,.mealSwapBtn,.homeTextAction,.homeSectionLink button,.planStart,.exerciseUtility button,.authInlineAction{
+  min-height:44px;
+}
+button{-webkit-tap-highlight-color:rgba(138,104,78,.14)}
+
+@media(max-height:740px){
+  .obShell{
+    padding-top:calc(10px + env(safe-area-inset-top));
+    padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  }
+  .obTrack{margin-top:10px}
+  .obBody{padding-top:18px;padding-bottom:14px}
+  .obStep .eyebrow{margin-bottom:7px}
+  .obStep h1{font-size:34px;line-height:.98;letter-spacing:-1.5px;margin-bottom:9px}
+  .obStep>p{font-size:12px;line-height:1.45;margin-bottom:16px}
+  .choice{padding:13px 2px;min-height:54px}
+  .choice b{font-size:15px}
+  .choice span{font-size:10px;line-height:1.35;margin-top:3px}
+  .obActions{padding-top:9px}
+  .entryBody{padding-top:24px;padding-bottom:16px}
+  .entryBody h1{font-size:40px}
+}
+
+@media(max-height:620px){
+  .obBody{padding-top:12px;padding-bottom:10px}
+  .obStep h1{font-size:30px;letter-spacing:-1.2px}
+  .obStep>p{margin-bottom:12px}
+  .choice{padding:10px 2px;min-height:48px}
+  .choice span{display:none}
+  .obActions .btn{min-height:46px}
+  .entryBody{justify-content:flex-start;padding-top:36px}
+  .entryBody h1{font-size:36px;letter-spacing:-1.6px}
+  .entryBody p{font-size:12px;line-height:1.5}
+}
+
+@media(max-width:380px){
+  .app{padding-left:16px;padding-right:16px}
+  .homeHello h1{font-size:34px}
+  .homePrimary h2{font-size:32px}
+  .pageHead h1{font-size:30px}
+  .guideSplit{grid-template-columns:1fr}
+  .referenceSource{flex-direction:column;gap:5px}
+  .mealCardTop{gap:10px}
+  .homeWeekHead{align-items:flex-start;flex-direction:column;gap:5px}
+}
+
+@supports(height:100dvh){
+  .entryGate,.onboarding,.authSheet,.utilitySheet,.completeSheet,
+  .entryShell,.obShell{height:100dvh;max-height:100dvh}
+}
 </style>
 </head>
 <body>
@@ -509,8 +623,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 <div class="utilitySheet" id="swapSheet" role="dialog" aria-modal="true" aria-labelledby="swapTitle" onclick="if(event.target===this)closeSwapSheet()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="closeSwapSheet()">×</button><div class="eyebrow">SWAP MOVEMENT</div><h2 id="swapTitle">Choose an alternative.</h2><p>JK Form keeps the same training intent and replaces only this exercise.</p><div id="swapOptions" class="swapOptions"></div></div></div>
 <div class="utilitySheet" id="leaveWorkoutSheet" role="dialog" aria-modal="true" aria-labelledby="leaveWorkoutTitle" onclick="if(event.target===this)cancelLeaveWorkout()"><div class="utilityPanel"><button type="button" class="authClose" aria-label="Close" onclick="cancelLeaveWorkout()">×</button><div class="eyebrow">WORKOUT IN PROGRESS</div><h2 id="leaveWorkoutTitle">Leave this workout?</h2><p>JK Form can’t resume an unfinished session yet. If you end now, this session won’t count toward Progress.</p><button class="btn primary" style="width:100%" onclick="cancelLeaveWorkout()">Keep training</button><button class="btn secondary" id="endWorkoutBtn" style="width:100%;margin-top:8px" onclick="confirmLeaveWorkout()">End workout</button></div></div>
 <div class="completeSheet" id="completeSheet" role="dialog" aria-modal="true" aria-label="Workout complete" onclick="if(event.target===this)dismissWorkoutComplete()"><div class="completePanel"><button type="button" class="authClose" aria-label="Close" onclick="dismissWorkoutComplete()">×</button><div class="eyebrow">FORM / COMPLETE</div><h2>Session complete.</h2><p id="completeCopy">The work is logged. Keep building.</p><div class="completeStats"><div><b id="completeExercises">5</b><span>Exercises</span></div><div><b id="completeMinutes">30</b><span>Minutes</span></div></div><div class="sessionFeedback"><span>HOW DID THAT FEEL?</span><div class="feedbackChoices"><button type="button" data-feedback="too_easy" onclick="saveWorkoutFeedback('too_easy')">Too easy</button><button type="button" data-feedback="good" onclick="saveWorkoutFeedback('good')">Good</button><button type="button" data-feedback="too_hard" onclick="saveWorkoutFeedback('too_hard')">Too hard</button></div><small id="feedbackImpact">Optional · helps adjust the next time this workout appears.</small></div><button class="btn primary" id="completePrimaryBtn" style="width:100%" onclick="handleCompletePrimary()">View progress</button><button class="btn secondary" id="completeSecondaryBtn" style="width:100%;margin-top:8px" onclick="handleCompleteSecondary()">Back home</button></div></div>
-<div class="onboarding" id="onboarding"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
-<div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name"></div></div>
+<div class="onboarding" id="onboarding" role="dialog" aria-modal="true" aria-label="Set up your JK Form plan"><div class="obShell"><div><div class="obTop"><div class="obLogo">JK FORM</div><div class="obCount" id="obCount">1 of 6</div></div><div class="obTrack"><span id="obProgress"></span></div></div><div class="obBody">
+<div class="obStep active" data-step="1"><div class="eyebrow">START HERE</div><h1>Build a plan around you.</h1><p>JK Form uses a few simple inputs to shape your starting training plan.</p><div class="field"><label>What should we call you?</label><input id="obName" placeholder="Your first name" autocomplete="given-name" enterkeyhint="next"></div></div>
 <div class="obStep" data-step="2"><div class="eyebrow">YOUR GOAL</div><h1>What are you training for?</h1><p>Choose the outcome that matters most right now.</p><div class="choiceGrid" id="goalChoices"><button class="choice" data-value="Build muscle"><b>Build muscle</b><span>Strength, muscle and progressive overload.</span></button><button class="choice" data-value="Fat loss"><b>Fat loss</b><span>Higher activity with strength retention.</span></button><button class="choice" data-value="General fitness"><b>General fitness</b><span>Strength, energy and consistency.</span></button><button class="choice" data-value="Mobility"><b>Mobility</b><span>Move better and improve control.</span></button></div></div>
 <div class="obStep" data-step="3"><div class="eyebrow">EXPERIENCE</div><h1>Where are you starting?</h1><p>This changes exercise complexity, volume and coaching cues.</p><div class="choiceGrid" id="levelChoices"><button class="choice" data-value="Beginner"><b>Beginner</b><span>New or returning after a long break.</span></button><button class="choice" data-value="Intermediate"><b>Intermediate</b><span>Training consistently for a while.</span></button><button class="choice" data-value="Advanced"><b>Advanced</b><span>Experienced with structured training.</span></button></div></div>
 <div class="obStep" data-step="4"><div class="eyebrow">YOUR SETUP</div><h1>What can you train with?</h1><p>Your training should match what you actually have.</p><div class="choiceGrid" id="equipChoices"><button class="choice" data-value="No equipment"><b>No equipment</b><span>Bodyweight only.</span></button><button class="choice" data-value="Dumbbells"><b>Dumbbells</b><span>A pair or adjustable dumbbells.</span></button><button class="choice" data-value="Resistance bands"><b>Resistance bands</b><span>Loop or long bands.</span></button><button class="choice" data-value="Gym access"><b>Gym access</b><span>Full equipment available.</span></button></div></div>
@@ -896,7 +1010,7 @@ function dbToLocalProfile(p){return{name:p.name||'Athlete',goal:p.goal||'General
 async function getUser(){const {data}=await sb.auth.getUser();return data.user||null}
 async function syncProfileToCloud(){const user=await getUser();const raw=localStorage.getItem(KEY);if(!user||!raw)return false;const p=JSON.parse(raw);const {error}=await sb.from('profiles').upsert(localToDbProfile(p,user),{onConflict:'id'});if(error){console.error(error);return false}return true}
 async function restoreCloudProfile(){const user=await getUser();if(!user)return false;const {data,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error){console.error(error);return false}if(data&&data.onboarding_completed){const p=dbToLocalProfile(data);localStorage.setItem(KEY,JSON.stringify(p));applyProfile(p);return true}const raw=localStorage.getItem(KEY);if(raw){await syncProfileToCloud();return true}return false}
-function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>setChoiceSelection(id,v));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function currentProgressionCue(session){
+function updateOb(){document.querySelectorAll('.obStep').forEach(s=>s.classList.toggle('active',+s.dataset.step===obStep));obCount.textContent=obStep+' of 6';obProgress.style.width=(obStep/6*100)+'%';obBack.style.visibility=obStep===1?'hidden':'visible';obNext.textContent=obStep===6?'View my plan':'Continue';if(obStep===6){const p=profileFromOb();obSummary.innerHTML=[['Goal',p.goal],['Level',p.level],['Setup',p.equip],['Routine',p.days+' · '+p.time]].map(x=>'<div class="summaryRow"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}requestAnimationFrame(()=>{if(typeof obBody!=='undefined')obBody.scrollTop=0})}function moveOb(dir){if(dir>0&&obStep===1&&!obName.value.trim()){obName.focus();showFeedback('Add your name first');return}if(dir>0&&obStep===6){finishOb();return}obStep=Math.max(1,Math.min(6,obStep+dir));updateOb()}async function finishOb(){const p=profileFromOb();localStorage.setItem(KEY,JSON.stringify(p));onboarding.classList.remove('show');applyProfile(p);go('home');const user=await getUser();if(user){await syncProfileToCloud()}showFeedback('Plan ready')}function restartOnboarding(){const p=JSON.parse(localStorage.getItem(KEY)||'{}');obName.value=p.name||'';[['goalChoices',p.goal],['levelChoices',p.level],['equipChoices',p.equip]].forEach(([id,v])=>setChoiceSelection(id,v));obDays.value=p.days||'4 days';obTime.value=p.time||'30 minutes';obStep=1;updateOb();onboarding.classList.add('show')}function currentProgressionCue(session){
   const notes=(session?.exercises||[]).map(x=>x[3]).filter(Boolean);
   return notes[0]||'';
 }
